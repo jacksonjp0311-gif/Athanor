@@ -1,0 +1,16 @@
+﻿[build-system]
+requires = [""setuptools>=68"", ""wheel""]
+build-backend = ""setuptools.build_meta""
+
+[project]
+name = ""athanor""
+version = ""1.0.0""
+description = ""Coherence Verifier Agent for Recursive AI Systems (H7 / ΔΦ governor)""
+requires-python = "">=3.10""
+dependencies = [""numpy>=1.24"", ""pyyaml>=6.0"", ""matplotlib>=3.7""]
+
+[tool.setuptools]
+package-dir = {"""" = ""src""}
+
+[tool.setuptools.packages.find]
+where = [""src""]

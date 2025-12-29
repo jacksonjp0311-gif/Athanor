@@ -1,0 +1,4 @@
+﻿# Ablation sweep hints (runner script can loop these)
+threshold_sweep: [0.65, 0.67, 0.70, 0.72, 0.75]
+alpha_sweep: [0.50, 0.70, 0.90]
+inherits: base.yaml
