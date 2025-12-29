@@ -1,5 +1,0 @@
-﻿# Placeholder for future MNIST neuroevolution / EvoDistill benchmark
-inherits: base.yaml
-backend: torch
-generations: 50
-population: 32
