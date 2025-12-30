@@ -1,0 +1,14 @@
+seed: 1337
+threshold_h7: 0.70
+alpha: 0.70
+steps_per_candidate: 24
+population: 16
+generations: 24
+refine_attempts: 2
+dphi_mode: l2
+backend: symbolic
+archive:
+  bins: [16, 16]
+  novelty_eps: 0.02
+run:
+  out_dir: data/archives

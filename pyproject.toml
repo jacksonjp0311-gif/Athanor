@@ -1,0 +1,19 @@
+﻿[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "athanor"
+version = "2.0.0"
+description = "ATHANOR — Coherence Verifier & Stability Governor"
+authors = [{ name="James Jackson" }]
+requires-python = ">=3.10"
+
+dependencies = [
+  "numpy",
+  "pyyaml",
+  "matplotlib"
+]
+
+[project.scripts]
+athanor = "athanor.__main__:main"

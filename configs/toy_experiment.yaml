@@ -1,0 +1,4 @@
+inherits: base.yaml
+generations: 12
+population: 10
+steps_per_candidate: 18

@@ -1,0 +1,1 @@
+# v2.0: backend hooks are still stubs (symbolic telemetry is default).
