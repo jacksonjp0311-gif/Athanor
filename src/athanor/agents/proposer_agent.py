@@ -16,5 +16,5 @@ class ProposerAgent(Agent):
             delta *= (self.step_cap / n)
 
         child = type(parent)(id=str(child_id), genome=(g + delta))
-        child.tags[""delta_norm""] = float(np.linalg.norm(delta))
+        child.tags["delta_norm"] = float(np.linalg.norm(delta))
         return child
