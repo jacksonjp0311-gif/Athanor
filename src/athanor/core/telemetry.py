@@ -13,5 +13,5 @@ def capture_trajectory(genome: np.ndarray, steps: int = 24, noise: float = 0.02,
         x[t] = s
         s = (A @ s) + rng.normal(0.0, float(noise), size=(D,)).astype(np.float32)
 
-    meta = {""steps"": int(steps), ""noise"": float(noise), ""D"": int(D)}
+    meta = {"steps": int(steps), "noise": float(noise), "D": int(D)}
     return TelemetryBatch(traj=x, meta=meta)
