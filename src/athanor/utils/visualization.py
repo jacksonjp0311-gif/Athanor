@@ -61,10 +61,10 @@ def render_dashboard(run_path: str, threshold_h7: float = 0.70):
                 .replace('&','&amp;')
                 .replace('<','&lt;')
                 .replace('>','&gt;')
-                .replace('\"','&quot;')
-                .replace(\"'\",\"&#39;\"))
+                .replace('"','&quot;')
+                .replace("'","&#39;"))
 
-    html = f\"\"\"<!doctype html>
+    html = f"""<!doctype html>
 <html>
 <head>
 <meta charset="utf-8"/>
@@ -122,7 +122,7 @@ def render_dashboard(run_path: str, threshold_h7: float = 0.70):
 </div>
 </body>
 </html>
-\"\"\"
+"""
 
     with open(dash, 'w', encoding='utf-8') as f:
         f.write(html)
