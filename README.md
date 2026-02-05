@@ -22,6 +22,7 @@ ATHANOR is a research-oriented Python framework for running a multi-agent evolut
 - [Testing](#testing)
 - [Intended use and scope](#intended-use-and-scope)
 - [Credits](#credits)
+- [H₇ geometry-law manuscript](#h-law-geometry-law-manuscript)
 - [License](#license)
 
 ---
@@ -220,6 +221,15 @@ Lineage and inspiration include:
 - Jürgen Schmidhuber’s Gödel Machine framing,
 - Quality-Diversity methods (MAP-Elites, novelty/open-endedness),
 - modern Darwin Gödel / EvoDistill-era recursive-improvement work.
+
+---
+
+## H₇ geometry-law manuscript
+A full LaTeX manuscript of the v2.1 geometry-law framing is included at:
+
+- `docs/source/h7_coherence_geometry_law_v2_1.tex`
+
+This is provided as a research document and conceptual framing reference for the repository.
 
 ---
 

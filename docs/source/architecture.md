@@ -49,3 +49,7 @@ Key config fields in `configs/base.yaml`:
 2. Add ablation scripts for threshold/alpha sweeps.
 3. Replace silent visualization exceptions with structured warnings.
 4. Extend integration tests to assert artifact presence and schema.
+
+
+## Manuscript
+- `docs/source/h7_coherence_geometry_law_v2_1.tex` (full v2.1 geometry-law manuscript)
