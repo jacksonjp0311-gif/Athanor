@@ -13,6 +13,7 @@ ATHANOR is a research-oriented Python framework for running a multi-agent evolut
 - [H₇ geometry-law framing (v2.1)](#h-law-framing-v21)
 - [System loop](#system-loop)
 - [Repository structure](#repository-structure)
+- [Section mini-guides](#section-mini-guides)
 - [Installation](#installation)
   - [Bash (Linux/macOS)](#bash-linuxmacos)
   - [PowerShell (Windows)](#powershell-windows)
@@ -121,6 +122,22 @@ For each generation:
 ├── requirements.txt
 └── LICENSE
 ```
+
+---
+
+
+## Section mini-guides
+To improve local onboarding and maintain coherence across contributors, each major section now includes a mini `README.md` explaining purpose, files, and workflow role:
+
+- `docs/README.md`
+- `scripts/README.md`
+- `tests/README.md`
+- `src/athanor/agents/README.md`
+- `src/athanor/core/README.md`
+- `src/athanor/evolution/README.md`
+- `src/athanor/experiments/README.md`
+- `src/athanor/scripts/README.md`
+- `src/athanor/utils/README.md`
 
 ---
 
