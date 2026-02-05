@@ -47,6 +47,9 @@ Key config fields in `configs/base.yaml`:
 ## Optional geometry helper functions
 - `weighted_coherence_mean(C, power)` for coherence-weighted averaging
 - `cusp_limited_h7(C, threshold, survival_floor)` for survival-floor horizon analysis
+- `inject_bounded_noise(dphi, sigma, rng)` for bounded perturbation sweeps
+- `immunity_index(C, C_perturbed)` and `basin_drift(C, C_perturbed)` for H₂₀ metrics
+- `omega_lipschitz_kappa_bound(C0)` for the analytic κ upper bound proxy
 
 ## Practical improvement roadmap
 1. Add config validation (bounds/types) before run start.
@@ -60,3 +63,5 @@ Key config fields in `configs/base.yaml`:
 
 - `docs/source/codex_777_triadic_boundary_excess_v1_0.tex` (777 boundary-excess v1.0)
 - `docs/source/codex_777_triadic_boundary_excess_v2_0.tex` (777 boundary-excess v2.0)
+
+- `docs/source/h20_omega_basin_noise_immunity_v1_5.tex` (H₂₀ Ω-basin noise-immunity v1.5)

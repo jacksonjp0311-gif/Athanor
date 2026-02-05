@@ -45,6 +45,36 @@ def cusp_limited_h7(C: np.ndarray, threshold: float = 0.70, survival_floor: floa
         return 0.0
     return h7_horizon(kept, threshold=threshold)
 
+
+def omega_lipschitz_kappa_bound(C0: float) -> float:
+    c0 = float(np.clip(C0, 0.0, 1.0))
+    return float(c0 ** 2)
+
+def immunity_index(C: np.ndarray, C_perturbed: np.ndarray) -> float:
+    if C.size == 0 or C_perturbed.size == 0:
+        return 0.0
+    n = min(C.size, C_perturbed.size)
+    base = C[:n].astype(np.float32)
+    pert = C_perturbed[:n].astype(np.float32)
+    num = float(np.mean(np.abs(pert - base)))
+    den = float(np.mean(np.abs(base))) + 1e-9
+    return float(np.clip(1.0 - (num / den), 0.0, 1.0))
+
+def basin_drift(C: np.ndarray, C_perturbed: np.ndarray) -> float:
+    if C.size == 0 or C_perturbed.size == 0:
+        return 0.0
+    n = min(C.size, C_perturbed.size)
+    return float(np.mean(C_perturbed[:n] - C[:n]))
+
+def inject_bounded_noise(dphi: np.ndarray, sigma: float, rng: np.random.Generator | None = None) -> np.ndarray:
+    if dphi.size == 0:
+        return np.zeros((0,), dtype=np.float32)
+    s = max(float(sigma), 0.0)
+    if rng is None:
+        rng = np.random.default_rng(0)
+    eps = rng.uniform(-s, s, size=dphi.shape).astype(np.float32)
+    return (dphi.astype(np.float32) + eps).astype(np.float32)
+
 def estimate(traj: np.ndarray, threshold: float = 0.70, mode: str = "l2") -> DeltaPhiEstimate:
     d = delta_phi(traj, mode=mode)
     C = coherence_from_dphi(d)
@@ -59,5 +89,6 @@ def estimate(traj: np.ndarray, threshold: float = 0.70, mode: str = "l2") -> Del
         "h7": float(h7),
         "h7_weighted": float(weighted_coherence_mean(C, power=1.0)),
         "h7_cusp": float(cusp_limited_h7(C, threshold=threshold, survival_floor=0.50)),
+        "kappa_bound": float(omega_lipschitz_kappa_bound(C.mean() if C.size else 0.0)),
     }
     return DeltaPhiEstimate(dphi=d, coherence=C, h7=h7, summary=summary)

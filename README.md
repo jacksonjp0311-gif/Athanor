@@ -24,6 +24,7 @@ ATHANOR is a research-oriented Python framework for running a multi-agent evolut
 - [Credits](#credits)
 - [H₇ geometry-law manuscript](#h-law-geometry-law-manuscript)
 - [777 triadic-boundary manuscripts](#777-triadic-boundary-manuscripts)
+- [H₂₀ Ω-basin manuscript](#h-basin-manuscript)
 - [License](#license)
 
 ---
@@ -52,6 +53,9 @@ Operationally, H₇ is used as:
 For experimentation with geometry-style weighting/survival ideas, `athanor.core.coherence` now also exposes:
 - `weighted_coherence_mean(C, power=...)`
 - `cusp_limited_h7(C, threshold=..., survival_floor=...)`
+- `inject_bounded_noise(ΔΦ, sigma, rng)`
+- `immunity_index(C, C_perturbed)` and `basin_drift(C, C_perturbed)`
+- `omega_lipschitz_kappa_bound(C0)`
 
 ---
 
@@ -246,6 +250,15 @@ The repository now also includes two LaTeX geometry notes:
 - `docs/source/codex_777_triadic_boundary_excess_v2_0.tex`
 
 These are included as mathematical reference documents and do not change runtime behavior by themselves.
+
+---
+
+## H₂₀ Ω-basin manuscript
+A full LaTeX manuscript of the H₂₀ Ω-basin noise-immunity framing is included at:
+
+- `docs/source/h20_omega_basin_noise_immunity_v1_5.tex`
+
+This can be used to guide perturbation robustness experiments around ΔΦ/Ω stability.
 
 ---
 
