@@ -23,6 +23,7 @@ ATHANOR is a research-oriented Python framework for running a multi-agent evolut
 - [Intended use and scope](#intended-use-and-scope)
 - [Credits](#credits)
 - [H₇ geometry-law manuscript](#h-law-geometry-law-manuscript)
+- [777 triadic-boundary manuscripts](#777-triadic-boundary-manuscripts)
 - [License](#license)
 
 ---
@@ -47,6 +48,10 @@ Operationally, H₇ is used as:
 - a verifier gate for candidate approval,
 - an archive admission criterion in quality-diversity space,
 - a stabilizing signal in fitness shaping.
+
+For experimentation with geometry-style weighting/survival ideas, `athanor.core.coherence` now also exposes:
+- `weighted_coherence_mean(C, power=...)`
+- `cusp_limited_h7(C, threshold=..., survival_floor=...)`
 
 ---
 
@@ -230,6 +235,17 @@ A full LaTeX manuscript of the v2.1 geometry-law framing is included at:
 - `docs/source/h7_coherence_geometry_law_v2_1.tex`
 
 This is provided as a research document and conceptual framing reference for the repository.
+
+---
+
+
+## 777 triadic-boundary manuscripts
+The repository now also includes two LaTeX geometry notes:
+
+- `docs/source/codex_777_triadic_boundary_excess_v1_0.tex`
+- `docs/source/codex_777_triadic_boundary_excess_v2_0.tex`
+
+These are included as mathematical reference documents and do not change runtime behavior by themselves.
 
 ---
 

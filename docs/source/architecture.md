@@ -44,6 +44,10 @@ Key config fields in `configs/base.yaml`:
 - `archive.bins`
 - `run.out_dir`
 
+## Optional geometry helper functions
+- `weighted_coherence_mean(C, power)` for coherence-weighted averaging
+- `cusp_limited_h7(C, threshold, survival_floor)` for survival-floor horizon analysis
+
 ## Practical improvement roadmap
 1. Add config validation (bounds/types) before run start.
 2. Add ablation scripts for threshold/alpha sweeps.
@@ -53,3 +57,6 @@ Key config fields in `configs/base.yaml`:
 
 ## Manuscript
 - `docs/source/h7_coherence_geometry_law_v2_1.tex` (full v2.1 geometry-law manuscript)
+
+- `docs/source/codex_777_triadic_boundary_excess_v1_0.tex` (777 boundary-excess v1.0)
+- `docs/source/codex_777_triadic_boundary_excess_v2_0.tex` (777 boundary-excess v2.0)
