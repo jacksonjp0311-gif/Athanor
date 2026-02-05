@@ -72,3 +72,5 @@ Config validation now enforces value bounds for key scalar parameters and valida
 - `docs/source/h20_omega_basin_noise_immunity_v1_5.tex` (H₂₀ Ω-basin noise-immunity v1.5)
 
 - `docs/source/h44_boundary_algebra_layer_v1_0.tex` (H₄₄ Boundary Algebra v1.0)
+
+- `docs/source/athanor-latex-paper.tex` (Codex–DGM H7 coherence paper)

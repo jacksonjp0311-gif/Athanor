@@ -102,6 +102,7 @@ For each generation:
 │   └── toy_experiment.yaml       # Minimal sanity config
 ├── data/archives/                # Run outputs (run_*/)
 ├── docs/source/architecture.md   # Architecture and roadmap notes
+├── docs/source/athanor-latex-paper.tex  # Extended Codex–DGM H7 paper
 ├── scripts/
 │   ├── run_evolution.py          # Scripted runner helper
 │   └── root_reflection.py        # Artifact verification helper
@@ -116,7 +117,6 @@ For each generation:
 ├── tests/
 │   ├── integration/
 │   └── unit/
-├── athanor-latex-paper.tex       # Extended theoretical/technical write-up
 ├── pyproject.toml
 ├── requirements.txt
 └── LICENSE
@@ -250,6 +250,7 @@ Lineage and inspiration include:
 A full LaTeX manuscript of the v2.1 geometry-law framing is included at:
 
 - `docs/source/h7_coherence_geometry_law_v2_1.tex`
+- `docs/source/athanor-latex-paper.tex`
 
 This is provided as a research document and conceptual framing reference for the repository.
 
