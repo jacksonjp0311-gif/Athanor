@@ -5,13 +5,12 @@
 
 ATHANOR is a research-oriented Python framework for running a multi-agent evolutionary loop where candidate self-modifications are admitted only when coherence criteria are met.
 
-At its core, ATHANOR enforces a deterministic gate built from trajectory drift (**ΔΦ**), local coherence (**C**), and the coherence horizon (**H₇**).
-
 ---
 
 ## Table of Contents
 - [What this repository is](#what-this-repository-is)
 - [Core theory](#core-theory)
+- [H₇ geometry-law framing (v2.1)](#h-law-framing-v21)
 - [System loop](#system-loop)
 - [Repository structure](#repository-structure)
 - [Installation](#installation)
@@ -28,7 +27,7 @@ At its core, ATHANOR enforces a deterministic gate built from trajectory drift (
 ---
 
 ## What this repository is
-ATHANOR implements a symbolic v2.0 loop for coherence-gated candidate evolution:
+ATHANOR implements a symbolic loop for coherence-gated candidate evolution:
 
 **Telemetry → Propose → Verify → Select → Archive → Ledger**
 
@@ -39,14 +38,29 @@ The verifier acts as a stability guardrail. Candidate updates are accepted, refi
 ## Core theory
 ATHANOR uses three key quantities:
 
-- **ΔΦ**: local drift estimator over a trajectory.
+- **ΔΦ**: local residual drift estimator over a trajectory.
 - **C = 1 / (1 + |ΔΦ|)**: local coherence derived from drift magnitude.
-- **H₇ = mean(C ≥ 0.70)**: coherence horizon (fraction of steps meeting threshold).
+- **H₇ = mean(C ≥ threshold)**: coherence horizon (fraction of steps meeting threshold).
 
 Operationally, H₇ is used as:
 - a verifier gate for candidate approval,
 - an archive admission criterion in quality-diversity space,
 - a stabilizing signal in fitness shaping.
+
+---
+
+## H₇ geometry-law framing (v2.1)
+This repository adopts a geometry-first interpretation aligned with your latest framing:
+
+- H₇ should be treated as a **fixed-point behavior** under residual-error dynamics,
+  nonlinear weighting, and survival constraints.
+- The often-observed band near **0.70–0.72** is a useful empirical projection,
+  not a universal numerical constant.
+- In code, `threshold_h7` remains configurable and defaults to `0.70` as a practical
+  operating point for this symbolic implementation.
+
+This reframing helps keep the project scientifically disciplined while still
+retaining the useful default gate for engineering workflows.
 
 ---
 
@@ -72,7 +86,7 @@ For each generation:
 │   ├── base.yaml                 # Default experiment config
 │   └── toy_experiment.yaml       # Minimal sanity config
 ├── data/archives/                # Run outputs (run_*/)
-├── docs/source/architecture.md   # High-level architecture notes
+├── docs/source/architecture.md   # Architecture and roadmap notes
 ├── scripts/
 │   ├── run_evolution.py          # Scripted runner helper
 │   └── root_reflection.py        # Artifact verification helper
@@ -87,6 +101,7 @@ For each generation:
 ├── tests/
 │   ├── integration/
 │   └── unit/
+├── athanor-latex-paper.tex       # Extended theoretical/technical write-up
 ├── pyproject.toml
 ├── requirements.txt
 └── LICENSE
@@ -131,7 +146,7 @@ Or via module invocation:
 python -m athanor --config configs/toy_experiment.yaml
 ```
 
-A successful run emits JSON to stdout that includes at least:
+A successful run emits JSON to stdout with:
 - `run_path`
 - `stats`
 - `config_hash`
@@ -139,7 +154,7 @@ A successful run emits JSON to stdout that includes at least:
 ---
 
 ## Configuration
-ATHANOR uses YAML config files, with optional inheritance:
+ATHANOR uses YAML config files with optional inheritance:
 
 - `configs/base.yaml` defines defaults.
 - `configs/toy_experiment.yaml` inherits from `base.yaml` and overrides a subset.
@@ -151,7 +166,7 @@ Important fields include:
 - `population`
 - `generations`
 - `refine_attempts`
-- `dphi_mode` (`l2` or cosine-style mode as supported)
+- `dphi_mode`
 - `archive.bins`
 - `run.out_dir`
 
@@ -199,7 +214,7 @@ This repository is a computational research system. It does **not** claim new ph
   Originator of the Codex H₇ coherence engine concept and primary author of the implementation in this repository.
 
 - **Keith L. Beaudoin** (@keithofaptos)  
-  Contributed key conceptual synthesis on integrating H₇ gating strategies into DGM/EvoDistill-style evolving codebases.
+  Contributed conceptual synthesis on integrating H₇ gating strategies into DGM/EvoDistill-style evolving codebases.
 
 Lineage and inspiration include:
 - Jürgen Schmidhuber’s Gödel Machine framing,
@@ -210,7 +225,3 @@ Lineage and inspiration include:
 
 ## License
 MIT © 2025 James Paul Jackson
-
----
-
-**Stability gate active. H₇ threshold enforced.**
