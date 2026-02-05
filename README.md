@@ -25,6 +25,7 @@ ATHANOR is a research-oriented Python framework for running a multi-agent evolut
 - [H₇ geometry-law manuscript](#h-law-geometry-law-manuscript)
 - [777 triadic-boundary manuscripts](#777-triadic-boundary-manuscripts)
 - [H₂₀ Ω-basin manuscript](#h-basin-manuscript)
+- [H₄₄ boundary algebra manuscript](#h-boundary-algebra-manuscript)
 - [License](#license)
 
 ---
@@ -56,6 +57,9 @@ For experimentation with geometry-style weighting/survival ideas, `athanor.core.
 - `inject_bounded_noise(ΔΦ, sigma, rng)`
 - `immunity_index(C, C_perturbed)` and `basin_drift(C, C_perturbed)`
 - `omega_lipschitz_kappa_bound(C0)`
+- `boundary_excess(value, boundary)`
+- `commensurability_suppression_score(value, max_denominator)`
+- `select_boundary_invariant(candidates, degree, suppression_weight)`
 
 ---
 
@@ -259,6 +263,15 @@ A full LaTeX manuscript of the H₂₀ Ω-basin noise-immunity framing is includ
 - `docs/source/h20_omega_basin_noise_immunity_v1_5.tex`
 
 This can be used to guide perturbation robustness experiments around ΔΦ/Ω stability.
+
+---
+
+## H₄₄ boundary algebra manuscript
+A full LaTeX manuscript of the H₄₄ Boundary Algebra layer is included at:
+
+- `docs/source/h44_boundary_algebra_layer_v1_0.tex`
+
+This provides a selection-layer framing for extremal invariants at feasibility boundaries.
 
 ---
 

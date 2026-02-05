@@ -50,6 +50,9 @@ Key config fields in `configs/base.yaml`:
 - `inject_bounded_noise(dphi, sigma, rng)` for bounded perturbation sweeps
 - `immunity_index(C, C_perturbed)` and `basin_drift(C, C_perturbed)` for H₂₀ metrics
 - `omega_lipschitz_kappa_bound(C0)` for the analytic κ upper bound proxy
+- `boundary_excess(value, boundary)` for feasibility-edge scoring
+- `commensurability_suppression_score(value, max_denominator)` for rational-lock resistance
+- `select_boundary_invariant(candidates, degree, suppression_weight)` for H₄₄-style selection
 
 ## Practical improvement roadmap
 1. Add config validation (bounds/types) before run start.
@@ -65,3 +68,5 @@ Key config fields in `configs/base.yaml`:
 - `docs/source/codex_777_triadic_boundary_excess_v2_0.tex` (777 boundary-excess v2.0)
 
 - `docs/source/h20_omega_basin_noise_immunity_v1_5.tex` (H₂₀ Ω-basin noise-immunity v1.5)
+
+- `docs/source/h44_boundary_algebra_layer_v1_0.tex` (H₄₄ Boundary Algebra v1.0)

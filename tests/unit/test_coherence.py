@@ -9,6 +9,9 @@ from athanor.core.coherence import (
     immunity_index,
     basin_drift,
     inject_bounded_noise,
+    boundary_excess,
+    commensurability_suppression_score,
+    select_boundary_invariant,
 )
 
 def test_delta_phi_l2_basic():
@@ -51,3 +54,15 @@ def test_h20_noise_immunity_helpers():
     assert 0.0 <= i20 <= 1.0
     assert isinstance(b20, float)
     assert 0.0 <= kappa <= 1.0
+
+def test_h44_boundary_algebra_helpers():
+    assert abs(boundary_excess(1.7, 1.0) - 0.7) < 1e-9
+
+    phi = (1.0 + np.sqrt(5.0)) / 2.0
+    s_phi = commensurability_suppression_score(float(phi), max_denominator=64)
+    s_rat = commensurability_suppression_score(1.5, max_denominator=64)
+    assert s_phi > s_rat
+
+    out = select_boundary_invariant([1.5, float(phi), 1.7], degree=2, suppression_weight=0.5)
+    assert out["selected"] is not None
+    assert out["degree"] == 2
