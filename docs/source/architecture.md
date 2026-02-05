@@ -44,10 +44,12 @@ Key config fields in `configs/base.yaml`:
 - `archive.bins`
 - `run.out_dir`
 
+Config validation now enforces value bounds for key scalar parameters and validates `dphi_mode` (`l2` or `cosine`) before run start.
+
 ## Optional geometry helper functions
 - `weighted_coherence_mean(C, power)` for coherence-weighted averaging
 - `cusp_limited_h7(C, threshold, survival_floor)` for survival-floor horizon analysis
-- `inject_bounded_noise(dphi, sigma, rng)` for bounded perturbation sweeps
+- `inject_bounded_noise(dphi, sigma, rng=None, seed=None)` for bounded perturbation sweeps
 - `immunity_index(C, C_perturbed)` and `basin_drift(C, C_perturbed)` for H₂₀ metrics
 - `omega_lipschitz_kappa_bound(C0)` for the analytic κ upper bound proxy
 - `boundary_excess(value, boundary)` for feasibility-edge scoring

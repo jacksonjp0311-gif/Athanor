@@ -20,6 +20,7 @@ ATHANOR is a research-oriented Python framework for running a multi-agent evolut
 - [Configuration](#configuration)
 - [Run artifacts](#run-artifacts)
 - [Testing](#testing)
+- [Project quality](#project-quality)
 - [Intended use and scope](#intended-use-and-scope)
 - [Credits](#credits)
 - [H₇ geometry-law manuscript](#h-law-geometry-law-manuscript)
@@ -54,7 +55,7 @@ Operationally, H₇ is used as:
 For experimentation with geometry-style weighting/survival ideas, `athanor.core.coherence` now also exposes:
 - `weighted_coherence_mean(C, power=...)`
 - `cusp_limited_h7(C, threshold=..., survival_floor=...)`
-- `inject_bounded_noise(ΔΦ, sigma, rng)`
+- `inject_bounded_noise(ΔΦ, sigma, rng=None, seed=None)`
 - `immunity_index(C, C_perturbed)` and `basin_drift(C, C_perturbed)`
 - `omega_lipschitz_kappa_bound(C0)`
 - `boundary_excess(value, boundary)`
@@ -212,6 +213,14 @@ Test suite includes:
 - integration check for CLI + toy config execution.
 
 ---
+
+## Project quality
+- CI runs on push/PR and executes unit + integration tests.
+- Core coherence utilities are covered by focused unit tests (including H₂₀/H₄₄ helpers).
+- CLI smoke path (`python -m athanor --config ...`) is continuously validated by integration tests.
+
+---
+
 
 ## Intended use and scope
 ATHANOR is intended as:

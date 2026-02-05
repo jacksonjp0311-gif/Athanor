@@ -66,12 +66,17 @@ def basin_drift(C: np.ndarray, C_perturbed: np.ndarray) -> float:
     n = min(C.size, C_perturbed.size)
     return float(np.mean(C_perturbed[:n] - C[:n]))
 
-def inject_bounded_noise(dphi: np.ndarray, sigma: float, rng: np.random.Generator | None = None) -> np.ndarray:
+def inject_bounded_noise(
+    dphi: np.ndarray,
+    sigma: float,
+    rng: np.random.Generator | None = None,
+    seed: int | None = None,
+) -> np.ndarray:
     if dphi.size == 0:
         return np.zeros((0,), dtype=np.float32)
     s = max(float(sigma), 0.0)
     if rng is None:
-        rng = np.random.default_rng(0)
+        rng = np.random.default_rng(seed)
     eps = rng.uniform(-s, s, size=dphi.shape).astype(np.float32)
     return (dphi.astype(np.float32) + eps).astype(np.float32)
 

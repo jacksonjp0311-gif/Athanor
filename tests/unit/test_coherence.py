@@ -66,3 +66,10 @@ def test_h44_boundary_algebra_helpers():
     out = select_boundary_invariant([1.5, float(phi), 1.7], degree=2, suppression_weight=0.5)
     assert out["selected"] is not None
     assert out["degree"] == 2
+
+
+def test_noise_seed_reproducible():
+    d = np.array([0.0, 0.3, 0.6], dtype=np.float32)
+    a = inject_bounded_noise(d, sigma=0.1, seed=11)
+    b = inject_bounded_noise(d, sigma=0.1, seed=11)
+    assert np.allclose(a, b)
