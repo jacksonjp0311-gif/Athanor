@@ -16,7 +16,7 @@ class MapElitesArchive:
 
     def descriptor(self, cand) -> Tuple[int,int]:
         h7 = float(cand.dphi.h7) if cand.dphi else 0.0
-        dn = float(cand.tags.get(""delta_norm"", 0.0))
+        dn = float(cand.tags.get("delta_norm", 0.0))
         i = int(np.clip(h7 * self.bins[0], 0, self.bins[0]-1))
         j = int(np.clip((dn / 1.0) * self.bins[1], 0, self.bins[1]-1))
         return (i, j)
@@ -29,9 +29,9 @@ class MapElitesArchive:
                 best_id=str(cand.id),
                 best_f=float(cand.score_f),
                 meta={
-                    ""h7"": float(cand.dphi.h7) if cand.dphi else 0.0,
-                    ""delta_norm"": float(cand.tags.get(""delta_norm"", 0.0)),
-                    ""verdict"": str(cand.verdict),
+                    "h7": float(cand.dphi.h7) if cand.dphi else 0.0,
+                    "delta_norm": float(cand.tags.get("delta_norm", 0.0)),
+                    "verdict": str(cand.verdict),
                 },
             )
             return True
@@ -39,10 +39,10 @@ class MapElitesArchive:
 
     def stats(self) -> Dict[str, Any]:
         if not self.cells:
-            return {""filled"": 0, ""mean_best_f"": 0.0, ""max_best_f"": 0.0}
+            return {"filled": 0, "mean_best_f": 0.0, "max_best_f": 0.0}
         fs = np.array([c.best_f for c in self.cells.values()], dtype=np.float32)
         return {
-            ""filled"": int(len(self.cells)),
-            ""mean_best_f"": float(fs.mean()),
-            ""max_best_f"": float(fs.max()),
+            "filled": int(len(self.cells)),
+            "mean_best_f": float(fs.mean()),
+            "max_best_f": float(fs.max()),
         }

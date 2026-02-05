@@ -6,7 +6,7 @@ class SelectorAgent(Agent):
         self.alpha = float(alpha)
 
     def step(self, candidate):
-        dn = float(candidate.tags.get(""delta_norm"", 0.0))
+        dn = float(candidate.tags.get("delta_norm", 0.0))
         q  = 1.0 / (1.0 + dn)
         h7 = float(candidate.dphi.h7) if candidate.dphi else 0.0
 
