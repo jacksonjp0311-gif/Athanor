@@ -1,0 +1,31 @@
+from __future__ import annotations
+import numpy as np
+
+from ..core.types import Candidate
+from .base import ProposerAdapter
+
+
+class GaussianNoiseAdapter(ProposerAdapter):
+    name = "gaussian_noise"
+
+    def __init__(self, sigma: float = 0.12, step_cap: float = 0.50):
+        self.sigma = float(sigma)
+        self.step_cap = float(step_cap)
+
+    def propose(
+        self,
+        parent: Candidate,
+        rng: np.random.Generator,
+        child_id: str,
+    ) -> Candidate:
+        g = parent.genome.astype(np.float32)
+        delta = rng.normal(0.0, self.sigma, size=g.shape).astype(np.float32)
+
+        n = float(np.linalg.norm(delta) + 1e-9)
+        if n > self.step_cap:
+            delta *= (self.step_cap / n)
+
+        child = type(parent)(id=str(child_id), genome=(g + delta))
+        child.tags["delta_norm"] = float(np.linalg.norm(delta))
+        child.tags["proposer_adapter"] = self.name
+        return child

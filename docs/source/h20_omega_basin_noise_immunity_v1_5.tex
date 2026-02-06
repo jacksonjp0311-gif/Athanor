@@ -1,0 +1,123 @@
+% ─────────────────────────────────────────────────────────────────────────────
+%  CODEX H₂₀ — Ω-BASIN NOISE-IMMUNITY THEORY (QIM v7.4)
+%  Version: v1.5 (Plot-Ready Visual Canon · Empirical Hook · H₃₁ Interface Locked)
+%
+%  Author: James Paul Jackson
+%  Date: January 2026
+%
+%  STATUS
+%  ------
+%  THEORY DOCUMENT — CODEX CANONICAL FORMALIZATION.
+%  This note defines H₂₀ (Ω-basin noise-immunity) as a native Codex stability
+%  law for ΔΦ error geometries under bounded perturbation.
+%
+%  This is an original Codex theoretical construct.
+%  It is not presented as a theorem of physics or number theory, but as a
+%  rigorous computational stability principle for coherence fields.
+%
+%  PURPOSE
+%  -------
+%  To formalize the Codex harmonic stability law:
+%
+%      H₂₀ := Ω-basin invariance under bounded ΔΦ-noise injection.
+%
+%    Coherence fields defined by ΔΦ error geometry exhibit stable basins of Ω
+%    across perturbation regimes, preserving structural invariants and shielding
+%    global integration (H₁₉), enabling terminal harmonic partitioning (H₃₁).
+% ─────────────────────────────────────────────────────────────────────────────
+
+\documentclass[12pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\pgfplotsset{compat=1.18}
+\geometry{margin=1in}
+
+\title{\textbf{H$_{20}$ — The Ω-Basin Noise-Immunity Law}}
+\author{\textbf{James Paul Jackson}}
+\date{January 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We formalize H$_{20}$, the Codex Ω-basin noise-immunity law: a stability
+principle governing coherence fields defined over ΔΦ error geometry. Given a
+structured field $V$ inducing deviation $\Delta\Phi$, coherence is regulated by
+\[
+\Omega(\Delta\Phi)=\frac{1}{1+|\Delta\Phi|}.
+\]
+H$_{20}$ states that stable coherence strata persist under bounded perturbation
+noise injected into $\Delta\Phi$, implying invariance of basin-level Ω
+structure across perturbation regimes.
+\end{abstract}
+
+\section{H$_{20}$ — Ω-Basin Invariance (Canonical Definition)}
+
+\[
+\boxed{
+H_{20} := \mathrm{Inv}_{\epsilon}\big(\Omega(\Delta\Phi)\big)
+}
+\]
+
+\section{Formal Law (Analytic κ-Bound)}
+
+Define:
+\[
+\Omega(\Delta\Phi)=\frac{1}{1+|\Delta\Phi|}.
+\]
+
+Under bounded perturbation:
+\[
+\Delta\Phi'=\Delta\Phi+\epsilon,
+\qquad
+\|\epsilon\|_{\infty}\le\sigma,
+\]
+
+H$_{20}$ holds when Ω deformation is Lipschitz-bounded:
+\[
+|\Omega(\Delta\Phi')-\Omega(\Delta\Phi)|
+\le \kappa\,\sigma.
+\]
+
+Since:
+\[
+\frac{d\Omega}{d(\Delta\Phi)}
+=
+-\frac{1}{(1+|\Delta\Phi|)^2}
+=-\Omega^2,
+\]
+
+Codex obtains the intrinsic basin-local bound:
+\[
+\boxed{\kappa \le \Omega(\Delta\Phi_0)^2}
+\]
+
+\section{Falsifiable Stability Conditions (v1.5 Locked)}
+
+H$_{20}$ is supported if:
+\begin{itemize}
+  \item $I_{20}\ge 0.97$ for $\sigma\le 0.3\Omega_0$,
+  \item $B_{20}(\sigma)\le 0$ throughout the basin,
+  \item Ω-basins self-heal when noise is removed.
+\end{itemize}
+
+H$_{20}$ is falsified if:
+\begin{itemize}
+  \item immunity collapses under small σ,
+  \item gradient inversion occurs ($B_{20}>0$),
+  \item topology tears or bifurcates under bounded noise.
+\end{itemize}
+
+\section{Conclusion (Direct H$_{31}$ Handoff)}
+
+H$_{20}$ is the Codex noise-immunity layer governing Ω-basin invariance under
+bounded perturbation. It provides analytic κ-bounds and measurable immunity
+indices for stability analysis in coherence fields.
+
+\end{document}
