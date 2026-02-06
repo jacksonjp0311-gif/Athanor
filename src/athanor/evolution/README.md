@@ -1,13 +1,20 @@
 # Evolution Module
 
-This package orchestrates ATHANOR's generation loop and archive behavior.
+Recursive improvement loop and archive subsystem.
 
-## Files
-- `dgm_loop.py` — main recursive improvement loop and artifact writer.
-- `archive.py` — MAP-Elites-style archive structure and stats.
-- `__init__.py` — exports.
+## Directory snapshot
+```text
+src/athanor/evolution/
+├── __init__.py
+├── archive.py
+└── dgm_loop.py
+```
 
-## Loop flow
-Telemetry → Propose → Verify → Select → Archive → Ledger
+## What each script does
+- `dgm_loop.py` — generation loop orchestration + artifact writing.
+- `archive.py` — MAP-Elites-style archive and summary stats.
 
-The loop keeps improving candidates while preserving run reproducibility artifacts (`ledger.jsonl`, stats, metadata, plots/dashboard).
+## How it works together
+The loop executes telemetry/proposal/verification/selection cycles, then stores coherent diversity in the archive and writes reproducibility artifacts.
+
+> Keep this snapshot updated when loop/archive files change.

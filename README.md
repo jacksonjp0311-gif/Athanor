@@ -129,10 +129,20 @@ For each generation:
 ## Section mini-guides
 To improve local onboarding and maintain coherence across contributors, each major section now includes a mini `README.md` explaining purpose, files, and workflow role:
 
+- `.github/README.md`
+- `configs/README.md`
+- `data/README.md`
+- `data/archives/README.md`
 - `docs/README.md`
+- `docs/source/README.md`
 - `scripts/README.md`
 - `tests/README.md`
+- `tests/unit/README.md`
+- `tests/integration/README.md`
+- `src/README.md`
+- `src/athanor/README.md`
 - `src/athanor/agents/README.md`
+- `src/athanor/backends/README.md`
 - `src/athanor/core/README.md`
 - `src/athanor/evolution/README.md`
 - `src/athanor/experiments/README.md`

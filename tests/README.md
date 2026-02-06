@@ -1,8 +1,17 @@
 # Test Suite
 
-## Structure
-- `tests/unit/` — fast, focused tests for core math and configuration validation.
-- `tests/integration/` — end-to-end CLI/run-path checks and artifact assertions.
+Validation surface for coherence math and executable paths.
 
-## Intent
-The suite protects coherence semantics (ΔΦ → C → H7), runtime stability, and reproducibility guarantees.
+## Directory snapshot
+```text
+tests/
+├── README.md
+├── integration/
+└── unit/
+```
+
+## How it works together
+- Unit tests protect local invariants and helper behavior.
+- Integration tests validate CLI execution and artifact contracts.
+
+> Keep this snapshot updated as test layout evolves.

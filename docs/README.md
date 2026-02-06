@@ -1,13 +1,15 @@
 # Documentation
 
-Primary theory and architecture references are under `docs/source/`.
+Theory + architecture references.
 
-## Includes
-- Architecture guide
-- H7 geometry-law manuscript
-- 777 triadic-boundary notes
-- H20 Ω-basin note
-- H44 boundary algebra note
-- Codex–DGM H7 paper
+## Directory snapshot
+```text
+docs/
+├── README.md
+└── source/
+```
 
-This layout keeps conceptual framing and implementation docs in one place.
+## What it contains
+`docs/source/` stores architecture notes and canonical manuscripts for H7/H20/H44/777 and the Codex–DGM paper.
+
+> Keep this snapshot updated as documentation structure evolves.

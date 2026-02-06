@@ -1,20 +1,22 @@
 # Core Module
 
-This package implements ATHANOR's core math, telemetry primitives, and data types.
+Foundational math, telemetry primitives, and data types.
 
-## Purpose
-Provide deterministic, reusable coherence primitives that every higher layer depends on.
+## Directory snapshot
+```text
+src/athanor/core/
+├── __init__.py
+├── coherence.py
+├── telemetry.py
+└── types.py
+```
 
-## Files
-- `coherence.py` — ΔΦ estimators, coherence transforms, H7 horizon, and H20/H44 helper utilities.
-- `telemetry.py` — trajectory capture helpers used by telemetry agents.
-- `types.py` — dataclasses for candidates, telemetry batches, and ΔΦ estimates.
-- `__init__.py` — public core API exports.
+## What each script does
+- `coherence.py` — ΔΦ estimators, coherence transforms, H7, and extended H20/H44 helpers.
+- `telemetry.py` — trajectory capture helpers.
+- `types.py` — dataclasses and shared structures.
 
-## How it works
-1. Convert trajectories to local drift (`delta_phi`).
-2. Map drift to coherence (`coherence_from_dphi`).
-3. Derive horizon and auxiliary robustness/selection metrics.
+## How it works together
+Trajectories are converted to drift (`delta_phi`), transformed into coherence (`C`), and summarized into horizon/stability metrics consumed by higher layers.
 
-## Evolutionary coherence note
-The core layer is intentionally minimal and composable so new theory layers can be added without destabilizing existing run semantics.
+> Keep this snapshot updated as the core API changes.

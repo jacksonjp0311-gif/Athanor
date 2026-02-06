@@ -1,18 +1,28 @@
 # Agents Module
 
-This package defines the operational roles in ATHANOR's coherence-gated evolution loop.
+Operational roles in ATHANOR's coherence-gated evolution loop.
 
-## Purpose
-Agents separate responsibilities so each stage can be reasoned about, tested, and evolved independently.
+## Directory snapshot
+```text
+src/athanor/agents/
+├── __init__.py
+├── archivist_agent.py
+├── base.py
+├── proposer_agent.py
+├── selector_agent.py
+├── telemetry_agent.py
+└── verifier_agent.py
+```
 
-## Files
-- `base.py` — minimal agent interface shared by all agent roles.
-- `telemetry_agent.py` — captures candidate trajectories and telemetry payloads.
-- `proposer_agent.py` — generates candidate mutations from the current parent.
-- `verifier_agent.py` — computes coherence metrics and assigns `APPROVE` / `REFINE` / `REJECT`.
-- `selector_agent.py` — combines quality and coherence into final scalar selection score.
-- `archivist_agent.py` — mediates admission into the MAP-Elites-style archive.
-- `__init__.py` — agent exports.
+## What each script does
+- `base.py` — shared interface for agent-style components.
+- `telemetry_agent.py` — generates trajectory telemetry.
+- `proposer_agent.py` — mutates parent candidates.
+- `verifier_agent.py` — computes coherence verdicts.
+- `selector_agent.py` — computes quality/coherence blended selection score.
+- `archivist_agent.py` — archive admission mediation.
 
-## Evolutionary coherence note
-The module is structured as a controllable pipeline: propose change, measure drift, verify coherence, then preserve only stable improvements.
+## How it works together
+Proposer creates change, Telemetry measures it, Verifier gates stability, Selector ranks candidates, Archivist preserves diverse coherent elites.
+
+> Keep this snapshot updated as agent modules evolve.

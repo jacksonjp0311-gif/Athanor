@@ -1,14 +1,18 @@
 # Package Scripts Module
 
-Command-layer helpers bundled inside the Python package.
+Packaged command-layer entrypoints.
 
-## Files
-- `cli.py` — `athanor` CLI entrypoint adapter (`--config` -> run loop).
-- `__init__.py` — package marker.
-
-## Usage
-Primary invocation:
-
-```bash
-python -m athanor --config configs/toy_experiment.yaml
+## Directory snapshot
+```text
+src/athanor/scripts/
+├── __init__.py
+└── cli.py
 ```
+
+## What each script does
+- `cli.py` — `athanor` executable adapter from config path to run loop.
+
+## How it works together
+CLI receives config path, loads validated config, executes loop, prints JSON summary.
+
+> Keep this snapshot updated as command interfaces evolve.

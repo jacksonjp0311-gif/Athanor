@@ -1,12 +1,22 @@
 # Utils Module
 
-Utility functions for logging, seeding, and artifact visualization.
+Support utilities for observability and reproducibility.
 
-## Files
+## Directory snapshot
+```text
+src/athanor/utils/
+├── __init__.py
+├── logging.py
+├── seeding.py
+└── visualization.py
+```
+
+## What each script does
 - `logging.py` — JSONL logging helpers.
-- `seeding.py` — RNG setup helpers.
-- `visualization.py` — H7/fitness plotting and run dashboard rendering.
-- `__init__.py` — utility exports.
+- `seeding.py` — random seed helper utilities.
+- `visualization.py` — plots and dashboard generation from run artifacts.
 
-## Role in coherence workflow
-These helpers do not drive policy decisions; they improve observability and reproducibility so coherence behavior can be audited over generations.
+## How it works together
+These utilities keep experiment outputs inspectable and reproducible without changing selection policy logic.
+
+> Keep this snapshot updated as utility modules change.
