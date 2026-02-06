@@ -149,6 +149,10 @@ To improve local onboarding and maintain coherence across contributors, each maj
 - `src/athanor/scripts/README.md`
 - `src/athanor/utils/README.md`
 
+Agent charters:
+- `AGENTS.md`
+- `src/athanor/agents/AGENTS.md`
+
 ---
 
 ## Installation
