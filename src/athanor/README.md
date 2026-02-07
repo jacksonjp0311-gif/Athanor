@@ -7,6 +7,7 @@ Main implementation package.
 src/athanor/
 ├── __init__.py
 ├── __main__.py
+├── adapters/
 ├── agents/
 ├── backends/
 ├── core/

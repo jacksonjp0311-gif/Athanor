@@ -2,18 +2,9 @@
 
 Experiment configuration files for ATHANOR runs.
 
-## What this folder does
-This folder defines runtime control planes (thresholds, population, generations, archive bins, and output paths).
+## Contents
+- `base.yaml` — canonical defaults.
+- `toy_experiment.yaml` — minimal overrides for fast smoke runs.
 
-## Directory snapshot
-```text
-configs/
-├── base.yaml
-└── toy_experiment.yaml
-```
-
-## How it works with the system
-- `base.yaml` provides canonical defaults.
-- `toy_experiment.yaml` inherits from `base.yaml` and overrides a minimal subset for fast smoke/integration runs.
-
-> Keep this snapshot updated when adding or removing config files.
+## Notes
+Use YAML inheritance (`inherits`) to layer new experiments on top of `base.yaml`.

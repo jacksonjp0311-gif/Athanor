@@ -1,14 +1,9 @@
 # Source Tree
 
-Python package source root.
+Python package source root for ATHANOR.
 
-## Directory snapshot
-```text
-src/
-└── athanor/
-```
+## Layout
+- `athanor/` — main package implementation.
 
-## How it works with the system
-`PYTHONPATH=src` enables local module discovery in tests and CLI smoke runs.
-
-> Keep this snapshot updated if additional top-level packages are added.
+## Notes
+Use `PYTHONPATH=src` for local test runs.
