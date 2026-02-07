@@ -1,20 +1,42 @@
 from __future__ import annotations
 import numpy as np
 from .base import Agent
+from ..adapters import GaussianNoiseAdapter, ProposerAdapter
 
 class ProposerAgent(Agent):
-    def __init__(self, sigma: float = 0.12, step_cap: float = 0.50):
-        self.sigma = float(sigma)
-        self.step_cap = float(step_cap)
+    def __init__(
+        self,
+        sigma: float = 0.12,
+        step_cap: float = 0.50,
+        adapter: ProposerAdapter | None = None,
+    ):
+        self.adapter = adapter or GaussianNoiseAdapter(sigma=sigma, step_cap=step_cap)
+        self._sigma = float(sigma)
+        self._step_cap = float(step_cap)
+
+    @property
+    def sigma(self) -> float:
+        if hasattr(self.adapter, "sigma"):
+            return float(getattr(self.adapter, "sigma"))
+        return self._sigma
+
+    @sigma.setter
+    def sigma(self, value: float) -> None:
+        if hasattr(self.adapter, "sigma"):
+            setattr(self.adapter, "sigma", float(value))
+        self._sigma = float(value)
+
+    @property
+    def step_cap(self) -> float:
+        if hasattr(self.adapter, "step_cap"):
+            return float(getattr(self.adapter, "step_cap"))
+        return self._step_cap
+
+    @step_cap.setter
+    def step_cap(self, value: float) -> None:
+        if hasattr(self.adapter, "step_cap"):
+            setattr(self.adapter, "step_cap", float(value))
+        self._step_cap = float(value)
 
     def step(self, parent, rng: np.random.Generator, child_id: str):
-        g = parent.genome.astype(np.float32)
-        delta = rng.normal(0.0, self.sigma, size=g.shape).astype(np.float32)
-
-        n = float(np.linalg.norm(delta) + 1e-9)
-        if n > self.step_cap:
-            delta *= (self.step_cap / n)
-
-        child = type(parent)(id=str(child_id), genome=(g + delta))
-        child.tags[""delta_norm""] = float(np.linalg.norm(delta))
-        return child
+        return self.adapter.propose(parent=parent, rng=rng, child_id=child_id)

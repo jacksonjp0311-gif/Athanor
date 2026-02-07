@@ -1,99 +1,193 @@
-Athanor
+# ATHANOR
 
-Coherence-Gated Darwin Gödel Agents  
-A Codex H₇ / ΔΦ Stability Governor for Recursive Self-Improvement
+**Coherence-Gated Darwin Gödel Agents**  
+*A stability governor for recursive self-improvement experiments.*
 
-H7-gated agent loop  
-(Telemetry → Propose → Verify (H7 Gate) → Select → Archive → Commit, with refinement on H7 failure and archive feedback)
-
-## One-Line Description
-
-A multi-agent architecture that constrains recursive self-improvement in Darwin Gödel Machine (DGM)-style systems using the Codex H₇ / ΔΦ coherence horizon as a deterministic stability governor.
-
-## Core Principle
-
-Recursive self-modification is permitted only when internal dynamics remain coherent under bounded phase drift.
-
-- ΔΦ → local drift estimator over trajectories  
-- C = 1 / (1 + |ΔΦ|) → local coherence  
-- H₇ = mean(C ≥ 0.70) → coherence horizon  
-
-H₇ serves three operational roles:
-- Auxiliary fitness regularizer
-- Quality-diversity archive admission gate
-- Hard verifier for self-modification commits
-
-## Authorship & Credit
-
-- James Paul Jackson (@unifiedenergy11)  
-  Originator of the Codex H₇ Coherence Engine, the ΔΦ-based coherence framework, the analytic coherence-horizon gating mechanism, and the overall stability-first safety architecture.  
-  Author of the complete implementation in this repository (including the evolutionary loop, agents, MAP-Elites archive, visualization, CLI, and forge system).
-
-- Keith L. Beaudoin (@keithofaptos)  
-  Contributed key conceptual synthesis that brought these ideas together through his December 25, 2025 note "Integrating H7 Engine Code into DGM Evolving Codebase". His work on integrating H₇ into DGM/EvoDistill-style evolving codebases — including fitness augmentation, archive gating, and verification strategies — directly shaped the multi-agent design and its compatibility with modern recursive improvement systems.
-
-## Lineage & Inspiration
-
-- Jürgen Schmidhuber — Gödel Machine and formal self-referential learning systems
-- Quality-Diversity evolution (MAP-Elites, novelty search, open-endedness)
-- Recent EvoDistill / Darwin Gödel Machine advances (Sakana AI et al., 2025)
-
-## Scope & Discipline
-
-This repository implements a computational stability governor.  
-It makes no claims about new physics, metaphysics, or consciousness.
-
-## Features
-
-- Full multi-agent loop with explicit agent roles
-- Parameter-free core coherence computation (L2 or cosine modes)
-- MAP-Elites archive over (H₇, novelty) behavioral descriptor
-- Adaptive refinement in the coherence band [0.50, 0.70)
-- Rich, versioned run artifacts: ledger.jsonl, archive.pkl, traces, HTML dashboards
-- CLI entry point, CI-ready, MIT licensed
-- Atomic PowerShell forge for reproducible builds
-
-## Quick Start
-
-bash git clone https://github.com/jacksonjp0311-gif/Athanor.git cd Athanor pip install -e . athanor --config configs/toy_experiment.yaml 
-
-Runs appear under data/archives/run_* with ledger, visualizations, and an interactive dashboard showing the H₇ ridge tightening over generations.
-
-## Intended Use
-
-- Reference implementation for safe recursive improvement research
-- Baseline for coherence-gated agents in quality-diversity evolution
-- Foundation for workshop / arXiv submissions on stability-first self-improvement
-
-## License
-
-MIT © 2025 James Paul Jackson
+ATHANOR is a research-grade Python framework for running multi-agent evolutionary loops where candidate self-modifications are only admitted when they preserve measured coherence. The system is designed to make changes auditable, reproducible, and stable under a coherence-first gate.
 
 ---
 
-Forge complete. Stability gate active. H₇ = 0.70 enforced.  
-𓂀
+## Table of Contents
+- [Overview](#overview)
+- [Core Concepts](#core-concepts)
+- [System Loop](#system-loop)
+- [Quickstart](#quickstart)
+- [Configuration](#configuration)
+- [Run Artifacts](#run-artifacts)
+- [Repository Structure](#repository-structure)
+- [Module Map](#module-map)
+- [Documentation & Charters](#documentation--charters)
+- [Testing](#testing)
+- [Scope & Intended Use](#scope--intended-use)
+- [License](#license)
 
-athanor/
-├── .github/workflows/ci.yml     # CI: install + tests
-├── configs/
-│   ├── base.yaml               # Default H7, α, ΔΦ mode
-│   └── toy_experiment.yaml     # Minimal sanity run
-├── data/archives/
-│   └── run_*/                  # Each run = immutable record
-├── docs/source/
-│   └── architecture.md         # System explanation
-├── examples/                   # Minimal demos (symbolic / neural)
-├── scripts/
-│   ├── run_evolution.py        # CLI runner
-│   └── root_reflection.py      # Artifact verification
-├── src/athanor/
-│   ├── core/                   # ΔΦ, C, H7 math
-│   ├── agents/                 # Telemetry / Propose / Verify / Select
-│   ├── evolution/              # Recursive loop + archive
-│   ├── backends/               # Torch / JAX / symbolic hooks
-│   └── utils/                  # Logging, seeding, visualization
-├── tests/                      # Unit + integration tests
-├── pyproject.toml
-├── requirements.txt
+---
+
+## Overview
+ATHANOR implements a coherence-gated evolutionary loop:
+
+**Telemetry → Propose → Verify → Select → Archive → Ledger**
+
+The verifier acts as a stability guardrail. Candidate updates are accepted, refined, or rejected based on H₇ thresholds, and every candidate’s trajectory is recorded in an immutable ledger for traceability.
+
+---
+
+## Core Concepts
+- **ΔΦ**: local residual drift estimator over a trajectory.
+- **C = 1 / (1 + |ΔΦ|)**: local coherence derived from drift magnitude.
+- **H₇ = mean(C ≥ threshold)**: coherence horizon (fraction of steps meeting threshold).
+
+H₇ is used as:
+- a verifier gate for candidate approval,
+- an archive admission criterion in quality-diversity space,
+- a stabilizing signal in fitness shaping.
+
+Core math and helper metrics live in `athanor.core.coherence`.
+
+---
+
+## System Loop
+For each generation:
+1. Propose child candidates from parent parameters.
+2. Capture telemetry trajectories.
+3. Verify with the H₇ gate:
+   - `APPROVE` when `H7 >= threshold_h7`
+   - `REFINE` when in the configured refine band
+   - `REJECT` below refine floor
+4. Score/select survivors.
+5. Attempt MAP-Elites archive admission.
+6. Persist an immutable ledger row per candidate.
+
+---
+
+## Quickstart
+### Install
+```bash
+git clone https://github.com/jacksonjp0311-gif/Athanor.git
+cd Athanor
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+pip install -e .
+```
+
+> Python 3.10+ is required.
+
+### Run (toy config)
+```bash
+athanor --config configs/toy_experiment.yaml
+```
+
+Or via module invocation:
+```bash
+python -m athanor --config configs/toy_experiment.yaml
+```
+
+A successful run emits JSON to stdout with:
+- `run_path`
+- `stats`
+- `config_hash`
+
+---
+
+## Configuration
+ATHANOR uses YAML config files with optional inheritance:
+
+- `configs/base.yaml` defines defaults.
+- `configs/toy_experiment.yaml` inherits from `base.yaml` and overrides a subset.
+
+Key fields include:
+- `threshold_h7`
+- `alpha`
+- `steps_per_candidate`
+- `population`
+- `generations`
+- `refine_attempts`
+- `dphi_mode`
+- `genome_dim`
+- `archive.bins`
+- `run.out_dir`
+
+---
+
+## Run Artifacts
+Each run writes to `data/archives/run_<timestamp>/` and includes:
+- `ledger.jsonl`
+- `archive.pkl`
+- `archive_stats.json`
+- `metadata.yaml`
+- `h7_trace.png`
+- `fitness_trace.png`
+- `dashboard.html`
+
+These artifacts provide reproducible traces for analysis, comparison, and reporting.
+
+---
+
+## Repository Structure
+```text
+.
+├── .github/                    # CI configuration
+├── configs/                     # Experiment configuration (base + examples)
+├── data/                        # Local run outputs (not committed)
+├── docs/                        # Architecture + manuscripts
+├── scripts/                     # Runner and validation utilities
+├── src/                         # Python package sources
+├── tests/                       # Unit + integration tests
+├── pyproject.toml               # Project metadata
+├── requirements.txt             # Runtime dependencies
 └── LICENSE
+```
+
+---
+
+## Module Map
+```text
+src/athanor/
+├── adapters/    # Proposal adapter strategies (pluggable mutation logic)
+├── agents/      # Telemetry/Propose/Verify/Select/Archivist agents
+├── backends/    # Backend hooks (optional integrations)
+├── core/        # ΔΦ, C, H₇, telemetry types/math
+├── evolution/   # DGM loop + archive implementation
+├── experiments/ # Config loader + validation
+├── scripts/     # CLI entrypoint implementation
+└── utils/       # Logging, seeding, visualization/dashboard
+```
+
+Mini-guides (`README.md`) are included in each major directory for local onboarding and maintenance.
+
+---
+
+## Documentation & Charters
+- `docs/source/architecture.md` provides system-level architecture and evolution notes.
+- Agent charters:
+  - `AGENTS.md`
+  - `src/athanor/agents/AGENTS.md`
+
+Research manuscripts (LaTeX) are available under `docs/source/` as optional references.
+
+---
+
+## Testing
+Run all tests:
+```bash
+PYTHONPATH=src pytest -q
+```
+
+The suite includes:
+- unit checks for coherence math,
+- integration checks for CLI + toy config execution.
+
+---
+
+## Scope & Intended Use
+ATHANOR is intended as:
+- a reference implementation for coherence-gated recursive improvement experiments,
+- a baseline for safety-oriented quality-diversity pipelines,
+- a foundation for workshop/paper prototypes.
+
+This repository is a computational research system. It does **not** claim new physics, metaphysics, or consciousness results.
+
+---
+
+## License
+MIT © 2025 James Paul Jackson
