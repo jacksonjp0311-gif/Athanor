@@ -3,18 +3,19 @@
 **Coherence-Gated Darwin Gödel Agents**  
 *A stability governor for recursive self-improvement experiments.*
 
-ATHANOR is a research-grade Python framework for running multi-agent evolutionary loops where candidate self-modifications are only admitted when they preserve measured coherence.
+ATHANOR is a research-grade Python framework for running multi-agent evolutionary loops where candidate self-modifications are only admitted when they preserve measured coherence. The system is designed to make changes auditable, reproducible, and stable under a coherence-first gate.
 
 ---
 
 ## Table of Contents
 - [Overview](#overview)
-- [Key Concepts](#key-concepts)
+- [Core Concepts](#core-concepts)
 - [System Loop](#system-loop)
 - [Quickstart](#quickstart)
 - [Configuration](#configuration)
 - [Run Artifacts](#run-artifacts)
 - [Repository Structure](#repository-structure)
+- [Key Modules](#key-modules)
 - [Documentation & Charters](#documentation--charters)
 - [Testing](#testing)
 - [Scope & Intended Use](#scope--intended-use)
@@ -27,11 +28,11 @@ ATHANOR implements a coherence-gated evolutionary loop:
 
 **Telemetry → Propose → Verify → Select → Archive → Ledger**
 
-The verifier acts as a stability guardrail. Candidate updates are accepted, refined, or rejected based on H₇ thresholds.
+The verifier acts as a stability guardrail. Candidate updates are accepted, refined, or rejected based on H₇ thresholds, and every candidate’s trajectory is recorded in an immutable ledger for traceability.
 
 ---
 
-## Key Concepts
+## Core Concepts
 - **ΔΦ**: local residual drift estimator over a trajectory.
 - **C = 1 / (1 + |ΔΦ|)**: local coherence derived from drift magnitude.
 - **H₇ = mean(C ≥ threshold)**: coherence horizon (fraction of steps meeting threshold).
@@ -41,7 +42,7 @@ H₇ is used as:
 - an archive admission criterion in quality-diversity space,
 - a stabilizing signal in fitness shaping.
 
-The core math and helper metrics live in `athanor.core.coherence`.
+Core math and helper metrics live in `athanor.core.coherence`.
 
 ---
 
@@ -102,6 +103,7 @@ Key fields include:
 - `generations`
 - `refine_attempts`
 - `dphi_mode`
+- `genome_dim`
 - `archive.bins`
 - `run.out_dir`
 
@@ -124,37 +126,39 @@ These artifacts provide reproducible traces for analysis, comparison, and report
 ## Repository Structure
 ```text
 .
-├── .github/workflows/ci.yml      # CI install + test workflow
-├── configs/
-│   ├── base.yaml                 # Default experiment config
-│   └── toy_experiment.yaml       # Minimal sanity config
-├── data/archives/                # Run outputs (run_*/)
-├── docs/source/architecture.md   # Architecture and roadmap notes
-├── scripts/
-│   ├── run_evolution.py          # Scripted runner helper
-│   └── root_reflection.py        # Artifact verification helper
-├── src/athanor/
-│   ├── adapters/                 # Proposal adapter strategies
-│   ├── agents/                   # Telemetry/Propose/Verify/Select/Archivist agents
-│   ├── backends/                 # Backend hooks
-│   ├── core/                     # ΔΦ, C, H₇, telemetry types/math
-│   ├── evolution/                # DGM loop + archive implementation
-│   ├── experiments/              # Config loader/registry
-│   ├── scripts/                  # CLI entrypoint implementation
-│   └── utils/                    # Logging, seeding, visualization/dashboard
-├── tests/
-│   ├── integration/
-│   └── unit/
-├── pyproject.toml
-├── requirements.txt
+├── .github/                    # CI configuration
+├── configs/                     # Experiment configuration (base + examples)
+├── data/                        # Local run outputs (not committed)
+├── docs/                        # Architecture + manuscripts
+├── scripts/                     # Runner and validation utilities
+├── src/                         # Python package sources
+├── tests/                       # Unit + integration tests
+├── pyproject.toml               # Project metadata
+├── requirements.txt             # Runtime dependencies
 └── LICENSE
 ```
 
 ---
 
+## Key Modules
+```text
+src/athanor/
+├── adapters/    # Proposal adapter strategies (pluggable mutation logic)
+├── agents/      # Telemetry/Propose/Verify/Select/Archivist agents
+├── backends/    # Backend hooks (optional integrations)
+├── core/        # ΔΦ, C, H₇, telemetry types/math
+├── evolution/   # DGM loop + archive implementation
+├── experiments/ # Config loader + validation
+├── scripts/     # CLI entrypoint implementation
+└── utils/       # Logging, seeding, visualization/dashboard
+```
+
+Mini-guides (`README.md`) are included in each major directory for local onboarding and maintenance.
+
+---
+
 ## Documentation & Charters
 - `docs/source/architecture.md` provides system-level architecture and evolution notes.
-- Mini-guides are available for each major directory (see `README.md` files inside folders).
 - Agent charters:
   - `AGENTS.md`
   - `src/athanor/agents/AGENTS.md`
