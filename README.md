@@ -15,7 +15,7 @@ ATHANOR is a research-grade Python framework for running multi-agent evolutionar
 - [Configuration](#configuration)
 - [Run Artifacts](#run-artifacts)
 - [Repository Structure](#repository-structure)
-- [Key Modules](#key-modules)
+- [Module Map](#module-map)
 - [Documentation & Charters](#documentation--charters)
 - [Testing](#testing)
 - [Scope & Intended Use](#scope--intended-use)
@@ -140,7 +140,7 @@ These artifacts provide reproducible traces for analysis, comparison, and report
 
 ---
 
-## Key Modules
+## Module Map
 ```text
 src/athanor/
 ├── adapters/    # Proposal adapter strategies (pluggable mutation logic)
