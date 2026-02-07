@@ -1,6 +1,15 @@
 # Documentation
 
-Theory and architecture references for ATHANOR.
+Theory + architecture references.
 
-## Layout
-- `source/` — architecture notes and canonical manuscripts.
+## Directory snapshot
+```text
+docs/
+├── README.md
+└── source/
+```
+
+## What it contains
+`docs/source/` stores architecture notes and canonical manuscripts for H7/H20/H44/777 and the Codex–DGM paper.
+
+> Keep this snapshot updated as documentation structure evolves.

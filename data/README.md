@@ -2,8 +2,13 @@
 
 Runtime output root for generated experiment artifacts.
 
-## Layout
-- `archives/` — immutable `run_*` folders produced by execution.
+## Directory snapshot
+```text
+data/
+└── archives/
+```
 
-## Notes
-`run.out_dir` in config points here by default.
+## How it works with the system
+`run.out_dir` in config points here by default; each execution writes an immutable `run_*` folder under `data/archives/`.
+
+> Keep this snapshot updated when storage structure changes.
