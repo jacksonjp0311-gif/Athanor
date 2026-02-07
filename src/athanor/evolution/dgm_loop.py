@@ -1,5 +1,5 @@
 from __future__ import annotations
-import os, json, pickle, hashlib
+import os, json, pickle, hashlib, logging
 from typing import Dict, Any
 from datetime import datetime, timezone
 import numpy as np
@@ -7,6 +7,8 @@ import numpy as np
 from ..core.types import Candidate
 from ..agents import TelemetryAgent, ProposerAgent, VerifierAgent, SelectorAgent, ArchivistAgent
 from ..utils.visualization import plot_h7, plot_fitness, render_dashboard
+
+log = logging.getLogger(__name__)
 
 def now_tag():
     return datetime.now(timezone.utc).strftime('%Y-%m-%d_%H%M%S')
@@ -51,7 +53,7 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
 
     def ledger(row: Dict[str, Any]):
         with open(ledger_path, 'a', encoding='utf-8') as f:
-            f.write(json.dumps(row) + '\\n')
+            f.write(json.dumps(row) + '\n')
 
     for g in range(gens):
         best = None
@@ -92,6 +94,9 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
                 'verdict': child.verdict,
                 'reason': child.reason,
                 'h7': h7,
+                'h7_weighted': float(child.dphi.summary.get('h7_weighted', 0.0)) if child.dphi else 0.0,
+                'h7_cusp': float(child.dphi.summary.get('h7_cusp', 0.0)) if child.dphi else 0.0,
+                'kappa_bound': float(child.dphi.summary.get('kappa_bound', 0.0)) if child.dphi else 0.0,
                 'q': float(child.score_q),
                 'f': float(child.score_f),
                 'admitted': bool(admitted),
@@ -133,13 +138,13 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
     }
     with open(os.path.join(run_path, 'metadata.yaml'), 'w', encoding='utf-8') as f:
         for k,v in meta.items():
-            f.write(f'{k}: {v}\\n')
+            f.write(f'{k}: {v}\n')
 
     try:
         plot_h7(ledger_path, os.path.join(run_path, 'h7_trace.png'), h7_threshold=threshold)
         plot_fitness(ledger_path, os.path.join(run_path, 'fitness_trace.png'))
         render_dashboard(run_path, threshold_h7=threshold)
-    except Exception:
-        pass
+    except Exception as exc:
+        log.warning("artifact generation failed: %s", exc)
 
     return { 'run_path': run_path, 'stats': stats, 'config_hash': cfg_hash }
