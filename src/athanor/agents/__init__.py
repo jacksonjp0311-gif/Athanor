@@ -5,9 +5,9 @@ from .selector_agent import SelectorAgent
 from .archivist_agent import ArchivistAgent
 
 __all__ = [
-    ""TelemetryAgent"",
-    ""ProposerAgent"",
-    ""VerifierAgent"",
-    ""SelectorAgent"",
-    ""ArchivistAgent"",
+    "TelemetryAgent",
+    "ProposerAgent",
+    "VerifierAgent",
+    "SelectorAgent",
+    "ArchivistAgent",
 ]

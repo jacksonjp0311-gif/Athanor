@@ -23,6 +23,6 @@ class Candidate:
     dphi: Optional[DeltaPhiEstimate] = None
     score_q: float = 0.0
     score_f: float = 0.0
-    verdict: str = ""PENDING""
-    reason: str = """"
+    verdict: str = "PENDING"
+    reason: str = ""
     tags: Dict[str, Any] = field(default_factory=dict)
