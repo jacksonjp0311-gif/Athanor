@@ -16,6 +16,7 @@ ATHANOR is a research-grade Python framework for running multi-agent evolutionar
 - [Run Artifacts](#run-artifacts)
 - [Repository Structure](#repository-structure)
 - [Module Map](#module-map)
+- [Theory & Manuscripts](#theory--manuscripts)
 - [Documentation & Charters](#documentation--charters)
 - [Testing](#testing)
 - [Scope & Intended Use](#scope--intended-use)
@@ -154,6 +155,21 @@ src/athanor/
 ```
 
 Mini-guides (`README.md`) are included in each major directory for local onboarding and maintenance.
+
+---
+
+## Theory & Manuscripts
+ATHANOR includes formal manuscripts that document the theoretical framing behind the coherence gates and boundary algebra tools:
+
+- **H₇ Geometry-Law (v2.1)**: `docs/source/h7_coherence_geometry_law_v2_1.tex`
+- **Codex–DGM H₇ Paper**: `docs/source/athanor-latex-paper.tex`
+- **H₂₀ Ω-Basin Noise Immunity (v1.5)**: `docs/source/h20_omega_basin_noise_immunity_v1_5.tex`
+- **H₄₄ Boundary Algebra (v1.0)**: `docs/source/h44_boundary_algebra_layer_v1_0.tex`
+- **777 Triadic Boundary Excess (v1.0, v2.0)**:
+  - `docs/source/codex_777_triadic_boundary_excess_v1_0.tex`
+  - `docs/source/codex_777_triadic_boundary_excess_v2_0.tex`
+
+These documents are research references that inform optional helper utilities and do not change runtime behavior unless explicitly wired into experiments.
 
 ---
 
