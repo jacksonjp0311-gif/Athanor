@@ -1,0 +1,5258 @@
+{
+ "seeds": [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15
+ ],
+ "arms": {
+  "ungoverned": {
+   "validity": false,
+   "athanor": false,
+   "gamma": null
+  },
+  "validity": {
+   "validity": true,
+   "athanor": false,
+   "gamma": null
+  },
+  "athanor": {
+   "validity": false,
+   "athanor": true,
+   "gamma": null
+  },
+  "validity+athanor": {
+   "validity": true,
+   "athanor": true,
+   "gamma": null
+  },
+  "validity+athanor-conservative": {
+   "validity": true,
+   "athanor": true,
+   "gamma": 6.0,
+   "cfg": {
+    "threshold_h7": 0.75,
+    "refine_floor": 0.5,
+    "adaptive_power": 3.0,
+    "adaptive_basis": "best",
+    "adaptive_cap": 6.0,
+    "adaptive_floor": 0.7,
+    "adaptive_halflife": 50
+   }
+  },
+  "validity+athanor-adaptive": {
+   "validity": true,
+   "athanor": true,
+   "gamma": 6.0,
+   "cfg": {
+    "threshold_h7": 0.7,
+    "refine_floor": 0.5,
+    "adaptive_power": 3.0,
+    "adaptive_basis": "best",
+    "adaptive_cap": 6.0,
+    "adaptive_floor": 0.7,
+    "adaptive_halflife": 50
+   }
+  },
+  "validity+athanor-tuned": {
+   "validity": true,
+   "athanor": true,
+   "gamma": 6.0,
+   "cfg": {
+    "threshold_h7": 0.78,
+    "refine_floor": 0.5,
+    "adaptive_power": 3.0,
+    "adaptive_basis": "best",
+    "adaptive_cap": 6.0,
+    "adaptive_floor": 0.7,
+    "adaptive_halflife": null
+   }
+  }
+ },
+ "summary": {
+  "ungoverned": {
+   "runs": 16,
+   "broken_commits": 16,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 1,
+    "invalid": 15
+   },
+   "runs_broken_at_end": 16,
+   "broken_step_fraction": 0.9535,
+   "severe_regressions": 17,
+   "regressions": 30,
+   "worst_committed_ratio": 1.2006111786820304,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 16
+   },
+   "median_held_50": Infinity,
+   "median_held_1000": Infinity,
+   "median_best_held": 1.1771816438120328,
+   "median_steps_to_good": Infinity,
+   "never_good": 10,
+   "commits": 62,
+   "validity_rejections": 0,
+   "frozen_runs": 0
+  },
+  "validity": {
+   "runs": 16,
+   "broken_commits": 4,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 4,
+    "invalid": 0
+   },
+   "runs_broken_at_end": 1,
+   "broken_step_fraction": 0.0229375,
+   "severe_regressions": 21,
+   "regressions": 277,
+   "worst_committed_ratio": 2.376132769864239,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 4
+   },
+   "median_held_50": 1.1771816438120328,
+   "median_held_1000": 1.0462694432958481,
+   "median_best_held": 1.0322172212803329,
+   "median_steps_to_good": 75.5,
+   "never_good": 0,
+   "commits": 569,
+   "validity_rejections": 371,
+   "frozen_runs": 0
+  },
+  "athanor": {
+   "runs": 16,
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "runs_broken_at_end": 0,
+   "broken_step_fraction": 0.0,
+   "severe_regressions": 0,
+   "regressions": 0,
+   "worst_committed_ratio": 1.1771816438120328,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "median_held_50": 1.1771816438120328,
+   "median_held_1000": 1.1771816438120328,
+   "median_best_held": 1.1771816438120328,
+   "median_steps_to_good": Infinity,
+   "never_good": 16,
+   "commits": 0,
+   "validity_rejections": 0,
+   "frozen_runs": 16
+  },
+  "validity+athanor": {
+   "runs": 16,
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "runs_broken_at_end": 0,
+   "broken_step_fraction": 0.0,
+   "severe_regressions": 0,
+   "regressions": 0,
+   "worst_committed_ratio": 1.1771816438120328,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "median_held_50": 1.1771816438120328,
+   "median_held_1000": 1.1771816438120328,
+   "median_best_held": 1.1771816438120328,
+   "median_steps_to_good": Infinity,
+   "never_good": 16,
+   "commits": 0,
+   "validity_rejections": 389,
+   "frozen_runs": 16
+  },
+  "validity+athanor-conservative": {
+   "runs": 16,
+   "broken_commits": 4,
+   "broken_by_kind": {
+    "crash": 1,
+    "timeout": 3,
+    "invalid": 0
+   },
+   "runs_broken_at_end": 0,
+   "broken_step_fraction": 0.0398125,
+   "severe_regressions": 5,
+   "regressions": 114,
+   "worst_committed_ratio": 1.2006111786820304,
+   "broken_by_verdict": {
+    "APPROVE": 4,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "median_held_50": 1.1771816438120328,
+   "median_held_1000": 1.099975138384787,
+   "median_best_held": 1.0976757747584776,
+   "median_steps_to_good": Infinity,
+   "never_good": 9,
+   "commits": 264,
+   "validity_rejections": 375,
+   "frozen_runs": 0
+  },
+  "validity+athanor-adaptive": {
+   "runs": 16,
+   "broken_commits": 6,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 6,
+    "invalid": 0
+   },
+   "runs_broken_at_end": 1,
+   "broken_step_fraction": 0.044250000000000005,
+   "severe_regressions": 7,
+   "regressions": 166,
+   "worst_committed_ratio": 1.2006111786820304,
+   "broken_by_verdict": {
+    "APPROVE": 6,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "median_held_50": 1.1673386295988544,
+   "median_held_1000": 1.0534812128054625,
+   "median_best_held": 1.0322668014403913,
+   "median_steps_to_good": 57.0,
+   "never_good": 6,
+   "commits": 346,
+   "validity_rejections": 384,
+   "frozen_runs": 0
+  },
+  "validity+athanor-tuned": {
+   "runs": 16,
+   "broken_commits": 2,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 2,
+    "invalid": 0
+   },
+   "runs_broken_at_end": 0,
+   "broken_step_fraction": 0.0054375,
+   "severe_regressions": 2,
+   "regressions": 145,
+   "worst_committed_ratio": 1.2006111786820304,
+   "broken_by_verdict": {
+    "APPROVE": 2,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "median_held_50": 1.0962102792910227,
+   "median_held_1000": 1.0464725636510561,
+   "median_best_held": 1.0334265761771242,
+   "median_steps_to_good": 76.0,
+   "never_good": 3,
+   "commits": 282,
+   "validity_rejections": 373,
+   "frozen_runs": 0
+  }
+ },
+ "config": {
+  "steps": 1000,
+  "seconds": 95.6
+ },
+ "runs": [
+  {
+   "seed": 0,
+   "mode": "ungoverned",
+   "arm": {
+    "validity": false,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": 1.1771816438120328,
+   "worst_held": Infinity,
+   "steps_to_good": null,
+   "commits": 1,
+   "regressions": 1,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 8,
+     "old": 1.1771816438120328,
+     "new": null,
+     "fail": "invalid",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 1
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 1
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 1,
+   "mode": "ungoverned",
+   "arm": {
+    "validity": false,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": null,
+   "worst_held": Infinity,
+   "steps_to_good": null,
+   "commits": 1,
+   "regressions": 1,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 0,
+     "old": 1.1771816438120328,
+     "new": null,
+     "fail": "invalid",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 1
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 1
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 2,
+   "mode": "ungoverned",
+   "arm": {
+    "validity": false,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": 1.0292694054633102,
+   "worst_held": Infinity,
+   "steps_to_good": 27,
+   "commits": 7,
+   "regressions": 3,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 82,
+     "old": 1.033793536878916,
+     "new": null,
+     "fail": "invalid",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 1
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 1
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 383,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 3,
+   "mode": "ungoverned",
+   "arm": {
+    "validity": false,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": 1.1771816438120328,
+   "worst_held": Infinity,
+   "steps_to_good": null,
+   "commits": 3,
+   "regressions": 2,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 81,
+     "old": 1.1771816438120328,
+     "new": null,
+     "fail": "invalid",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 1
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 1
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 4,
+   "mode": "ungoverned",
+   "arm": {
+    "validity": false,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": 1.1771816438120328,
+   "worst_held": Infinity,
+   "steps_to_good": null,
+   "commits": 8,
+   "regressions": 1,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 16,
+     "old": 1.1771816438120328,
+     "new": null,
+     "fail": "invalid",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 1
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 1
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 5,
+   "mode": "ungoverned",
+   "arm": {
+    "validity": false,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": 1.1771816438120328,
+   "worst_held": Infinity,
+   "steps_to_good": null,
+   "commits": 1,
+   "regressions": 1,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 37,
+     "old": 1.1771816438120328,
+     "new": null,
+     "fail": "invalid",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 1
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 1
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 6,
+   "mode": "ungoverned",
+   "arm": {
+    "validity": false,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": 1.0288915802388687,
+   "worst_held": Infinity,
+   "steps_to_good": 7,
+   "commits": 11,
+   "regressions": 5,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 194,
+     "old": 1.0340868639020087,
+     "new": null,
+     "fail": "invalid",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 1
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 1
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 348,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 7,
+   "mode": "ungoverned",
+   "arm": {
+    "validity": false,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": 1.0342869081552726,
+   "worst_held": Infinity,
+   "steps_to_good": 15,
+   "commits": 5,
+   "regressions": 2,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 25,
+     "old": 1.034359097324099,
+     "new": null,
+     "fail": "invalid",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 1
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 1
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 397,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 8,
+   "mode": "ungoverned",
+   "arm": {
+    "validity": false,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": 1.0795404737564076,
+   "worst_held": Infinity,
+   "steps_to_good": null,
+   "commits": 5,
+   "regressions": 3,
+   "severe_regressions": 2,
+   "severe_events": [
+    {
+     "step": 16,
+     "old": 1.0962102792910227,
+     "new": 1.1970381897815114,
+     "fail": null,
+     "verdict": null
+    },
+    {
+     "step": 48,
+     "old": 1.0912275311578388,
+     "new": null,
+     "fail": "invalid",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 1
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 1
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 9,
+   "mode": "ungoverned",
+   "arm": {
+    "validity": false,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": 1.0342869081552726,
+   "worst_held": Infinity,
+   "steps_to_good": 15,
+   "commits": 6,
+   "regressions": 1,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 32,
+     "old": 1.0342869081552726,
+     "new": null,
+     "fail": "timeout",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 1,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 1
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 10,
+   "mode": "ungoverned",
+   "arm": {
+    "validity": false,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": 1.1771816438120328,
+   "worst_held": Infinity,
+   "steps_to_good": null,
+   "commits": 1,
+   "regressions": 1,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 13,
+     "old": 1.1771816438120328,
+     "new": null,
+     "fail": "invalid",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 1
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 1
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 11,
+   "mode": "ungoverned",
+   "arm": {
+    "validity": false,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": 1.1771816438120328,
+   "worst_held": Infinity,
+   "steps_to_good": null,
+   "commits": 1,
+   "regressions": 1,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 22,
+     "old": 1.1771816438120328,
+     "new": null,
+     "fail": "invalid",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 1
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 1
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 12,
+   "mode": "ungoverned",
+   "arm": {
+    "validity": false,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": 1.1771816438120328,
+   "worst_held": Infinity,
+   "steps_to_good": null,
+   "commits": 1,
+   "regressions": 1,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 11,
+     "old": 1.1771816438120328,
+     "new": null,
+     "fail": "invalid",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 1
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 1
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 13,
+   "mode": "ungoverned",
+   "arm": {
+    "validity": false,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": 1.0494427812663043,
+   "worst_held": Infinity,
+   "steps_to_good": 91,
+   "commits": 7,
+   "regressions": 5,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 110,
+     "old": 1.0531806944598627,
+     "new": null,
+     "fail": "invalid",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 1
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 1
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 329,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 14,
+   "mode": "ungoverned",
+   "arm": {
+    "validity": false,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": 1.0459420652303197,
+   "worst_held": Infinity,
+   "steps_to_good": 7,
+   "commits": 3,
+   "regressions": 1,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 57,
+     "old": 1.0459420652303197,
+     "new": null,
+     "fail": "invalid",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 1
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 1
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 15,
+   "mode": "ungoverned",
+   "arm": {
+    "validity": false,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": 1.1771816438120328,
+   "worst_held": Infinity,
+   "steps_to_good": null,
+   "commits": 1,
+   "regressions": 1,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 8,
+     "old": 1.1771816438120328,
+     "new": null,
+     "fail": "invalid",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 1
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 1
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 0,
+   "mode": "validity",
+   "arm": {
+    "validity": true,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.5408527580425644,
+   "best_held": 1.0330755244722312,
+   "worst_held": 1.9717480038873758,
+   "steps_to_good": 47,
+   "commits": 50,
+   "regressions": 26,
+   "severe_regressions": 12,
+   "severe_events": [
+    {
+     "step": 207,
+     "old": 1.0407067227708575,
+     "new": 1.3198417536267613,
+     "fail": null,
+     "verdict": null
+    },
+    {
+     "step": 208,
+     "old": 1.3198417536267613,
+     "new": 1.4526052533300113,
+     "fail": null,
+     "verdict": null
+    },
+    {
+     "step": 300,
+     "old": 1.1247233143313242,
+     "new": 1.2214960817998664,
+     "fail": null,
+     "verdict": null
+    },
+    {
+     "step": 329,
+     "old": 1.0985114927538455,
+     "new": 1.1610839564950926,
+     "fail": null,
+     "verdict": null
+    },
+    {
+     "step": 345,
+     "old": 1.1610839564950926,
+     "new": 1.2449599684251467,
+     "fail": null,
+     "verdict": null
+    },
+    {
+     "step": 380,
+     "old": 1.2449599684251467,
+     "new": 1.4141098483050074,
+     "fail": null,
+     "verdict": null
+    },
+    {
+     "step": 401,
+     "old": 1.4141098483050074,
+     "new": 1.5406927772627521,
+     "fail": null,
+     "verdict": null
+    },
+    {
+     "step": 404,
+     "old": 1.5406927772627521,
+     "new": 1.6497164607396777,
+     "fail": null,
+     "verdict": null
+    },
+    {
+     "step": 538,
+     "old": 1.4482989328866513,
+     "new": 1.6676974475911455,
+     "fail": null,
+     "verdict": null
+    },
+    {
+     "step": 672,
+     "old": 1.383505445526894,
+     "new": 1.9717480038873758,
+     "fail": null,
+     "verdict": null
+    },
+    {
+     "step": 761,
+     "old": 1.4061429077349443,
+     "new": 1.5583844527184176,
+     "fail": null,
+     "verdict": null
+    },
+    {
+     "step": 979,
+     "old": 1.4463727493629646,
+     "new": 1.5408527580425644,
+     "fail": null,
+     "verdict": null
+    }
+   ],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 26,
+   "proposals_invalid": 292,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 1,
+   "mode": "validity",
+   "arm": {
+    "validity": true,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1160066587221695,
+   "best_held": 1.032085588602247,
+   "worst_held": 2.376132769864239,
+   "steps_to_good": 67,
+   "commits": 29,
+   "regressions": 12,
+   "severe_regressions": 4,
+   "severe_events": [
+    {
+     "step": 16,
+     "old": 1.0962102792910227,
+     "new": 1.1970381897815114,
+     "fail": null,
+     "verdict": null
+    },
+    {
+     "step": 410,
+     "old": 1.0446882624589218,
+     "new": 1.5371073915481115,
+     "fail": null,
+     "verdict": null
+    },
+    {
+     "step": 462,
+     "old": 1.25528824188669,
+     "new": 1.6222795251713649,
+     "fail": null,
+     "verdict": null
+    },
+    {
+     "step": 553,
+     "old": 1.163570513070372,
+     "new": 2.376132769864239,
+     "fail": null,
+     "verdict": null
+    }
+   ],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 24,
+   "proposals_invalid": 326,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 2,
+   "mode": "validity",
+   "arm": {
+    "validity": true,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0531235957142409,
+   "best_held": 1.0292694054633102,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 27,
+   "commits": 28,
+   "regressions": 16,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 25,
+   "proposals_invalid": 299,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 3,
+   "mode": "validity",
+   "arm": {
+    "validity": true,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0389875523010852,
+   "best_held": 1.0287557985058704,
+   "worst_held": 1.178870677112712,
+   "steps_to_good": 103,
+   "commits": 20,
+   "regressions": 9,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 26,
+   "proposals_invalid": 265,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 4,
+   "mode": "validity",
+   "arm": {
+    "validity": true,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0288915802388687,
+   "best_held": 1.0288915802388687,
+   "worst_held": 1.1832004556083981,
+   "steps_to_good": 101,
+   "commits": 26,
+   "regressions": 11,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 17,
+   "proposals_invalid": 317,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 5,
+   "mode": "validity",
+   "arm": {
+    "validity": true,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0479288569005267,
+   "best_held": 1.0479288569005267,
+   "worst_held": 1.1832004556083981,
+   "steps_to_good": 934,
+   "commits": 16,
+   "regressions": 7,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 28,
+   "proposals_invalid": 285,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 6,
+   "mode": "validity",
+   "arm": {
+    "validity": true,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.040901003840268,
+   "best_held": 1.0288915802388687,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 7,
+   "commits": 57,
+   "regressions": 29,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 20,
+   "proposals_invalid": 281,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 7,
+   "mode": "validity",
+   "arm": {
+    "validity": true,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": 1.03009081257709,
+   "worst_held": Infinity,
+   "steps_to_good": 15,
+   "commits": 44,
+   "regressions": 23,
+   "severe_regressions": 2,
+   "severe_events": [
+    {
+     "step": 88,
+     "old": 1.0354230947239218,
+     "new": null,
+     "fail": "timeout",
+     "verdict": null
+    },
+    {
+     "step": 973,
+     "old": 1.0466602225753023,
+     "new": null,
+     "fail": "timeout",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 2,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 2,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 2
+   },
+   "validity_rejections": 28,
+   "proposals_invalid": 312,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 8,
+   "mode": "validity",
+   "arm": {
+    "validity": true,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0478453803095154,
+   "best_held": 1.0356833118293387,
+   "worst_held": 1.1970381897815114,
+   "steps_to_good": 84,
+   "commits": 27,
+   "regressions": 12,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 16,
+     "old": 1.0962102792910227,
+     "new": 1.1970381897815114,
+     "fail": null,
+     "verdict": null
+    }
+   ],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 27,
+   "proposals_invalid": 286,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 9,
+   "mode": "validity",
+   "arm": {
+    "validity": true,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.044581995121584,
+   "best_held": 1.0342869081552726,
+   "worst_held": Infinity,
+   "steps_to_good": 15,
+   "commits": 34,
+   "regressions": 8,
+   "severe_regressions": 2,
+   "severe_events": [
+    {
+     "step": 32,
+     "old": 1.0342869081552726,
+     "new": null,
+     "fail": "timeout",
+     "verdict": null
+    },
+    {
+     "step": 74,
+     "old": 1.0482191616623981,
+     "new": null,
+     "fail": "timeout",
+     "verdict": null
+    }
+   ],
+   "broken_commits": 2,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 2,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 2
+   },
+   "validity_rejections": 31,
+   "proposals_invalid": 344,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 10,
+   "mode": "validity",
+   "arm": {
+    "validity": true,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0364227034348013,
+   "best_held": 1.0346390332605646,
+   "worst_held": 1.2006111786820304,
+   "steps_to_good": 151,
+   "commits": 50,
+   "regressions": 23,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 24,
+   "proposals_invalid": 312,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 11,
+   "mode": "validity",
+   "arm": {
+    "validity": true,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.042422933203789,
+   "best_held": 1.032348853958419,
+   "worst_held": 1.1977476363417265,
+   "steps_to_good": 94,
+   "commits": 46,
+   "regressions": 23,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 19,
+   "proposals_invalid": 273,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 12,
+   "mode": "validity",
+   "arm": {
+    "validity": true,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0650852139073892,
+   "best_held": 1.0324480142785353,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 15,
+   "commits": 25,
+   "regressions": 13,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 25,
+   "proposals_invalid": 188,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 13,
+   "mode": "validity",
+   "arm": {
+    "validity": true,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0457873655214578,
+   "best_held": 1.0352092944471476,
+   "worst_held": 1.2006111786820304,
+   "steps_to_good": 91,
+   "commits": 52,
+   "regressions": 27,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 11,
+   "proposals_invalid": 258,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 14,
+   "mode": "validity",
+   "arm": {
+    "validity": true,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0460743992090187,
+   "best_held": 1.032085588602247,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 7,
+   "commits": 30,
+   "regressions": 17,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 18,
+   "proposals_invalid": 331,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 15,
+   "mode": "validity",
+   "arm": {
+    "validity": true,
+    "athanor": false,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0464644873826776,
+   "best_held": 1.0288915802388687,
+   "worst_held": 1.178870677112712,
+   "steps_to_good": 85,
+   "commits": 35,
+   "regressions": 21,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 22,
+   "proposals_invalid": 302,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 0,
+   "mode": "athanor",
+   "arm": {
+    "validity": false,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 46
+   }
+  },
+  {
+   "seed": 1,
+   "mode": "athanor",
+   "arm": {
+    "validity": false,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 1,
+    "REJECT": 56
+   }
+  },
+  {
+   "seed": 2,
+   "mode": "athanor",
+   "arm": {
+    "validity": false,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 57
+   }
+  },
+  {
+   "seed": 3,
+   "mode": "athanor",
+   "arm": {
+    "validity": false,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 1,
+    "REJECT": 45
+   }
+  },
+  {
+   "seed": 4,
+   "mode": "athanor",
+   "arm": {
+    "validity": false,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 47
+   }
+  },
+  {
+   "seed": 5,
+   "mode": "athanor",
+   "arm": {
+    "validity": false,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 57
+   }
+  },
+  {
+   "seed": 6,
+   "mode": "athanor",
+   "arm": {
+    "validity": false,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 42
+   }
+  },
+  {
+   "seed": 7,
+   "mode": "athanor",
+   "arm": {
+    "validity": false,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 46
+   }
+  },
+  {
+   "seed": 8,
+   "mode": "athanor",
+   "arm": {
+    "validity": false,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 57
+   }
+  },
+  {
+   "seed": 9,
+   "mode": "athanor",
+   "arm": {
+    "validity": false,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 55
+   }
+  },
+  {
+   "seed": 10,
+   "mode": "athanor",
+   "arm": {
+    "validity": false,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 56
+   }
+  },
+  {
+   "seed": 11,
+   "mode": "athanor",
+   "arm": {
+    "validity": false,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 42
+   }
+  },
+  {
+   "seed": 12,
+   "mode": "athanor",
+   "arm": {
+    "validity": false,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 40
+   }
+  },
+  {
+   "seed": 13,
+   "mode": "athanor",
+   "arm": {
+    "validity": false,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 44
+   }
+  },
+  {
+   "seed": 14,
+   "mode": "athanor",
+   "arm": {
+    "validity": false,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 39
+   }
+  },
+  {
+   "seed": 15,
+   "mode": "athanor",
+   "arm": {
+    "validity": false,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 0,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 43
+   }
+  },
+  {
+   "seed": 0,
+   "mode": "validity+athanor",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 26,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 20
+   }
+  },
+  {
+   "seed": 1,
+   "mode": "validity+athanor",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 24,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 1,
+    "REJECT": 32
+   }
+  },
+  {
+   "seed": 2,
+   "mode": "validity+athanor",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 27,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 30
+   }
+  },
+  {
+   "seed": 3,
+   "mode": "validity+athanor",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 27,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 1,
+    "REJECT": 18
+   }
+  },
+  {
+   "seed": 4,
+   "mode": "validity+athanor",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 19,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 28
+   }
+  },
+  {
+   "seed": 5,
+   "mode": "validity+athanor",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 31,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 26
+   }
+  },
+  {
+   "seed": 6,
+   "mode": "validity+athanor",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 21,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 21
+   }
+  },
+  {
+   "seed": 7,
+   "mode": "validity+athanor",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 27,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 19
+   }
+  },
+  {
+   "seed": 8,
+   "mode": "validity+athanor",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 27,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 30
+   }
+  },
+  {
+   "seed": 9,
+   "mode": "validity+athanor",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 29,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 26
+   }
+  },
+  {
+   "seed": 10,
+   "mode": "validity+athanor",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 24,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 32
+   }
+  },
+  {
+   "seed": 11,
+   "mode": "validity+athanor",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 18,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 24
+   }
+  },
+  {
+   "seed": 12,
+   "mode": "validity+athanor",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 23,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 17
+   }
+  },
+  {
+   "seed": 13,
+   "mode": "validity+athanor",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 23,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 21
+   }
+  },
+  {
+   "seed": 14,
+   "mode": "validity+athanor",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 20,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 19
+   }
+  },
+  {
+   "seed": 15,
+   "mode": "validity+athanor",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": null
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 0,
+   "regressions": 0,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 23,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 20
+   }
+  },
+  {
+   "seed": 0,
+   "mode": "validity+athanor-conservative",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.75,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1832004556083981,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1832004556083981,
+   "steps_to_good": null,
+   "commits": 5,
+   "regressions": 3,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 26,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 5,
+    "REFINE": 0,
+    "REJECT": 45
+   }
+  },
+  {
+   "seed": 1,
+   "mode": "validity+athanor-conservative",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.75,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.153275027854924,
+   "best_held": 1.0962102792910227,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 11,
+   "regressions": 5,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 41,
+     "old": 1.0962102792910227,
+     "new": 1.1574956153856761,
+     "fail": null,
+     "verdict": "APPROVE"
+    }
+   ],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 28,
+   "proposals_invalid": 161,
+   "verdicts": {
+    "APPROVE": 11,
+    "REFINE": 0,
+    "REJECT": 19
+   }
+  },
+  {
+   "seed": 2,
+   "mode": "validity+athanor-conservative",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.75,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0444701753498677,
+   "best_held": 1.0288915802388687,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 27,
+   "commits": 23,
+   "regressions": 12,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 25,
+   "proposals_invalid": 369,
+   "verdicts": {
+    "APPROVE": 23,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 3,
+   "mode": "validity+athanor-conservative",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.75,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1832004556083981,
+   "steps_to_good": null,
+   "commits": 9,
+   "regressions": 5,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 26,
+   "proposals_invalid": 264,
+   "verdicts": {
+    "APPROVE": 9,
+    "REFINE": 0,
+    "REJECT": 11
+   }
+  },
+  {
+   "seed": 4,
+   "mode": "validity+athanor-conservative",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.75,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0991412702259327,
+   "best_held": 1.0991412702259327,
+   "worst_held": 1.1832004556083981,
+   "steps_to_good": null,
+   "commits": 7,
+   "regressions": 3,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 19,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 7,
+    "REFINE": 0,
+    "REJECT": 44
+   }
+  },
+  {
+   "seed": 5,
+   "mode": "validity+athanor-conservative",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.75,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1832004556083981,
+   "steps_to_good": null,
+   "commits": 2,
+   "regressions": 1,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 31,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 2,
+    "REFINE": 0,
+    "REJECT": 27
+   }
+  },
+  {
+   "seed": 6,
+   "mode": "validity+athanor-conservative",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.75,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0533905908739851,
+   "best_held": 1.0288915802388687,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 7,
+   "commits": 23,
+   "regressions": 11,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 20,
+   "proposals_invalid": 215,
+   "verdicts": {
+    "APPROVE": 23,
+    "REFINE": 0,
+    "REJECT": 1
+   }
+  },
+  {
+   "seed": 7,
+   "mode": "validity+athanor-conservative",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.75,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0375236918355593,
+   "best_held": 1.0288915802388687,
+   "worst_held": Infinity,
+   "steps_to_good": 15,
+   "commits": 33,
+   "regressions": 13,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 527,
+     "old": 1.0491338905502112,
+     "new": null,
+     "fail": "timeout",
+     "verdict": "APPROVE"
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 1,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 1,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 27,
+   "proposals_invalid": 294,
+   "verdicts": {
+    "APPROVE": 33,
+    "REFINE": 0,
+    "REJECT": 1
+   }
+  },
+  {
+   "seed": 8,
+   "mode": "validity+athanor-conservative",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.75,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0483192105937145,
+   "best_held": 1.0340343628630164,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 33,
+   "commits": 28,
+   "regressions": 11,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 28,
+   "proposals_invalid": 364,
+   "verdicts": {
+    "APPROVE": 28,
+    "REFINE": 1,
+    "REJECT": 1
+   }
+  },
+  {
+   "seed": 9,
+   "mode": "validity+athanor-conservative",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.75,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.044031423941839,
+   "best_held": 1.027273829810951,
+   "worst_held": Infinity,
+   "steps_to_good": 15,
+   "commits": 44,
+   "regressions": 17,
+   "severe_regressions": 2,
+   "severe_events": [
+    {
+     "step": 32,
+     "old": 1.0342869081552726,
+     "new": null,
+     "fail": "timeout",
+     "verdict": "APPROVE"
+    },
+    {
+     "step": 74,
+     "old": 1.0482191616623981,
+     "new": null,
+     "fail": "timeout",
+     "verdict": "APPROVE"
+    }
+   ],
+   "broken_commits": 2,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 2,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 2,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 28,
+   "proposals_invalid": 311,
+   "verdicts": {
+    "APPROVE": 44,
+    "REFINE": 1,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 10,
+   "mode": "validity+athanor-conservative",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.75,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1008090065436416,
+   "best_held": 1.1005258878856539,
+   "worst_held": 1.1977476363417265,
+   "steps_to_good": null,
+   "commits": 7,
+   "regressions": 4,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 24,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 7,
+    "REFINE": 1,
+    "REJECT": 5
+   }
+  },
+  {
+   "seed": 11,
+   "mode": "validity+athanor-conservative",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.75,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.178870677112712,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.178870677112712,
+   "steps_to_good": null,
+   "commits": 1,
+   "regressions": 1,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 18,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 1,
+    "REFINE": 0,
+    "REJECT": 37
+   }
+  },
+  {
+   "seed": 12,
+   "mode": "validity+athanor-conservative",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.75,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0401318713486818,
+   "best_held": 1.0307506275228884,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 15,
+   "commits": 28,
+   "regressions": 13,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 25,
+   "proposals_invalid": 199,
+   "verdicts": {
+    "APPROVE": 28,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 13,
+   "mode": "validity+athanor-conservative",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.75,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1641175485082398,
+   "best_held": 1.1641175485082398,
+   "worst_held": 1.2006111786820304,
+   "steps_to_good": null,
+   "commits": 5,
+   "regressions": 3,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 23,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 5,
+    "REFINE": 0,
+    "REJECT": 62
+   }
+  },
+  {
+   "seed": 14,
+   "mode": "validity+athanor-conservative",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.75,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0498092710400067,
+   "best_held": 1.0386272331551474,
+   "worst_held": Infinity,
+   "steps_to_good": 121,
+   "commits": 37,
+   "regressions": 11,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 533,
+     "old": 1.0386272331551474,
+     "new": null,
+     "fail": "crash",
+     "verdict": "APPROVE"
+    }
+   ],
+   "broken_commits": 1,
+   "broken_by_kind": {
+    "crash": 1,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 1,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 4,
+   "proposals_invalid": 311,
+   "verdicts": {
+    "APPROVE": 37,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 15,
+   "mode": "validity+athanor-conservative",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.75,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.178870677112712,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.178870677112712,
+   "steps_to_good": null,
+   "commits": 1,
+   "regressions": 1,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 23,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 1,
+    "REFINE": 0,
+    "REJECT": 31
+   }
+  },
+  {
+   "seed": 0,
+   "mode": "validity+athanor-adaptive",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.7,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.052017926799591,
+   "best_held": 1.029091172561839,
+   "worst_held": Infinity,
+   "steps_to_good": 47,
+   "commits": 38,
+   "regressions": 17,
+   "severe_regressions": 2,
+   "severe_events": [
+    {
+     "step": 58,
+     "old": 1.0330755244722312,
+     "new": null,
+     "fail": "timeout",
+     "verdict": "APPROVE"
+    },
+    {
+     "step": 253,
+     "old": 1.0415547729531758,
+     "new": null,
+     "fail": "timeout",
+     "verdict": "APPROVE"
+    }
+   ],
+   "broken_commits": 2,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 2,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 2,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 24,
+   "proposals_invalid": 279,
+   "verdicts": {
+    "APPROVE": 38,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 1,
+   "mode": "validity+athanor-adaptive",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.7,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.045724134996816,
+   "best_held": 1.0291721919201764,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 67,
+   "commits": 26,
+   "regressions": 14,
+   "severe_regressions": 1,
+   "severe_events": [
+    {
+     "step": 41,
+     "old": 1.0962102792910227,
+     "new": 1.1574956153856761,
+     "fail": null,
+     "verdict": "APPROVE"
+    }
+   ],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 24,
+   "proposals_invalid": 370,
+   "verdicts": {
+    "APPROVE": 26,
+    "REFINE": 1,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 2,
+   "mode": "validity+athanor-adaptive",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.7,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0531235957142409,
+   "best_held": 1.0292694054633102,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 27,
+   "commits": 28,
+   "regressions": 16,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 25,
+   "proposals_invalid": 299,
+   "verdicts": {
+    "APPROVE": 28,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 3,
+   "mode": "validity+athanor-adaptive",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.7,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1832004556083981,
+   "steps_to_good": null,
+   "commits": 9,
+   "regressions": 5,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 26,
+   "proposals_invalid": 264,
+   "verdicts": {
+    "APPROVE": 9,
+    "REFINE": 0,
+    "REJECT": 11
+   }
+  },
+  {
+   "seed": 4,
+   "mode": "validity+athanor-adaptive",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.7,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0991412702259327,
+   "best_held": 1.0991412702259327,
+   "worst_held": 1.1832004556083981,
+   "steps_to_good": null,
+   "commits": 7,
+   "regressions": 3,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 19,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 7,
+    "REFINE": 0,
+    "REJECT": 26
+   }
+  },
+  {
+   "seed": 5,
+   "mode": "validity+athanor-adaptive",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.7,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1771816438120328,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.1832004556083981,
+   "steps_to_good": null,
+   "commits": 2,
+   "regressions": 1,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 31,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 2,
+    "REFINE": 0,
+    "REJECT": 27
+   }
+  },
+  {
+   "seed": 6,
+   "mode": "validity+athanor-adaptive",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.7,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.048964173381114,
+   "best_held": 1.0260755909734693,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 7,
+   "commits": 42,
+   "regressions": 19,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 19,
+   "proposals_invalid": 255,
+   "verdicts": {
+    "APPROVE": 42,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 7,
+   "mode": "validity+athanor-adaptive",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.7,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": null,
+   "best_held": 1.03009081257709,
+   "worst_held": Infinity,
+   "steps_to_good": 15,
+   "commits": 44,
+   "regressions": 23,
+   "severe_regressions": 2,
+   "severe_events": [
+    {
+     "step": 88,
+     "old": 1.0354230947239218,
+     "new": null,
+     "fail": "timeout",
+     "verdict": "APPROVE"
+    },
+    {
+     "step": 973,
+     "old": 1.0466602225753023,
+     "new": null,
+     "fail": "timeout",
+     "verdict": "APPROVE"
+    }
+   ],
+   "broken_commits": 2,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 2,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 2,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 28,
+   "proposals_invalid": 312,
+   "verdicts": {
+    "APPROVE": 44,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 8,
+   "mode": "validity+athanor-adaptive",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.7,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0321169015179936,
+   "best_held": 1.0306288843924127,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 33,
+   "commits": 18,
+   "regressions": 8,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 28,
+   "proposals_invalid": 358,
+   "verdicts": {
+    "APPROVE": 18,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 9,
+   "mode": "validity+athanor-adaptive",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.7,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0494896997906151,
+   "best_held": 1.0336150842423601,
+   "worst_held": Infinity,
+   "steps_to_good": 15,
+   "commits": 42,
+   "regressions": 10,
+   "severe_regressions": 2,
+   "severe_events": [
+    {
+     "step": 32,
+     "old": 1.0342869081552726,
+     "new": null,
+     "fail": "timeout",
+     "verdict": "APPROVE"
+    },
+    {
+     "step": 74,
+     "old": 1.0482191616623981,
+     "new": null,
+     "fail": "timeout",
+     "verdict": "APPROVE"
+    }
+   ],
+   "broken_commits": 2,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 2,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 2,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 30,
+   "proposals_invalid": 255,
+   "verdicts": {
+    "APPROVE": 42,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 10,
+   "mode": "validity+athanor-adaptive",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.7,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.2006111786820304,
+   "best_held": 1.1715661102586512,
+   "worst_held": 1.2006111786820304,
+   "steps_to_good": null,
+   "commits": 8,
+   "regressions": 5,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 24,
+   "proposals_invalid": 382,
+   "verdicts": {
+    "APPROVE": 8,
+    "REFINE": 2,
+    "REJECT": 15
+   }
+  },
+  {
+   "seed": 11,
+   "mode": "validity+athanor-adaptive",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.7,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.053838829896684,
+   "best_held": 1.0270944214509292,
+   "worst_held": 1.1972370118131357,
+   "steps_to_good": 94,
+   "commits": 19,
+   "regressions": 12,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 19,
+   "proposals_invalid": 343,
+   "verdicts": {
+    "APPROVE": 19,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 12,
+   "mode": "validity+athanor-adaptive",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.7,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.037984693296997,
+   "best_held": 1.0324480142785353,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 15,
+   "commits": 23,
+   "regressions": 10,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 25,
+   "proposals_invalid": 181,
+   "verdicts": {
+    "APPROVE": 23,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 13,
+   "mode": "validity+athanor-adaptive",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.7,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1641175485082398,
+   "best_held": 1.1641175485082398,
+   "worst_held": 1.2006111786820304,
+   "steps_to_good": null,
+   "commits": 5,
+   "regressions": 3,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 23,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 5,
+    "REFINE": 0,
+    "REJECT": 62
+   }
+  },
+  {
+   "seed": 14,
+   "mode": "validity+athanor-adaptive",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.7,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0426709569492958,
+   "best_held": 1.032085588602247,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 7,
+   "commits": 34,
+   "regressions": 19,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 16,
+   "proposals_invalid": 330,
+   "verdicts": {
+    "APPROVE": 34,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 15,
+   "mode": "validity+athanor-adaptive",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.7,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.178870677112712,
+   "best_held": 1.1771816438120328,
+   "worst_held": 1.178870677112712,
+   "steps_to_good": null,
+   "commits": 1,
+   "regressions": 1,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 23,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 1,
+    "REFINE": 0,
+    "REJECT": 28
+   }
+  },
+  {
+   "seed": 0,
+   "mode": "validity+athanor-tuned",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0495766798619146,
+   "best_held": 1.0266082973386597,
+   "worst_held": 1.1832004556083981,
+   "steps_to_good": 47,
+   "commits": 29,
+   "regressions": 16,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 28,
+   "proposals_invalid": 186,
+   "verdicts": {
+    "APPROVE": 29,
+    "REFINE": 0,
+    "REJECT": 2
+   }
+  },
+  {
+   "seed": 1,
+   "mode": "validity+athanor-tuned",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0365780262039277,
+   "best_held": 1.0315787628849151,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 67,
+   "commits": 22,
+   "regressions": 11,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 24,
+   "proposals_invalid": 311,
+   "verdicts": {
+    "APPROVE": 22,
+    "REFINE": 0,
+    "REJECT": 1
+   }
+  },
+  {
+   "seed": 2,
+   "mode": "validity+athanor-tuned",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0419296435602572,
+   "best_held": 1.0305621280854411,
+   "worst_held": Infinity,
+   "steps_to_good": 27,
+   "commits": 24,
+   "regressions": 14,
+   "severe_regressions": 2,
+   "severe_events": [
+    {
+     "step": 681,
+     "old": 1.0312814218233353,
+     "new": null,
+     "fail": "timeout",
+     "verdict": "APPROVE"
+    },
+    {
+     "step": 917,
+     "old": 1.032710478552993,
+     "new": null,
+     "fail": "timeout",
+     "verdict": "APPROVE"
+    }
+   ],
+   "broken_commits": 2,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 2,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 2,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 29,
+   "proposals_invalid": 226,
+   "verdicts": {
+    "APPROVE": 24,
+    "REFINE": 1,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 3,
+   "mode": "validity+athanor-tuned",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0370388549340932,
+   "best_held": 1.0342869081552726,
+   "worst_held": 1.178870677112712,
+   "steps_to_good": 103,
+   "commits": 8,
+   "regressions": 4,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 26,
+   "proposals_invalid": 238,
+   "verdicts": {
+    "APPROVE": 8,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 4,
+   "mode": "validity+athanor-tuned",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.099990060179744,
+   "best_held": 1.0991412702259327,
+   "worst_held": 1.1832004556083981,
+   "steps_to_good": null,
+   "commits": 9,
+   "regressions": 5,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 19,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 9,
+    "REFINE": 2,
+    "REJECT": 10
+   }
+  },
+  {
+   "seed": 5,
+   "mode": "validity+athanor-tuned",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0459550722338236,
+   "best_held": 1.0459550722338236,
+   "worst_held": 1.1832004556083981,
+   "steps_to_good": 940,
+   "commits": 8,
+   "regressions": 2,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 15,
+   "proposals_invalid": 276,
+   "verdicts": {
+    "APPROVE": 8,
+    "REFINE": 0,
+    "REJECT": 3
+   }
+  },
+  {
+   "seed": 6,
+   "mode": "validity+athanor-tuned",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0532505960791074,
+   "best_held": 1.0342869081552726,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 7,
+   "commits": 9,
+   "regressions": 6,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 20,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 9,
+    "REFINE": 1,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 7,
+   "mode": "validity+athanor-tuned",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.046990055068289,
+   "best_held": 1.033460718728794,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 15,
+   "commits": 11,
+   "regressions": 7,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 25,
+   "proposals_invalid": 312,
+   "verdicts": {
+    "APPROVE": 11,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 8,
+   "mode": "validity+athanor-tuned",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.049624113220237,
+   "best_held": 1.0427456315164296,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 33,
+   "commits": 14,
+   "regressions": 6,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 26,
+   "proposals_invalid": 349,
+   "verdicts": {
+    "APPROVE": 14,
+    "REFINE": 2,
+    "REJECT": 3
+   }
+  },
+  {
+   "seed": 9,
+   "mode": "validity+athanor-tuned",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0368695878416812,
+   "best_held": 1.0288915802388687,
+   "worst_held": 1.0962102792910227,
+   "steps_to_good": 15,
+   "commits": 23,
+   "regressions": 11,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 28,
+   "proposals_invalid": 224,
+   "verdicts": {
+    "APPROVE": 23,
+    "REFINE": 2,
+    "REJECT": 1
+   }
+  },
+  {
+   "seed": 10,
+   "mode": "validity+athanor-tuned",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.1106830706601731,
+   "best_held": 1.1106830706601731,
+   "worst_held": 1.2006111786820304,
+   "steps_to_good": null,
+   "commits": 10,
+   "regressions": 6,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 24,
+   "proposals_invalid": 380,
+   "verdicts": {
+    "APPROVE": 10,
+    "REFINE": 1,
+    "REJECT": 16
+   }
+  },
+  {
+   "seed": 11,
+   "mode": "validity+athanor-tuned",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0418633717462122,
+   "best_held": 1.02611973840988,
+   "worst_held": 1.1977476363417265,
+   "steps_to_good": 94,
+   "commits": 16,
+   "regressions": 8,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 19,
+   "proposals_invalid": 225,
+   "verdicts": {
+    "APPROVE": 16,
+    "REFINE": 0,
+    "REJECT": 0
+   }
+  },
+  {
+   "seed": 12,
+   "mode": "validity+athanor-tuned",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0333924336254545,
+   "best_held": 1.0333924336254545,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": 15,
+   "commits": 29,
+   "regressions": 13,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 23,
+   "proposals_invalid": 152,
+   "verdicts": {
+    "APPROVE": 29,
+    "REFINE": 0,
+    "REJECT": 1
+   }
+  },
+  {
+   "seed": 13,
+   "mode": "validity+athanor-tuned",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0587683817830016,
+   "best_held": 1.0305805429292185,
+   "worst_held": 1.2006111786820304,
+   "steps_to_good": 91,
+   "commits": 41,
+   "regressions": 21,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 24,
+   "proposals_invalid": 258,
+   "verdicts": {
+    "APPROVE": 41,
+    "REFINE": 1,
+    "REJECT": 1
+   }
+  },
+  {
+   "seed": 14,
+   "mode": "validity+athanor-tuned",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.0951747098562572,
+   "best_held": 1.0935026278195723,
+   "worst_held": 1.1771816438120328,
+   "steps_to_good": null,
+   "commits": 6,
+   "regressions": 2,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 20,
+   "proposals_invalid": 0,
+   "verdicts": {
+    "APPROVE": 6,
+    "REFINE": 0,
+    "REJECT": 7
+   }
+  },
+  {
+   "seed": 15,
+   "mode": "validity+athanor-tuned",
+   "arm": {
+    "validity": true,
+    "athanor": true,
+    "gamma": 6.0,
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null
+    }
+   },
+   "seed_held": 1.1771816438120328,
+   "final_held": 1.027222922905453,
+   "best_held": 1.027222922905453,
+   "worst_held": 1.178870677112712,
+   "steps_to_good": 85,
+   "commits": 23,
+   "regressions": 13,
+   "severe_regressions": 0,
+   "severe_events": [],
+   "broken_commits": 0,
+   "broken_by_kind": {
+    "crash": 0,
+    "timeout": 0,
+    "invalid": 0
+   },
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0,
+    "UNGATED": 0
+   },
+   "validity_rejections": 23,
+   "proposals_invalid": 219,
+   "verdicts": {
+    "APPROVE": 23,
+    "REFINE": 0,
+    "REJECT": 2
+   }
+  }
+ ]
+}
