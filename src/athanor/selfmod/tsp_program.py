@@ -156,7 +156,8 @@ class Program:
 
 
 def tour_length(tour: List[int], D: List[List[float]]) -> float:
-    return float(sum(D[tour[k]][tour[(k + 1) % len(tour)]] for k in range(len(tour))))
+    # math.fsum: exactly rounded, so results are identical across Python versions (3.12 changed sum())
+    return float(math.fsum(D[tour[k]][tour[(k + 1) % len(tour)]] for k in range(len(tour))))
 
 
 def check_tour(tour: Any, n: int) -> None:

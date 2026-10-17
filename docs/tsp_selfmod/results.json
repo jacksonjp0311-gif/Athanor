@@ -94,7 +94,7 @@
    "broken_step_fraction": 0.9535,
    "severe_regressions": 17,
    "regressions": 30,
-   "worst_committed_ratio": 1.2006111786820306,
+   "worst_committed_ratio": 1.2006111786820304,
    "broken_by_verdict": {
     "APPROVE": 0,
     "REFINE": 0,
@@ -206,7 +206,7 @@
    "broken_step_fraction": 0.0398125,
    "severe_regressions": 5,
    "regressions": 114,
-   "worst_committed_ratio": 1.2006111786820306,
+   "worst_committed_ratio": 1.2006111786820304,
    "broken_by_verdict": {
     "APPROVE": 4,
     "REFINE": 0,
@@ -214,7 +214,7 @@
     "UNGATED": 0
    },
    "median_held_50": 1.1771816438120328,
-   "median_held_1000": 1.0999751383847869,
+   "median_held_1000": 1.099975138384787,
    "median_best_held": 1.0976757747584776,
    "median_steps_to_good": Infinity,
    "never_good": 9,
@@ -234,7 +234,7 @@
    "broken_step_fraction": 0.044250000000000005,
    "severe_regressions": 7,
    "regressions": 166,
-   "worst_committed_ratio": 1.2006111786820306,
+   "worst_committed_ratio": 1.2006111786820304,
    "broken_by_verdict": {
     "APPROVE": 6,
     "REFINE": 0,
@@ -262,7 +262,7 @@
    "broken_step_fraction": 0.0054375,
    "severe_regressions": 2,
    "regressions": 145,
-   "worst_committed_ratio": 1.2006111786820306,
+   "worst_committed_ratio": 1.2006111786820304,
    "broken_by_verdict": {
     "APPROVE": 2,
     "REFINE": 0,
@@ -270,7 +270,7 @@
     "UNGATED": 0
    },
    "median_held_50": 1.0962102792910227,
-   "median_held_1000": 1.0464725636510563,
+   "median_held_1000": 1.0464725636510561,
    "median_best_held": 1.0334265761771242,
    "median_steps_to_good": 76.0,
    "never_good": 3,
@@ -281,7 +281,7 @@
  },
  "config": {
   "steps": 1000,
-  "seconds": 139.1
+  "seconds": 95.6
  },
  "runs": [
   {
@@ -573,7 +573,7 @@
    "severe_events": [
     {
      "step": 194,
-     "old": 1.0340868639020089,
+     "old": 1.0340868639020087,
      "new": null,
      "fail": "invalid",
      "verdict": null
@@ -609,7 +609,7 @@
    },
    "seed_held": 1.1771816438120328,
    "final_held": null,
-   "best_held": 1.0342869081552724,
+   "best_held": 1.0342869081552726,
    "worst_held": Infinity,
    "steps_to_good": 15,
    "commits": 5,
@@ -618,7 +618,7 @@
    "severe_events": [
     {
      "step": 25,
-     "old": 1.0343590973240988,
+     "old": 1.034359097324099,
      "new": null,
      "fail": "invalid",
      "verdict": null
@@ -664,7 +664,7 @@
     {
      "step": 16,
      "old": 1.0962102792910227,
-     "new": 1.1970381897815112,
+     "new": 1.1970381897815114,
      "fail": null,
      "verdict": null
     },
@@ -706,7 +706,7 @@
    },
    "seed_held": 1.1771816438120328,
    "final_held": null,
-   "best_held": 1.0342869081552724,
+   "best_held": 1.0342869081552726,
    "worst_held": Infinity,
    "steps_to_good": 15,
    "commits": 6,
@@ -715,7 +715,7 @@
    "severe_events": [
     {
      "step": 32,
-     "old": 1.0342869081552724,
+     "old": 1.0342869081552726,
      "new": null,
      "fail": "timeout",
      "verdict": null
@@ -1020,9 +1020,9 @@
     "gamma": null
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.540852758042564,
+   "final_held": 1.5408527580425644,
    "best_held": 1.0330755244722312,
-   "worst_held": 1.971748003887376,
+   "worst_held": 1.9717480038873758,
    "steps_to_good": 47,
    "commits": 50,
    "regressions": 26,
@@ -1030,85 +1030,85 @@
    "severe_events": [
     {
      "step": 207,
-     "old": 1.0407067227708573,
-     "new": 1.319841753626762,
+     "old": 1.0407067227708575,
+     "new": 1.3198417536267613,
      "fail": null,
      "verdict": null
     },
     {
      "step": 208,
-     "old": 1.319841753626762,
-     "new": 1.4526052533300116,
+     "old": 1.3198417536267613,
+     "new": 1.4526052533300113,
      "fail": null,
      "verdict": null
     },
     {
      "step": 300,
-     "old": 1.124723314331324,
-     "new": 1.2214960817998661,
+     "old": 1.1247233143313242,
+     "new": 1.2214960817998664,
      "fail": null,
      "verdict": null
     },
     {
      "step": 329,
      "old": 1.0985114927538455,
-     "new": 1.1610839564950928,
+     "new": 1.1610839564950926,
      "fail": null,
      "verdict": null
     },
     {
      "step": 345,
-     "old": 1.1610839564950928,
-     "new": 1.244959968425147,
+     "old": 1.1610839564950926,
+     "new": 1.2449599684251467,
      "fail": null,
      "verdict": null
     },
     {
      "step": 380,
-     "old": 1.244959968425147,
-     "new": 1.4141098483050072,
+     "old": 1.2449599684251467,
+     "new": 1.4141098483050074,
      "fail": null,
      "verdict": null
     },
     {
      "step": 401,
-     "old": 1.4141098483050072,
-     "new": 1.540692777262752,
+     "old": 1.4141098483050074,
+     "new": 1.5406927772627521,
      "fail": null,
      "verdict": null
     },
     {
      "step": 404,
-     "old": 1.540692777262752,
-     "new": 1.6497164607396775,
+     "old": 1.5406927772627521,
+     "new": 1.6497164607396777,
      "fail": null,
      "verdict": null
     },
     {
      "step": 538,
      "old": 1.4482989328866513,
-     "new": 1.667697447591145,
+     "new": 1.6676974475911455,
      "fail": null,
      "verdict": null
     },
     {
      "step": 672,
-     "old": 1.3835054455268938,
-     "new": 1.971748003887376,
+     "old": 1.383505445526894,
+     "new": 1.9717480038873758,
      "fail": null,
      "verdict": null
     },
     {
      "step": 761,
-     "old": 1.406142907734944,
-     "new": 1.5583844527184174,
+     "old": 1.4061429077349443,
+     "new": 1.5583844527184176,
      "fail": null,
      "verdict": null
     },
     {
      "step": 979,
-     "old": 1.446372749362965,
-     "new": 1.540852758042564,
+     "old": 1.4463727493629646,
+     "new": 1.5408527580425644,
      "fail": null,
      "verdict": null
     }
@@ -1142,7 +1142,7 @@
     "gamma": null
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.1160066587221693,
+   "final_held": 1.1160066587221695,
    "best_held": 1.032085588602247,
    "worst_held": 2.376132769864239,
    "steps_to_good": 67,
@@ -1153,21 +1153,21 @@
     {
      "step": 16,
      "old": 1.0962102792910227,
-     "new": 1.1970381897815112,
+     "new": 1.1970381897815114,
      "fail": null,
      "verdict": null
     },
     {
      "step": 410,
-     "old": 1.0446882624589215,
-     "new": 1.5371073915481117,
+     "old": 1.0446882624589218,
+     "new": 1.5371073915481115,
      "fail": null,
      "verdict": null
     },
     {
      "step": 462,
      "old": 1.25528824188669,
-     "new": 1.6222795251713644,
+     "new": 1.6222795251713649,
      "fail": null,
      "verdict": null
     },
@@ -1245,9 +1245,9 @@
     "gamma": null
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.038987552301085,
-   "best_held": 1.0287557985058702,
-   "worst_held": 1.1788706771127118,
+   "final_held": 1.0389875523010852,
+   "best_held": 1.0287557985058704,
+   "worst_held": 1.178870677112712,
    "steps_to_good": 103,
    "commits": 20,
    "regressions": 9,
@@ -1284,7 +1284,7 @@
    "seed_held": 1.1771816438120328,
    "final_held": 1.0288915802388687,
    "best_held": 1.0288915802388687,
-   "worst_held": 1.183200455608398,
+   "worst_held": 1.1832004556083981,
    "steps_to_good": 101,
    "commits": 26,
    "regressions": 11,
@@ -1319,9 +1319,9 @@
     "gamma": null
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.0479288569005265,
-   "best_held": 1.0479288569005265,
-   "worst_held": 1.183200455608398,
+   "final_held": 1.0479288569005267,
+   "best_held": 1.0479288569005267,
+   "worst_held": 1.1832004556083981,
    "steps_to_good": 934,
    "commits": 16,
    "regressions": 7,
@@ -1356,7 +1356,7 @@
     "gamma": null
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.0409010038402682,
+   "final_held": 1.040901003840268,
    "best_held": 1.0288915802388687,
    "worst_held": 1.1771816438120328,
    "steps_to_good": 7,
@@ -1403,7 +1403,7 @@
    "severe_events": [
     {
      "step": 88,
-     "old": 1.0354230947239216,
+     "old": 1.0354230947239218,
      "new": null,
      "fail": "timeout",
      "verdict": null
@@ -1445,9 +1445,9 @@
     "gamma": null
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.0478453803095151,
-   "best_held": 1.035683311829339,
-   "worst_held": 1.1970381897815112,
+   "final_held": 1.0478453803095154,
+   "best_held": 1.0356833118293387,
+   "worst_held": 1.1970381897815114,
    "steps_to_good": 84,
    "commits": 27,
    "regressions": 12,
@@ -1456,7 +1456,7 @@
     {
      "step": 16,
      "old": 1.0962102792910227,
-     "new": 1.1970381897815112,
+     "new": 1.1970381897815114,
      "fail": null,
      "verdict": null
     }
@@ -1491,7 +1491,7 @@
    },
    "seed_held": 1.1771816438120328,
    "final_held": 1.044581995121584,
-   "best_held": 1.0342869081552724,
+   "best_held": 1.0342869081552726,
    "worst_held": Infinity,
    "steps_to_good": 15,
    "commits": 34,
@@ -1500,7 +1500,7 @@
    "severe_events": [
     {
      "step": 32,
-     "old": 1.0342869081552724,
+     "old": 1.0342869081552726,
      "new": null,
      "fail": "timeout",
      "verdict": null
@@ -1543,8 +1543,8 @@
    },
    "seed_held": 1.1771816438120328,
    "final_held": 1.0364227034348013,
-   "best_held": 1.0346390332605648,
-   "worst_held": 1.2006111786820306,
+   "best_held": 1.0346390332605646,
+   "worst_held": 1.2006111786820304,
    "steps_to_good": 151,
    "commits": 50,
    "regressions": 23,
@@ -1579,7 +1579,7 @@
     "gamma": null
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.0424229332037893,
+   "final_held": 1.042422933203789,
    "best_held": 1.032348853958419,
    "worst_held": 1.1977476363417265,
    "steps_to_good": 94,
@@ -1616,7 +1616,7 @@
     "gamma": null
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.0650852139073894,
+   "final_held": 1.0650852139073892,
    "best_held": 1.0324480142785353,
    "worst_held": 1.1771816438120328,
    "steps_to_good": 15,
@@ -1653,9 +1653,9 @@
     "gamma": null
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.0457873655214576,
+   "final_held": 1.0457873655214578,
    "best_held": 1.0352092944471476,
-   "worst_held": 1.2006111786820306,
+   "worst_held": 1.2006111786820304,
    "steps_to_good": 91,
    "commits": 52,
    "regressions": 27,
@@ -1729,7 +1729,7 @@
    "seed_held": 1.1771816438120328,
    "final_held": 1.0464644873826776,
    "best_held": 1.0288915802388687,
-   "worst_held": 1.1788706771127118,
+   "worst_held": 1.178870677112712,
    "steps_to_good": 85,
    "commits": 35,
    "regressions": 21,
@@ -2957,9 +2957,9 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.183200455608398,
+   "final_held": 1.1832004556083981,
    "best_held": 1.1771816438120328,
-   "worst_held": 1.183200455608398,
+   "worst_held": 1.1832004556083981,
    "steps_to_good": null,
    "commits": 5,
    "regressions": 3,
@@ -3003,7 +3003,7 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.1532750278549238,
+   "final_held": 1.153275027854924,
    "best_held": 1.0962102792910227,
    "worst_held": 1.1771816438120328,
    "steps_to_good": null,
@@ -3057,7 +3057,7 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.044470175349868,
+   "final_held": 1.0444701753498677,
    "best_held": 1.0288915802388687,
    "worst_held": 1.1771816438120328,
    "steps_to_good": 27,
@@ -3105,7 +3105,7 @@
    "seed_held": 1.1771816438120328,
    "final_held": 1.1771816438120328,
    "best_held": 1.1771816438120328,
-   "worst_held": 1.183200455608398,
+   "worst_held": 1.1832004556083981,
    "steps_to_good": null,
    "commits": 9,
    "regressions": 5,
@@ -3149,9 +3149,9 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.0991412702259322,
-   "best_held": 1.0991412702259322,
-   "worst_held": 1.183200455608398,
+   "final_held": 1.0991412702259327,
+   "best_held": 1.0991412702259327,
+   "worst_held": 1.1832004556083981,
    "steps_to_good": null,
    "commits": 7,
    "regressions": 3,
@@ -3197,7 +3197,7 @@
    "seed_held": 1.1771816438120328,
    "final_held": 1.1771816438120328,
    "best_held": 1.1771816438120328,
-   "worst_held": 1.183200455608398,
+   "worst_held": 1.1832004556083981,
    "steps_to_good": null,
    "commits": 2,
    "regressions": 1,
@@ -3241,7 +3241,7 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.053390590873985,
+   "final_held": 1.0533905908739851,
    "best_held": 1.0288915802388687,
    "worst_held": 1.1771816438120328,
    "steps_to_good": 7,
@@ -3297,7 +3297,7 @@
    "severe_events": [
     {
      "step": 527,
-     "old": 1.049133890550211,
+     "old": 1.0491338905502112,
      "new": null,
      "fail": "timeout",
      "verdict": "APPROVE"
@@ -3342,7 +3342,7 @@
    },
    "seed_held": 1.1771816438120328,
    "final_held": 1.0483192105937145,
-   "best_held": 1.0340343628630162,
+   "best_held": 1.0340343628630164,
    "worst_held": 1.1771816438120328,
    "steps_to_good": 33,
    "commits": 28,
@@ -3388,7 +3388,7 @@
    },
    "seed_held": 1.1771816438120328,
    "final_held": 1.044031423941839,
-   "best_held": 1.0272738298109512,
+   "best_held": 1.027273829810951,
    "worst_held": Infinity,
    "steps_to_good": 15,
    "commits": 44,
@@ -3397,7 +3397,7 @@
    "severe_events": [
     {
      "step": 32,
-     "old": 1.0342869081552724,
+     "old": 1.0342869081552726,
      "new": null,
      "fail": "timeout",
      "verdict": "APPROVE"
@@ -3494,9 +3494,9 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.1788706771127118,
+   "final_held": 1.178870677112712,
    "best_held": 1.1771816438120328,
-   "worst_held": 1.1788706771127118,
+   "worst_held": 1.178870677112712,
    "steps_to_good": null,
    "commits": 1,
    "regressions": 1,
@@ -3540,7 +3540,7 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.040131871348682,
+   "final_held": 1.0401318713486818,
    "best_held": 1.0307506275228884,
    "worst_held": 1.1771816438120328,
    "steps_to_good": 15,
@@ -3588,7 +3588,7 @@
    "seed_held": 1.1771816438120328,
    "final_held": 1.1641175485082398,
    "best_held": 1.1641175485082398,
-   "worst_held": 1.2006111786820306,
+   "worst_held": 1.2006111786820304,
    "steps_to_good": null,
    "commits": 5,
    "regressions": 3,
@@ -3632,7 +3632,7 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.0498092710400069,
+   "final_held": 1.0498092710400067,
    "best_held": 1.0386272331551474,
    "worst_held": Infinity,
    "steps_to_good": 121,
@@ -3686,9 +3686,9 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.1788706771127118,
+   "final_held": 1.178870677112712,
    "best_held": 1.1771816438120328,
-   "worst_held": 1.1788706771127118,
+   "worst_held": 1.178870677112712,
    "steps_to_good": null,
    "commits": 1,
    "regressions": 1,
@@ -3732,7 +3732,7 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.0520179267995908,
+   "final_held": 1.052017926799591,
    "best_held": 1.029091172561839,
    "worst_held": Infinity,
    "steps_to_good": 47,
@@ -3793,8 +3793,8 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.0457241349968165,
-   "best_held": 1.0291721919201766,
+   "final_held": 1.045724134996816,
+   "best_held": 1.0291721919201764,
    "worst_held": 1.1771816438120328,
    "steps_to_good": 67,
    "commits": 26,
@@ -3895,7 +3895,7 @@
    "seed_held": 1.1771816438120328,
    "final_held": 1.1771816438120328,
    "best_held": 1.1771816438120328,
-   "worst_held": 1.183200455608398,
+   "worst_held": 1.1832004556083981,
    "steps_to_good": null,
    "commits": 9,
    "regressions": 5,
@@ -3939,9 +3939,9 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.0991412702259322,
-   "best_held": 1.0991412702259322,
-   "worst_held": 1.183200455608398,
+   "final_held": 1.0991412702259327,
+   "best_held": 1.0991412702259327,
+   "worst_held": 1.1832004556083981,
    "steps_to_good": null,
    "commits": 7,
    "regressions": 3,
@@ -3987,7 +3987,7 @@
    "seed_held": 1.1771816438120328,
    "final_held": 1.1771816438120328,
    "best_held": 1.1771816438120328,
-   "worst_held": 1.183200455608398,
+   "worst_held": 1.1832004556083981,
    "steps_to_good": null,
    "commits": 2,
    "regressions": 1,
@@ -4031,8 +4031,8 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.0489641733811137,
-   "best_held": 1.0260755909734696,
+   "final_held": 1.048964173381114,
+   "best_held": 1.0260755909734693,
    "worst_held": 1.1771816438120328,
    "steps_to_good": 7,
    "commits": 42,
@@ -4087,7 +4087,7 @@
    "severe_events": [
     {
      "step": 88,
-     "old": 1.0354230947239216,
+     "old": 1.0354230947239218,
      "new": null,
      "fail": "timeout",
      "verdict": "APPROVE"
@@ -4138,7 +4138,7 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.0321169015179938,
+   "final_held": 1.0321169015179936,
    "best_held": 1.0306288843924127,
    "worst_held": 1.1771816438120328,
    "steps_to_good": 33,
@@ -4185,7 +4185,7 @@
    },
    "seed_held": 1.1771816438120328,
    "final_held": 1.0494896997906151,
-   "best_held": 1.03361508424236,
+   "best_held": 1.0336150842423601,
    "worst_held": Infinity,
    "steps_to_good": 15,
    "commits": 42,
@@ -4194,7 +4194,7 @@
    "severe_events": [
     {
      "step": 32,
-     "old": 1.0342869081552724,
+     "old": 1.0342869081552726,
      "new": null,
      "fail": "timeout",
      "verdict": "APPROVE"
@@ -4245,9 +4245,9 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.2006111786820306,
-   "best_held": 1.1715661102586514,
-   "worst_held": 1.2006111786820306,
+   "final_held": 1.2006111786820304,
+   "best_held": 1.1715661102586512,
+   "worst_held": 1.2006111786820304,
    "steps_to_good": null,
    "commits": 8,
    "regressions": 5,
@@ -4337,7 +4337,7 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.0379846932969967,
+   "final_held": 1.037984693296997,
    "best_held": 1.0324480142785353,
    "worst_held": 1.1771816438120328,
    "steps_to_good": 15,
@@ -4385,7 +4385,7 @@
    "seed_held": 1.1771816438120328,
    "final_held": 1.1641175485082398,
    "best_held": 1.1641175485082398,
-   "worst_held": 1.2006111786820306,
+   "worst_held": 1.2006111786820304,
    "steps_to_good": null,
    "commits": 5,
    "regressions": 3,
@@ -4475,9 +4475,9 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.1788706771127118,
+   "final_held": 1.178870677112712,
    "best_held": 1.1771816438120328,
-   "worst_held": 1.1788706771127118,
+   "worst_held": 1.178870677112712,
    "steps_to_good": null,
    "commits": 1,
    "regressions": 1,
@@ -4522,8 +4522,8 @@
    },
    "seed_held": 1.1771816438120328,
    "final_held": 1.0495766798619146,
-   "best_held": 1.0266082973386594,
-   "worst_held": 1.183200455608398,
+   "best_held": 1.0266082973386597,
+   "worst_held": 1.1832004556083981,
    "steps_to_good": 47,
    "commits": 29,
    "regressions": 16,
@@ -4567,7 +4567,7 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.0365780262039275,
+   "final_held": 1.0365780262039277,
    "best_held": 1.0315787628849151,
    "worst_held": 1.1771816438120328,
    "steps_to_good": 67,
@@ -4674,9 +4674,9 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.037038854934093,
-   "best_held": 1.0342869081552724,
-   "worst_held": 1.1788706771127118,
+   "final_held": 1.0370388549340932,
+   "best_held": 1.0342869081552726,
+   "worst_held": 1.178870677112712,
    "steps_to_good": 103,
    "commits": 8,
    "regressions": 4,
@@ -4720,9 +4720,9 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.0999900601797439,
-   "best_held": 1.0991412702259322,
-   "worst_held": 1.183200455608398,
+   "final_held": 1.099990060179744,
+   "best_held": 1.0991412702259327,
+   "worst_held": 1.1832004556083981,
    "steps_to_good": null,
    "commits": 9,
    "regressions": 5,
@@ -4768,7 +4768,7 @@
    "seed_held": 1.1771816438120328,
    "final_held": 1.0459550722338236,
    "best_held": 1.0459550722338236,
-   "worst_held": 1.183200455608398,
+   "worst_held": 1.1832004556083981,
    "steps_to_good": 940,
    "commits": 8,
    "regressions": 2,
@@ -4813,7 +4813,7 @@
    },
    "seed_held": 1.1771816438120328,
    "final_held": 1.0532505960791074,
-   "best_held": 1.0342869081552724,
+   "best_held": 1.0342869081552726,
    "worst_held": 1.1771816438120328,
    "steps_to_good": 7,
    "commits": 9,
@@ -4858,7 +4858,7 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.0469900550682891,
+   "final_held": 1.046990055068289,
    "best_held": 1.033460718728794,
    "worst_held": 1.1771816438120328,
    "steps_to_good": 15,
@@ -4996,9 +4996,9 @@
     }
    },
    "seed_held": 1.1771816438120328,
-   "final_held": 1.1106830706601734,
-   "best_held": 1.1106830706601734,
-   "worst_held": 1.2006111786820306,
+   "final_held": 1.1106830706601731,
+   "best_held": 1.1106830706601731,
+   "worst_held": 1.2006111786820304,
    "steps_to_good": null,
    "commits": 10,
    "regressions": 6,
@@ -5136,7 +5136,7 @@
    "seed_held": 1.1771816438120328,
    "final_held": 1.0587683817830016,
    "best_held": 1.0305805429292185,
-   "worst_held": 1.2006111786820306,
+   "worst_held": 1.2006111786820304,
    "steps_to_good": 91,
    "commits": 41,
    "regressions": 21,
@@ -5228,7 +5228,7 @@
    "seed_held": 1.1771816438120328,
    "final_held": 1.027222922905453,
    "best_held": 1.027222922905453,
-   "worst_held": 1.1788706771127118,
+   "worst_held": 1.178870677112712,
    "steps_to_good": 85,
    "commits": 23,
    "regressions": 13,

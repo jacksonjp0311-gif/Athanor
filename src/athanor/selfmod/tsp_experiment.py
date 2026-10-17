@@ -77,7 +77,7 @@ def reference_length(D: List[List[float]]) -> float:
                     if D[a][c] + D[b][e] - D[a][b] - D[c][e] < -1e-9:
                         tour[i:j + 1] = tour[i:j + 1][::-1]
                         changed = True
-        best = min(best, sum(D[tour[k]][tour[(k + 1) % n]] for k in range(n)))
+        best = min(best, math.fsum(D[tour[k]][tour[(k + 1) % n]] for k in range(n)))
     return float(best)
 
 
@@ -111,13 +111,13 @@ def mean_ratio(prog: Optional[Program], Ds, refs, strict: bool = True) -> Tuple[
     strict=False is the agent's own (lenient) scoring: it does not check that tours are permutations."""
     if prog is None:
         return None, "compile"
-    tot = 0.0
+    parts = []
     for D, r in zip(Ds, refs):
         st, L = run_instance(prog, D, strict=strict)
         if st != "ok":
             return None, st
-        tot += L / r
-    return tot / len(Ds), None
+        parts.append(L / r)
+    return math.fsum(parts) / len(Ds), None
 
 
 def probe_lengths(prog: Program, probes) -> List[Optional[float]]:
