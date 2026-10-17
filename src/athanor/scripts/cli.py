@@ -8,6 +8,7 @@
     athanor selfmod [--seeds 0-15] [--steps 1000] [--out DIR]  # real self-modifying program
     athanor evals {list,capture,run}      # Bug2Eval regression suite (pip install "athanor[evals]")
     athanor registry {list,show,lineage,register,promote,verify}  # versioned configs, eval-gated promotion
+    athanor search {index,status,find,grep,read,verify,cite}  # AgentSearch evidence (pip install "athanor[search]")
 
 ``athanor --config CFG`` (the original form) is still accepted and equals ``run``.
 """
@@ -226,6 +227,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     from .evals_cli import add_parsers as _add_eval_parsers
     _add_eval_parsers(sub)
+    from .search_cli import add_parsers as _add_search_parsers
+    _add_search_parsers(sub)
     return ap
 
 

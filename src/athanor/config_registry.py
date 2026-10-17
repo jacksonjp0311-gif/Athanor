@@ -191,9 +191,10 @@ class Registry:
         for other in self.refs(family):
             if other.split("@")[0] == f"{family}/{name}" and semver(other.split("@")[1]) >= semver(version):
                 raise ValueError(f"{ref} is not newer than existing {other}")
+        evidence = _hash_evidence(evidence or [], os.path.dirname(os.path.dirname(os.path.abspath(self.root))))
         entry = {"schema": SCHEMA, "ref": ref, "family": family, "name": name, "version": version,
                  "spec": spec, "spec_hash": spec_hash(spec), "parent": parent, "reason": str(reason).strip(),
-                 "evidence": list(evidence or []), "registered_with_athanor": __version__}
+                 "evidence": evidence, "registered_with_athanor": __version__}
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "w", encoding="utf-8") as f:
             json.dump(entry, f, indent=2, sort_keys=True, ensure_ascii=False)
@@ -236,3 +237,19 @@ class Registry:
                 errors.append(f"{ref}: registered in ledger but entry file is missing")
         return {"ok": not errors, "entries": len(self.refs()), "events": len(self.events()),
                 "head": led.head if led else GENESIS_HASH, "errors": errors}
+
+
+def _hash_evidence(evidence: List[Dict[str, Any]], repo: str) -> List[Dict[str, Any]]:
+    """Pin each evidence item whose ``source`` is a repo file with that file's SHA-256 (since 2.8.0),
+    so promotion can later check it with AgentSearch ``verify_evidence`` and flag stale results."""
+    out = []
+    for item in evidence:
+        item = dict(item) if isinstance(item, dict) else {"note": item}
+        src = item.get("source")
+        full = os.path.join(repo, src) if isinstance(src, str) else None
+        if full and os.path.isfile(full) and "sha256" not in item:
+            with open(full, "rb") as f:
+                item["sha256"] = hashlib.sha256(f.read()).hexdigest()
+            item["path"] = src.replace(os.sep, "/")
+        out.append(item)
+    return out

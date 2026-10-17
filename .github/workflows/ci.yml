@@ -18,7 +18,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install -e ".[evals]"
+          pip install -e ".[evals,search]"   # search is skipped on 3.10 by its marker
       - name: Tests
         run: pytest -q
       - name: Determinism smoke (run -> verify -> replay)
@@ -32,6 +32,12 @@ jobs:
         run: |
           athanor registry verify
           athanor evals run --out "$RUNNER_TEMP/evals"
+      - name: Evidence layer (AgentSearch, Python 3.11+)
+        if: matrix.python-version != '3.10'
+        run: |
+          athanor search index
+          athanor search grep "severe 30 vs 8" --scope docs
+          athanor evals evidence --check
       - name: Core works without the evals extra
         if: matrix.python-version == '3.12'
         run: |

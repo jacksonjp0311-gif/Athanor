@@ -142,9 +142,19 @@ def evaluate_case(ac: AthanorCase, *, src_root: str, candidate: Optional[Dict[st
     return {"row": row, "seconds": round(time.monotonic() - t0, 2)}
 
 
+def _evidence_checker(repo: Optional[str]):
+    """AgentSearch-backed citation checks, or None when the [search] extra is unavailable."""
+    from ..search import search_available
+    if not search_available():
+        return None
+    from ..search import EvidenceIndex
+    return EvidenceIndex(repo or ".")
+
+
 def run_suite(*, cases_root: str = DEFAULT_CASES, out_dir: Optional[str] = None, ids: Optional[List[str]] = None,
               kinds: Optional[List[str]] = None, candidate: Optional[Dict[str, Any]] = None,
-              src_root: Optional[str] = None, strict: bool = False) -> Dict[str, Any]:
+              src_root: Optional[str] = None, strict: bool = False, repo: Optional[str] = None,
+              check_evidence: bool = True) -> Dict[str, Any]:
     b2e = require_bug2eval()
     src_root = os.path.abspath(src_root or default_src_root())
     cases = load_cases(cases_root, ids=ids, kinds=kinds)
@@ -158,12 +168,28 @@ def run_suite(*, cases_root: str = DEFAULT_CASES, out_dir: Optional[str] = None,
                    "candidate": candidate.get("ref") if candidate else None,
                    "candidate_spec_hash": candidate.get("spec_hash") if candidate else None,
                    "cases": [c.case_id for c in cases], "strict": bool(strict)})
-    results, timings = [], {}
-    for ac in cases:
-        r = evaluate_case(ac, src_root=src_root, candidate=candidate)
-        writer.append(r["row"])
-        results.append(r["row"])
-        timings[ac.case_id] = r["seconds"]
+    results, timings, stale_evidence = [], {}, {}
+    repo = repo or os.path.dirname(os.path.dirname(os.path.abspath(cases_root)))
+    idx = _evidence_checker(repo) if check_evidence else None
+    try:
+        from .evidence import check_case
+        for ac in cases:
+            r = evaluate_case(ac, src_root=src_root, candidate=candidate)
+            if idx is not None:
+                chk = check_case(ac, idx=idx)
+                if chk is not None:
+                    r["row"]["evidence"] = {"checked": chk["checked"], "stale": len(chk["stale"]),
+                                            "hard": len(chk["hard"])}
+                    if chk["stale"]:
+                        stale_evidence[ac.case_id] = [{k: x.get(k) for k in ("path", "status", "detail")}
+                                                      for x in chk["stale"]]
+                        r["row"]["notes"].append(f"{len(chk['stale'])} cited source(s) changed since capture")
+            writer.append(r["row"])
+            results.append(r["row"])
+            timings[ac.case_id] = r["seconds"]
+    finally:
+        if idx is not None:
+            idx.close()
     counts: Dict[str, int] = {}
     for r in results:
         counts[r["status"]] = counts.get(r["status"], 0) + 1
@@ -173,7 +199,7 @@ def run_suite(*, cases_root: str = DEFAULT_CASES, out_dir: Optional[str] = None,
                "out_dir": out_dir, "candidate": candidate.get("ref") if candidate else None,
                "results": [{k: r.get(k) for k in ("case_id", "kind", "status", "notes", "before_exit",
                                                   "after_exit", "current_exit")} for r in results],
-               "seconds": timings}
+               "seconds": timings, "evidence_checked": idx is not None, "stale_evidence": stale_evidence}
     with open(os.path.join(out_dir, "summary.json"), "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2, sort_keys=True)
         f.write("\n")

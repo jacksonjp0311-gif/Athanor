@@ -39,8 +39,9 @@ def _evals_capture_bug(a) -> int:
     from ..evals.capture import capture_bug
     out = capture_bug(case_id=a.case_id, title=a.title, before_ref=a.before_ref, after_ref=a.after_ref,
                       verifier=a.verifier, repo=a.repo, out_root=a.cases, paths=a.path or ["src"],
-                      prompt=a.prompt, timeout=a.timeout, force=a.force)
-    _print({"case": out["case"], "validation": out["validation"]})
+                      prompt=a.prompt, timeout=a.timeout, force=a.force, cites=_cites(a),
+                      attach_evidence=False if a.no_evidence else None)
+    _print({"case": out["case"], "validation": out["validation"], "evidence": out.get("evidence")})
     return 0
 
 
@@ -49,8 +50,33 @@ def _evals_capture_tuning(a) -> int:
     ev = json.loads(a.evidence) if a.evidence else {}
     out = capture_tuning(case_id=a.case_id, title=a.title, bad_ref=a.bad, good_ref=a.good, seeds=_seeds(a.seeds),
                          steps=a.steps, limits=[parse_limit(x) for x in a.limit], registry=Registry(a.registry),
-                         out_root=a.cases, evidence=ev, prompt=a.prompt, timeout=a.timeout, force=a.force)
-    _print({"case": out["case"], "validation": out["validation"], "recorded": out["sidecar"]["recorded"]})
+                         out_root=a.cases, evidence=ev, prompt=a.prompt, timeout=a.timeout, force=a.force,
+                         cites=_cites(a), attach_evidence=False if a.no_evidence else None)
+    _print({"case": out["case"], "validation": out["validation"], "recorded": out["sidecar"]["recorded"],
+            "evidence": out.get("evidence")})
+    return 0
+
+
+def _cites(a):
+    from ..evals.evidence import parse_cite
+    return [parse_cite(c) for c in (getattr(a, "cite", None) or [])]
+
+
+def _evals_evidence(a) -> int:
+    from ..evals.cases import load_cases
+    from ..evals.evidence import attach, check_case
+    cases = load_cases(a.cases, ids=a.case or None)
+    out = []
+    for ac in cases:
+        if a.check:
+            chk = check_case(ac)
+            out.append({"case_id": ac.case_id, "checked": chk and chk["checked"],
+                        "stale": chk and [{k: x.get(k) for k in ("path", "status", "detail")} for x in chk["stale"]]})
+        else:
+            out.append(attach(ac, _cites(a), refresh=not a.no_refresh))
+    _print(out)
+    if a.check and any(r["stale"] for r in out):
+        return 1
     return 0
 
 
@@ -113,7 +139,8 @@ def _reg_promote(a) -> int:
     from ..evals.promotion import GATE_SEEDS, promote
     rep = promote(Registry(a.registry), a.ref, cases_root=a.cases, out_dir=a.out,
                   seeds=_seeds(a.gate_seeds) if a.gate_seeds else GATE_SEEDS, steps=a.steps,
-                  allow_refine=a.allow_refine, dry_run=a.dry_run, src_root=a.src, bootstrap=a.bootstrap)
+                  allow_refine=a.allow_refine, dry_run=a.dry_run, src_root=a.src, bootstrap=a.bootstrap,
+                  require_fresh_evidence=a.require_fresh_evidence)
     _print(rep)
     return 0 if rep["decision"] == "promote" else 1
 
@@ -127,9 +154,10 @@ def _reg_verify(a) -> int:
 def _guard(fn):
     def wrapped(a) -> int:
         from ..evals import EvalsUnavailable
+        from ..search import SearchUnavailable
         try:
             return fn(a)
-        except (EvalsUnavailable, ValueError, KeyError, FileExistsError, FileNotFoundError, RuntimeError) as exc:
+        except (EvalsUnavailable, SearchUnavailable, ValueError, KeyError, FileExistsError, FileNotFoundError, RuntimeError) as exc:
             _print({"ok": False, "error": f"{type(exc).__name__}: {exc}"})
             return 2
     return wrapped
@@ -158,6 +186,8 @@ def add_parsers(sub) -> None:
     p.add_argument("--repo", default=".")
     p.add_argument("--prompt", default=None)
     p.add_argument("--timeout", type=int, default=300)
+    p.add_argument("--cite", action="append", help="evidence to attach: PATH or PATH:literal text (needs athanor[search])")
+    p.add_argument("--no-evidence", action="store_true", help="do not attach AgentSearch citations")
     p.add_argument("--force", action="store_true")
     p.add_argument("--cases", **common_cases)
     p.set_defaults(fn=_g_evals_capture_bug)
@@ -172,10 +202,20 @@ def add_parsers(sub) -> None:
     p.add_argument("--evidence", default=None, help="JSON object: where the failure was measured")
     p.add_argument("--prompt", default=None)
     p.add_argument("--timeout", type=int, default=900)
+    p.add_argument("--cite", action="append", help="evidence to attach: PATH or PATH:literal text (needs athanor[search])")
+    p.add_argument("--no-evidence", action="store_true", help="do not attach AgentSearch citations")
     p.add_argument("--force", action="store_true")
     p.add_argument("--cases", **common_cases)
     p.add_argument("--registry", **common_reg)
     p.set_defaults(fn=_g_evals_capture_tuning)
+
+    p = es.add_parser("evidence", help="attach (default) or --check AgentSearch citations of cases (athanor[search])")
+    p.add_argument("--case", action="append", help="case id; repeatable (default: all)")
+    p.add_argument("--cite", action="append", help="extra citation PATH or PATH:literal text")
+    p.add_argument("--check", action="store_true", help="re-verify citations; exit 1 if any are stale")
+    p.add_argument("--no-refresh", action="store_true", help="do not rescan the index first")
+    p.add_argument("--cases", **common_cases)
+    p.set_defaults(fn=_g_evals_evidence)
 
     p = es.add_parser("run", help="run the suite and write a hash-chained ledger (exit 1 on failure)")
     p.add_argument("--case", action="append", help="only this case id; repeatable")
@@ -219,6 +259,8 @@ def add_parsers(sub) -> None:
     p.add_argument("--allow-refine", action="store_true")
     p.add_argument("--bootstrap", action="store_true", help="first promotion in a family (no incumbent)")
     p.add_argument("--dry-run", action="store_true", help="evaluate but do not record")
+    p.add_argument("--require-fresh-evidence", action="store_true",
+                   help="hold (refine) if a cited source is stale or missing (athanor[search])")
     p.add_argument("--out", default=None)
     p.add_argument("--src", default=None)
     p.add_argument("--cases", **common_cases)
@@ -232,6 +274,7 @@ def add_parsers(sub) -> None:
 _g_evals_capture_bug = _guard(_evals_capture_bug)
 _g_evals_capture_tuning = _guard(_evals_capture_tuning)
 _g_evals_list = _guard(_evals_list)
+_g_evals_evidence = _guard(_evals_evidence)
 _g_evals_run = _guard(_evals_run)
 _g_reg_lineage = _guard(_reg_lineage)
 _g_reg_list = _guard(_reg_list)

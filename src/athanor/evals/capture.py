@@ -68,7 +68,7 @@ def _validate_or_discard(case_dir: str, *, force_kind: str) -> Dict[str, Any]:
 def capture_bug(*, case_id: str, title: str, before_ref: str, after_ref: str, verifier: str,
                 repo: str = ".", out_root: str = DEFAULT_CASES, paths: Sequence[str] = ("src",),
                 prompt: Optional[str] = None, tags: Optional[List[str]] = None, timeout: int = 300,
-                force: bool = False) -> Dict[str, Any]:
+                force: bool = False, cites: Sequence = (), attach_evidence: Optional[bool] = None) -> Dict[str, Any]:
     """Capture a fixed Athanor bug. Workspaces are ``paths`` at each commit plus the protected verifier."""
     require_bug2eval()
     from bug2eval.capture import capture_directories
@@ -104,8 +104,18 @@ def capture_bug(*, case_id: str, title: str, before_ref: str, after_ref: str, ve
                      "before_output": _tail(res["before"]["stdout"] + res["before"]["stderr"], 2),
                      "after_output": _tail(res["after"]["stdout"], 1)},
     })
+    ev = _maybe_evidence(out, cites, repo, attach_evidence)
     return {"case": out, "validation": {"valid": res["valid"], "before": res["before"]["exit_code"],
-                                        "after": res["after"]["exit_code"]}, "sidecar": side}
+                                        "after": res["after"]["exit_code"]}, "sidecar": side, "evidence": ev}
+
+
+def _maybe_evidence(case_dir: str, cites: Sequence, repo: str, evidence: Optional[bool]):
+    """Attach AgentSearch citations: always if ``evidence`` is True, if available when it is None."""
+    from ..search import search_available
+    if evidence is False or (evidence is None and not search_available()):
+        return None
+    from .evidence import attach
+    return attach(case_dir, list(cites), repo=repo)
 
 
 def parse_limit(text: str) -> Dict[str, Any]:
@@ -124,7 +134,8 @@ def capture_tuning(*, case_id: str, title: str, bad_ref: str, good_ref: str, see
                    limits: Sequence[Dict[str, Any]], registry: Registry, out_root: str = DEFAULT_CASES,
                    evidence: Optional[Dict[str, Any]] = None, prompt: Optional[str] = None,
                    fingerprint_metrics: Sequence[str] = DEFAULT_FINGERPRINT, timeout: int = 900,
-                   tags: Optional[List[str]] = None, force: bool = False) -> Dict[str, Any]:
+                   tags: Optional[List[str]] = None, force: bool = False, cites: Sequence = (),
+                   attach_evidence: Optional[bool] = None, repo: str = ".") -> Dict[str, Any]:
     """Capture a tuning failure: ``bad_ref`` violates ``limits`` on ``seeds``; ``good_ref`` satisfies them."""
     require_bug2eval()
     from bug2eval.capture import capture_directories
@@ -174,4 +185,5 @@ def capture_tuning(*, case_id: str, title: str, bad_ref: str, good_ref: str, see
                      "before_fingerprint": mb and mb["fingerprint"], "after_fingerprint": ma and ma["fingerprint"]},
     })
     return {"case": out, "validation": {"valid": res["valid"], "before": res["before"]["exit_code"],
-                                        "after": res["after"]["exit_code"]}, "sidecar": side}
+                                        "after": res["after"]["exit_code"]}, "sidecar": side,
+            "evidence": _maybe_evidence(out, cites, repo, attach_evidence)}
