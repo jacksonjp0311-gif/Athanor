@@ -118,6 +118,22 @@ def mse(fn, xs, ys) -> float:
     return v if math.isfinite(v) else math.inf
 
 
+def scheduled_tolerance(cur_err2: float, best_err2: float, scale: float, step: int,
+                        gamma: float, cfg: Dict[str, Any]) -> float:
+    """The full adaptive schedule (basis, power, floor, cap, half-life) used by every self-mod system.
+
+    ``cur_err2`` / ``best_err2`` are squared errors in the units of ``scale`` (e = sqrt(err2)/scale).
+    """
+    basis = best_err2 if cfg.get("adaptive_basis", "current") == "best" else cur_err2
+    tol = drift_tolerance(basis, scale, gamma, float(cfg.get("adaptive_power", 1.0)),
+                          float(cfg.get("adaptive_floor", 1.0)), cfg.get("adaptive_cap"))
+    hl = cfg.get("adaptive_halflife")
+    if hl:
+        fl = float(cfg.get("adaptive_floor", 1.0))
+        tol = fl + (tol - fl) * 2.0 ** (-step / float(hl))
+    return tol
+
+
 def edit_trajectory(old_fn, new_fn, old_src: str, new_src: str, task, cfg, tol: float = 1.0) -> np.ndarray:
     a, _ = evaluate(old_fn, task["xpr"])
     b, _ = evaluate(new_fn, task["xpr"])
@@ -172,13 +188,7 @@ def run_selfmod(seed: int, governed: bool | None = None, cfg: Dict[str, Any] | N
         if gamma:
             cur_train = mse(fn, task["xtr"], task["ytr"])
             best_train = min(best_train, cur_train)
-            basis = best_train if cfg.get("adaptive_basis", "current") == "best" else cur_train
-            tol = drift_tolerance(basis, task["sigma_y"], gamma, float(cfg.get("adaptive_power", 1.0)),
-                                  float(cfg.get("adaptive_floor", 1.0)), cfg.get("adaptive_cap"))
-            hl = cfg.get("adaptive_halflife")
-            if hl:
-                fl = float(cfg.get("adaptive_floor", 1.0))
-                tol = fl + (tol - fl) * 2.0 ** (-step / float(hl))
+            tol = scheduled_tolerance(cur_train, best_train, task["sigma_y"], step, gamma, cfg)
 
         def propose(attempt: int, scale: float):
             rng = np.random.default_rng(derive_seed(seed, 4, step, attempt))

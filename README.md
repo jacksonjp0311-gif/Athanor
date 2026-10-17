@@ -5,7 +5,7 @@
 <p align="center">
   <a href="https://github.com/jacksonjp0311-gif/Athanor/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/jacksonjp0311-gif/Athanor/actions/workflows/ci.yml/badge.svg?branch=main"/></a>
   <img alt="Python 3.10 | 3.11 | 3.12" src="https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-3776AB?logo=python&logoColor=white"/>
-  <a href="https://github.com/jacksonjp0311-gif/Athanor/releases/latest"><img alt="Version 2.5.0" src="https://img.shields.io/badge/version-2.5.0-ffb347"/></a>
+  <a href="https://github.com/jacksonjp0311-gif/Athanor/releases/latest"><img alt="Version 2.6.0" src="https://img.shields.io/badge/version-2.6.0-ffb347"/></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-3ddc97"/></a>
 </p>
 
@@ -26,7 +26,7 @@ A system that rewrites itself needs a referee that is *outside* the thing being 
 - **Every run can be audited.** Edited, deleted, inserted, or reordered ledger rows are detected, and a run can be replayed and compared bit-for-bit through its digest.
 
 ## Contents
-[Governance loop](#governance-loop) · [Quickstart](#quickstart) · [Benchmark](#benchmark-governed-vs-ungoverned) · [Real self-modifying program](#real-world-test-a-self-modifying-program) · [Algorithm card](docs/ALGORITHM_CARD.md) · [CLI](#cli-reference) · [Configuration](#configuration-reference) · [Guarantees](#guarantees) · [Run artifacts](#run-artifacts) · [Architecture](#architecture) · [Testing](#testing) · [Theory](#theory--manuscripts) · [Roadmap](#roadmap) · [Changelog](CHANGELOG.md)
+[Governance loop](#governance-loop) · [Quickstart](#quickstart) · [Benchmark](#benchmark-governed-vs-ungoverned) · [Real self-modifying program](#real-world-test-a-self-modifying-program) · [Transfer test](#26-transfer-test-a-self-modifying-tsp-solver) · [Algorithm card](docs/ALGORITHM_CARD.md) · [CLI](#cli-reference) · [Configuration](#configuration-reference) · [Guarantees](#guarantees) · [Run artifacts](#run-artifacts) · [Architecture](#architecture) · [Testing](#testing) · [Theory](#theory--manuscripts) · [Roadmap](#roadmap) · [Changelog](CHANGELOG.md)
 
 ## Governance loop
 
@@ -60,10 +60,10 @@ Install straight from GitHub (Python 3.10+):
 
 ```bash
 pip install git+https://github.com/jacksonjp0311-gif/Athanor.git            # latest main
-pip install git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.5.0     # pinned release
+pip install git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.6.0     # pinned release
 ```
 
-Each [GitHub release](https://github.com/jacksonjp0311-gif/Athanor/releases) also has the built wheel and sdist attached (for example `pip install athanor-2.5.0-py3-none-any.whl`). ATHANOR is **not published on PyPI**. The name `athanor` on PyPI belongs to an unrelated project, so `pip install athanor` will **not** install this package.
+Each [GitHub release](https://github.com/jacksonjp0311-gif/Athanor/releases) also has the built wheel and sdist attached (for example `pip install athanor-2.6.0-py3-none-any.whl`). ATHANOR is **not published on PyPI**. The name `athanor` on PyPI belongs to an unrelated project, so `pip install athanor` will **not** install this package.
 
 For development:
 
@@ -171,6 +171,40 @@ Details: [TUNING_LOG.md](docs/TUNING_LOG.md) (all 195 settings, plateau, sensiti
 
 ```bash
 athanor selfmod-arms --seeds 0-15 --out docs/selfmod --chart docs/assets/selfmod_arms.png
+```
+
+### 2.6: transfer test, a self-modifying TSP solver
+
+Does the v2.5 conservative setting work on a *different, larger* self-modifier **without retuning**? The second testbed is a six-function TSP solver module (`priority`, `pick_start`, `construct`, `budget`, `improve`, `solve`) that rewrites its own source with AST mutations. A local LLM proposer was not feasible on CPU here, so the mutations are programmatic. Its failures are real:
+- crashes;
+- deterministic loop timeouts, from a harness-owned tick counter;
+- **silent wrong answers**: tours that drop cities and *look shorter* to the agent's own scoring;
+- regressions on larger held-out instances.
+
+The governor, the validity check and the adaptive schedule are reused unchanged. ΔΦ is the relative tour-length change on 16 probe instances (scale κ = 0.10, fixed a priori) plus AST distance.
+
+<p align="center"><img src="docs/assets/tsp_selfmod.png" alt="TSP self-modifier: held-out quality and breakage by arm" width="100%"/></p>
+
+| Held-out seeds 0–15, 1000 steps (ratio to reference, lower is better) | broken commits | severe | ratio@50 | ratio@1000 | runs never ≤ 1.05 |
+|---|---:|---:|---:|---:|---:|
+| ungoverned | 16 | 17 | broken | broken | 10 |
+| validity only | 4 | 21 | 1.177 | **1.046** | **0** |
+| validity + athanor (fixed tolerance) | **0** | **0** | 1.177 | 1.177 | 16 (frozen) |
+| v2.5 conservative, **carried over unchanged** | 4 | 5 | 1.177 | 1.100 | 9 |
+| retuned on seeds 100–115 (τ 0.78, no time decay) | 2 | 2 | **1.096** | **1.046** | 3 |
+
+**Honest answer: partial transfer.**
+- **Safety in kind:** the carried-over setting cut severe regressions from 21 to 5 against validity only, and no run ended broken.
+- **Not safety in degree:** it committed 4 breaks, as many as validity alone. All 4 were APPROVEd timeouts or crashes that occur only on instances larger than any probe.
+- **Not speed:** its 50-step half-life closes the window for the one big "turn on 2-opt" edit after about 60 steps, so 9 of 16 runs never got good.
+- **A small retune fixed most of it, and the safety held:** 36 settings, on separate seeds *and* separate instances, with the same 2.5 rules. Broken/severe went from 2/4 on the tuning seeds to 2/2 on held-out.
+- **A derived condition predicted every freeze:** `APPROVE ⇔ tol ≥ r₍⌈τP⌉₎·τ/(κ(1−τ))`.
+- **Fixed-tolerance Athanor froze on every seed.**
+
+Details: [tsp_selfmod.md](docs/tsp_selfmod.md) · [TUNING_LOG.md](docs/TUNING_LOG.md#260-transfer-to-the-tsp-self-modifier) · [ALGORITHM_CARD.md](docs/ALGORITHM_CARD.md#transfer-to-a-second-system-v260-self-modifying-tsp-solver).
+
+```bash
+python experiments/tsp_selfmod/run.py --with-tuned
 ```
 
 ## CLI reference
@@ -292,6 +326,8 @@ H7 coherence geometry law (`h7_coherence_geometry_law_v2_1.tex`), the Codex–DG
 - [x] Governed-vs-ungoverned benchmark (`athanor bench`), wheel/sdist attached to GitHub releases (2.3)
 - [x] Real self-modifying program test (`athanor selfmod`) (2.4)
 - [x] Validity pre-gate, 4-arm comparison, adaptive schedule tuned on separate seeds (2.5)
+- [x] Transfer test on a second, larger self-modifier (TSP solver); admission/lockout condition derived (2.6)
+- [ ] Probe sets that cover deployment input sizes (every governed TSP break was outside the probe range)
 - [ ] Robust (worst-case over seed subsets) tuning objective, since the tuned optimum overfit its safety
 - [ ] Pluggable telemetry backends for real model or agent traces (beyond the built-in linear dynamics)
 - [ ] Signed run digests (for example Sigstore or GPG) to make whole-file rewrites detectable

@@ -1,4 +1,4 @@
-# ATHANOR Algorithm Card (v2.5.0)
+# ATHANOR Algorithm Card (v2.6.0)
 
 ## Purpose
 
@@ -99,7 +99,7 @@ Tuned on seeds 100–115 only. See [TUNING_LOG.md](TUNING_LOG.md).
 - **Determinism:** same config and software stack ⇒ identical verdicts, ledger and run digest. Random streams are derived per (seed, gen/step, idx, attempt).
 - **Tamper evidence:** editing, deleting, inserting or reordering ledger rows makes `athanor verify` fail at the first bad row.
 - **Monotone gating:** optional gates and the validity pre-gate can only make a decision stricter.
-- **Default-off changes:** with default config, 2.5.0 reproduces 2.4.0 results exactly (tested).
+- **Default-off changes:** with default config, 2.5.0 reproduces 2.4.0 results exactly, and 2.6.0 reproduces the committed 2.5.0 self-mod results exactly (tested).
 - **Governed invariant:** in governed arms, no edit with a verdict other than APPROVE is ever committed.
 
 ## Non-guarantees
@@ -119,6 +119,9 @@ Tuned on seeds 100–115 only. See [TUNING_LOG.md](TUNING_LOG.md).
 | Narrow tuned optimum overfits | Selected setting: 8 severe on tuning seeds → 34 on held-out seeds |
 | Breakage between validation inputs | Validity-only: 10 broken commits on held-out seeds |
 | Slower improvement | Non-adaptive governed: median steps to MSE < 1.5 is 404.5 vs 8.5 ungoverned |
+| Probes smaller than deployment inputs (TSP, 2.6) | Every committed break in the governed TSP arms was an APPROVEd timeout or crash that only occurs on held-out instances larger than any probe |
+| Step-based decay is task-specific (TSP, 2.6) | Carried-over t½ = 50 locks out the one large beneficial edit after about 60 steps; 9 of 16 held-out runs never reach good |
+| Fixed tolerance freezes on a big "unlock" edit (TSP, 2.6) | Non-adaptive Athanor: 0 commits on all 16 held-out seeds |
 
 ## Evaluation summary (held-out seeds 0–15, 1000 steps, self-modifying program)
 
@@ -133,3 +136,42 @@ Tuned on seeds 100–115 only. See [TUNING_LOG.md](TUNING_LOG.md).
 | validity + athanor-adaptive τ 0.75 (conservative) | 0 | 2 | 3.8 | 1.247 | 0.903 | 0.819 | 34.5 |
 
 Source: [`selfmod/arms_results.md`](selfmod/arms_results.md). Synthetic-bench results are in the README. Scope: one small symbolic-regression self-modifier, not an LLM or a general agent.
+
+## Transfer to a second system (v2.6.0: self-modifying TSP solver)
+
+The question: does the v2.5 conservative setting work, **without retuning**, on a larger and different
+self-modifier? The system is a six-function TSP solver module that rewrites its own source by AST mutation. It
+has real crashes, deterministic loop timeouts, silent wrong answers (tours that drop cities and look shorter to
+the agent) and held-out regressions. The full definition is in [tsp_selfmod.md](tsp_selfmod.md).
+
+**Unchanged components:** `VerifierAgent` (the ΔΦ → C → H7 rules), `validity_check` and the adaptive schedule
+(`scheduled_tolerance`, factored out of 2.5 with bit-identical behaviour).
+
+**Changed only by definition (fixed a priori, not tuned):** ΔΦ per probe is `|ΔL|/(L·κ·tol)` with κ = 0.10,
+plus `w_s`·structural distance. The tolerance error term is `e = (train_ratio − 1)/κ`.
+
+| Held-out seeds 0–15, 1000 steps | broken (crash/timeout/silent) | severe | held@50 | held@1000 | never ≤ 1.05 |
+|---|---|---:|---:|---:|---:|
+| ungoverned | 16 (0/1/15) | 17 | broken | broken | 10 |
+| validity | 4 (0/4/0) | 21 | 1.177 | 1.046 | 0 |
+| athanor / validity + athanor (fixed tol) | 0 | 0 | 1.177 | 1.177 | 16 (frozen) |
+| v2.5 conservative, carried over | 4 (1/3/0) | 5 | 1.177 | 1.100 | 9 |
+| v2.5 tuned, carried over | 6 (0/6/0) | 7 | 1.167 | 1.053 | 6 |
+| retuned on 100–115 (τ 0.78, no decay) | 2 (0/2/0) | 2 | 1.096 | 1.046 | 3 |
+
+**Answer: partial transfer.**
+- The carried-over conservative setting kept the governor's *kind* of benefit: severe regressions fell 21 → 5 vs
+  validity only, and no run ended broken.
+- It did not keep its 2.5 *degree* of safety. It had 4 committed breaks, as many as validity alone, and above the
+  ≤ 2 feasibility rule it met in 2.5.
+- It lost its speed: 9 of 16 runs never reached good.
+- A 36-setting retune on separate seeds and separate instances fixed most of this, and generalised: 2/4 →
+  2/2 broken/severe from tuning to held-out.
+
+**What did transfer exactly** is the mechanism ([TUNING_LOG.md](TUNING_LOG.md#260-transfer-to-the-tsp-self-modifier)
+has the derivation): an edit passes iff `tol ≥ r₍⌈τP⌉₎ · τ / (κ(1 − τ))`. This predicted the freeze boundaries
+measured in tuning.
+
+**What the governor cannot do, on either system:** see failures outside the inputs it runs. The counterfactual
+gate rejected 15 of 16 ungoverned silent-wrong-answer breaks, because they change probe behaviour. It approved
+the timeout that only appears on large instances.
