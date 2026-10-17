@@ -5,6 +5,7 @@
     athanor replay RUN_PATH [--out-dir DIR]   # re-run from config.json, compare digests
     athanor diff RUN_A RUN_B           # compare two runs (digest, first divergence, stats)
     athanor bench [--config CFG] [--seeds 0-7] [--out DIR]   # governed vs ungoverned
+    athanor selfmod [--seeds 0-15] [--steps 1000] [--out DIR]  # real self-modifying program
 
 ``athanor --config CFG`` (the original form) is still accepted and equals ``run``.
 """
@@ -143,6 +144,22 @@ def _cmd_bench(args) -> int:
     return 0
 
 
+def _cmd_selfmod(args) -> int:
+    from ..selfmod import run_selfmod_bench, render_markdown as md, render_chart as chart_fn
+    from ..selfmod.experiment import compact
+    res = run_selfmod_bench(_parse_seeds(args.seeds), {"steps": int(args.steps)},
+                            ledger_dir=os.path.join(args.out, 'ledgers') if args.ledgers else None)
+    os.makedirs(args.out, exist_ok=True)
+    with open(os.path.join(args.out, 'results.json'), 'w', encoding='utf-8') as f:
+        json.dump(res if args.full_json else compact(res), f, indent=1)
+    with open(os.path.join(args.out, 'results.md'), 'w', encoding='utf-8') as f:
+        f.write(md(res))
+    chart = args.chart or os.path.join(args.out, 'selfmod.png')
+    chart_fn(res, chart)
+    print(json.dumps({'out': args.out, 'chart': chart, 'summary': res['summary'], 'per_seed': res['per_seed']}))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(prog='athanor', description='ATHANOR coherence governor')
     ap.add_argument('--version', action='version', version=f'athanor {__version__}')
@@ -168,6 +185,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument('--out', default='data/bench')
     p.add_argument('--chart', default=None, help='chart path (default: OUT/benchmark.png)')
     p.set_defaults(fn=_cmd_bench)
+
+    p = sub.add_parser('selfmod', help='governed vs ungoverned real self-modifying program')
+    p.add_argument('--seeds', default='0-15')
+    p.add_argument('--steps', type=int, default=1000)
+    p.add_argument('--out', default='data/selfmod')
+    p.add_argument('--chart', default=None, help='chart path (default: OUT/selfmod.png)')
+    p.add_argument('--full-json', action='store_true', help='include per-step series in results.json')
+    p.add_argument('--ledgers', action='store_true', help='also write a hash-chained ledger + final_self.py per run')
+    p.set_defaults(fn=_cmd_selfmod)
 
     p = sub.add_parser('diff', help='compare two runs (exit 0 if identical)')
     p.add_argument('run_a')

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.4.0 — 2026-10-17
+
+### Added
+- **Real self-modifying program test** (`athanor.selfmod`, `athanor selfmod`, `experiments/self_modify/`). An offline, deterministic agent rewrites its own `f(x)` source via `ast` mutation, recompiles it, and keeps edits that lower minibatch error. ΔΦ comes from real change (output divergence on 32 probes plus AST structural distance) and goes through ATHANOR's unchanged ΔΦ → C → H7 → `VerifierAgent` pipeline. Governed mode commits only APPROVE edits (REFINE retries a gentler edit); ungoverned commits every improving edit.
+- Committed results for 16 seeds × 1000 steps (`docs/selfmod/`, `docs/assets/selfmod.png`) and a write-up (`docs/selfmod.md`). Breaking commits 0 vs 23 and severe regressions 3 vs 140, but improvement is much slower and median final held-out MSE is worse (1.110 vs 0.862). The gate would itself have approved 20 of the 23 breaking edits (H7 is a drift limit, not a crash detector); results include each commit's verdict for this analysis.
+- Optional per-run hash-chained ledgers with the SHA-256 of every committed source, plus `final_self.py` (`--ledgers`).
+- Tests for the mutator, grammar whitelist, breakage detection, ΔΦ trajectory, determinism and the governed-commit invariant.
+
 ## 2.3.0 — 2026-10-17
 
 ### Added

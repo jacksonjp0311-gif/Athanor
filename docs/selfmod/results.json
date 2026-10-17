@@ -1,0 +1,1074 @@
+{
+ "schema": "athanor.selfmod/1",
+ "seeds": [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15
+ ],
+ "config": {
+  "steps": 1000,
+  "minibatch": 8,
+  "n_train": 40,
+  "train_noise": 0.1,
+  "n_probe": 32,
+  "n_test": 200,
+  "threshold_h7": 0.7,
+  "refine_floor": 0.5,
+  "refine_attempts": 2,
+  "structure_weight": 0.5
+ },
+ "summary": {
+  "governed": {
+   "final_test_mse_median": 1.1099086540784933,
+   "final_test_mse_mean_finite": 1.017354031224754,
+   "runs_broken_at_end": 0,
+   "median_test_mse_at": {
+    "25": 2.9705296092593505,
+    "50": 2.548381997586058,
+    "100": 2.250088457621583,
+    "200": 2.1463745023168146,
+    "1000": 1.1099086540784933
+   },
+   "commits": 1642,
+   "regressions": 639,
+   "severe_regressions": 3,
+   "broken_commits": 0,
+   "unapproved_commits": 0,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 3,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "verdict_counts": {
+    "APPROVE": 6112,
+    "REFINE": 566,
+    "REJECT": 7370
+   },
+   "committed_dphi_median": 0.08940823748707771,
+   "committed_C_median": 0.9206562340259552,
+   "committed_h7_median": 1.0
+  },
+  "ungoverned": {
+   "final_test_mse_median": 0.8619332864482108,
+   "final_test_mse_mean_finite": 0.7691007896037501,
+   "runs_broken_at_end": 1,
+   "median_test_mse_at": {
+    "25": 1.3815756975011744,
+    "50": 1.2216687903779944,
+    "100": 1.1733804287939766,
+    "200": 1.1372689575908708,
+    "1000": 0.8619332864482108
+   },
+   "commits": 2519,
+   "regressions": 1032,
+   "severe_regressions": 140,
+   "broken_commits": 23,
+   "unapproved_commits": 723,
+   "broken_by_verdict": {
+    "APPROVE": 20,
+    "REFINE": 2,
+    "REJECT": 1
+   },
+   "severe_by_verdict": {
+    "APPROVE": 56,
+    "REFINE": 25,
+    "REJECT": 59
+   },
+   "steps_broken": 167,
+   "verdict_counts": {
+    "APPROVE": 6618,
+    "REFINE": 1458,
+    "REJECT": 5100
+   },
+   "committed_dphi_median": 0.17986585199832916,
+   "committed_C_median": 0.862099826335907,
+   "committed_h7_median": 1.0
+  }
+ },
+ "per_seed": {
+  "governed_better": 7,
+  "ungoverned_better": 9,
+  "tied": 0
+ },
+ "runs": [
+  {
+   "seed": 0,
+   "mode": "governed",
+   "final_source": "def f(x):\n    return (x - math.tanh(-(0.4008 / (math.tanh(0.8431) + 0.0596))) + math.sin(--0.898)) / 1.3237\n",
+   "final_test_mse": 1.35176137292635,
+   "best_test_mse": 1.349035922407374,
+   "commits": 151,
+   "regressions": 60,
+   "severe_regressions": 0,
+   "broken_commits": 0,
+   "unapproved_commits": 0,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 161,
+   "verdict_counts": {
+    "APPROVE": 504,
+    "REFINE": 8,
+    "REJECT": 327
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 0,
+   "mode": "ungoverned",
+   "final_source": "def f(x):\n    return math.cos(-2.3735 / -(-0.3664 + 1.011) + x) - math.tanh(-0.112) + math.sqrt(0.5202)\n",
+   "final_test_mse": 0.214134073410063,
+   "best_test_mse": 0.214134073410063,
+   "commits": 196,
+   "regressions": 89,
+   "severe_regressions": 5,
+   "broken_commits": 0,
+   "unapproved_commits": 60,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 5
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 204,
+   "verdict_counts": {
+    "APPROVE": 402,
+    "REFINE": 63,
+    "REJECT": 331
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 1,
+   "mode": "governed",
+   "final_source": "def f(x):\n    return x + 0.4762 / 0.9437 + (math.exp(-(2.5 + -0.0823) + (x + math.sin(0.454))) - x)\n",
+   "final_test_mse": 0.5453776907342837,
+   "best_test_mse": 0.5386658385397931,
+   "commits": 75,
+   "regressions": 20,
+   "severe_regressions": 0,
+   "broken_commits": 0,
+   "unapproved_commits": 0,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 132,
+   "verdict_counts": {
+    "APPROVE": 434,
+    "REFINE": 21,
+    "REJECT": 413
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 1,
+   "mode": "ungoverned",
+   "final_source": "def f(x):\n    return math.exp(--(0.4347 * 1.0333)) - math.sin(math.sqrt(math.sin(--math.sqrt(0.4115))))\n",
+   "final_test_mse": 1.1834588134354445,
+   "best_test_mse": 0.6813628590407199,
+   "commits": 157,
+   "regressions": 66,
+   "severe_regressions": 8,
+   "broken_commits": 0,
+   "unapproved_commits": 83,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 8
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 53,
+   "verdict_counts": {
+    "APPROVE": 241,
+    "REFINE": 29,
+    "REJECT": 677
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 2,
+   "mode": "governed",
+   "final_source": "def f(x):\n    return (x + (0.9236 + (-(0.1601 - 0.2907 / 0.7313) - 0.3432))) * math.cos(0.7745 - math.log(2.0574) * -0.5137)\n",
+   "final_test_mse": 1.1710520338824566,
+   "best_test_mse": 0.9253506957893702,
+   "commits": 71,
+   "regressions": 26,
+   "severe_regressions": 0,
+   "broken_commits": 0,
+   "unapproved_commits": 0,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 37,
+   "verdict_counts": {
+    "APPROVE": 350,
+    "REFINE": 26,
+    "REJECT": 587
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 2,
+   "mode": "ungoverned",
+   "final_source": "def f(x):\n    return math.cos(math.cos(-((x - -math.exp(0.7077) - x + x) * x) + x))\n",
+   "final_test_mse": 1.1078052101951363,
+   "best_test_mse": 0.46745444095643235,
+   "commits": 149,
+   "regressions": 69,
+   "severe_regressions": 3,
+   "broken_commits": 0,
+   "unapproved_commits": 35,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 1,
+    "REFINE": 1,
+    "REJECT": 1
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 223,
+   "verdict_counts": {
+    "APPROVE": 531,
+    "REFINE": 42,
+    "REJECT": 204
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 3,
+   "mode": "governed",
+   "final_source": "def f(x):\n    return x + math.cos(math.cos(0.0098) / x + --math.exp(-(--0.945 / 1.6932)))\n",
+   "final_test_mse": 1.79807235339632,
+   "best_test_mse": 1.7973288555682512,
+   "commits": 112,
+   "regressions": 48,
+   "severe_regressions": 0,
+   "broken_commits": 0,
+   "unapproved_commits": 0,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 178,
+   "verdict_counts": {
+    "APPROVE": 383,
+    "REFINE": 18,
+    "REJECT": 421
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 3,
+   "mode": "ungoverned",
+   "final_source": "def f(x):\n    return math.tanh(x + (x + (math.tanh(-1.5035) - x) / 2.7043) - math.tanh(-0.5352))\n",
+   "final_test_mse": 1.5725632932358848,
+   "best_test_mse": 0.1768969190985497,
+   "commits": 179,
+   "regressions": 69,
+   "severe_regressions": 14,
+   "broken_commits": 3,
+   "unapproved_commits": 44,
+   "broken_by_verdict": {
+    "APPROVE": 2,
+    "REFINE": 1,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 7,
+    "REFINE": 4,
+    "REJECT": 3
+   },
+   "steps_broken": 30,
+   "invalid_proposals": 140,
+   "verdict_counts": {
+    "APPROVE": 509,
+    "REFINE": 92,
+    "REJECT": 259
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 4,
+   "mode": "governed",
+   "final_source": "def f(x):\n    return math.tanh(x * 1.4642 + -(math.exp(0.2504) - x)) - math.tanh(-(36.0934 + x))\n",
+   "final_test_mse": 0.5370419268306967,
+   "best_test_mse": 0.4822887539759866,
+   "commits": 101,
+   "regressions": 40,
+   "severe_regressions": 0,
+   "broken_commits": 0,
+   "unapproved_commits": 0,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 157,
+   "verdict_counts": {
+    "APPROVE": 410,
+    "REFINE": 97,
+    "REJECT": 336
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 4,
+   "mode": "ungoverned",
+   "final_source": "def f(x):\n    return math.tanh(math.exp((-0.4319 - 3.3419) * (math.cos(x) - x)) * x * x)\n",
+   "final_test_mse": 0.9022782009769691,
+   "best_test_mse": 0.10592996275951685,
+   "commits": 163,
+   "regressions": 80,
+   "severe_regressions": 11,
+   "broken_commits": 0,
+   "unapproved_commits": 55,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 7,
+    "REFINE": 2,
+    "REJECT": 2
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 203,
+   "verdict_counts": {
+    "APPROVE": 411,
+    "REFINE": 147,
+    "REJECT": 239
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 5,
+   "mode": "governed",
+   "final_source": "def f(x):\n    return x - -(math.cos(-(-2.5587 / x + -math.sqrt(0.9513))) - -0.7586 / 0.8512)\n",
+   "final_test_mse": 1.2101140281258267,
+   "best_test_mse": 1.2101140281258267,
+   "commits": 89,
+   "regressions": 29,
+   "severe_regressions": 0,
+   "broken_commits": 0,
+   "unapproved_commits": 0,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 79,
+   "verdict_counts": {
+    "APPROVE": 342,
+    "REFINE": 47,
+    "REJECT": 532
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 5,
+   "mode": "ungoverned",
+   "final_source": "def f(x):\n    return math.tanh(math.cos(math.tanh(math.exp(--(-(x * 3.4591) / x / x)))))\n",
+   "final_test_mse": 1.1103032016895478,
+   "best_test_mse": 0.588179599177024,
+   "commits": 198,
+   "regressions": 77,
+   "severe_regressions": 10,
+   "broken_commits": 0,
+   "unapproved_commits": 43,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 3,
+    "REFINE": 1,
+    "REJECT": 6
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 49,
+   "verdict_counts": {
+    "APPROVE": 512,
+    "REFINE": 146,
+    "REJECT": 293
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 6,
+   "mode": "governed",
+   "final_source": "def f(x):\n    return (x - math.sin(-(-0.0534 / x) - x + 0.0115)) * (0.2674 - -0.1815 * x)\n",
+   "final_test_mse": 0.2043638491065825,
+   "best_test_mse": 0.09551006009247857,
+   "commits": 75,
+   "regressions": 26,
+   "severe_regressions": 1,
+   "broken_commits": 0,
+   "unapproved_commits": 0,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 1,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 96,
+   "verdict_counts": {
+    "APPROVE": 328,
+    "REFINE": 103,
+    "REJECT": 473
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 6,
+   "mode": "ungoverned",
+   "final_source": "def f(x):\n    return math.cos(math.exp(math.tanh(x - x)) + math.cos(x - math.tanh(-2.1337)))\n",
+   "final_test_mse": 0.6341507460138932,
+   "best_test_mse": 0.057083267486085346,
+   "commits": 131,
+   "regressions": 55,
+   "severe_regressions": 9,
+   "broken_commits": 0,
+   "unapproved_commits": 44,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 1,
+    "REFINE": 1,
+    "REJECT": 7
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 266,
+   "verdict_counts": {
+    "APPROVE": 336,
+    "REFINE": 76,
+    "REJECT": 322
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 7,
+   "mode": "governed",
+   "final_source": "def f(x):\n    return math.sin(x) + math.cos(math.tanh(-math.sqrt(0.9813)) / x)\n",
+   "final_test_mse": 0.4903544259788113,
+   "best_test_mse": 0.47117035802736995,
+   "commits": 161,
+   "regressions": 71,
+   "severe_regressions": 0,
+   "broken_commits": 0,
+   "unapproved_commits": 0,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 112,
+   "verdict_counts": {
+    "APPROVE": 445,
+    "REFINE": 18,
+    "REJECT": 425
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 7,
+   "mode": "ungoverned",
+   "final_source": "def f(x):\n    return (math.exp(x + (math.cos(-0.7052) - -0.3729)) + 2.7317 + x - -1.1743) * 0.0551\n",
+   "final_test_mse": 0.5570923181409593,
+   "best_test_mse": 0.521506705288919,
+   "commits": 156,
+   "regressions": 60,
+   "severe_regressions": 3,
+   "broken_commits": 0,
+   "unapproved_commits": 11,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 2,
+    "REFINE": 1,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 210,
+   "verdict_counts": {
+    "APPROVE": 487,
+    "REFINE": 64,
+    "REJECT": 239
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 8,
+   "mode": "governed",
+   "final_source": "def f(x):\n    return x * math.cos(1.0017) * 0.6462 + (math.sin(1.8514) - 0.0073 + -1.0566 * math.cos(x))\n",
+   "final_test_mse": 0.21225161494899225,
+   "best_test_mse": 0.21138166247444704,
+   "commits": 77,
+   "regressions": 25,
+   "severe_regressions": 0,
+   "broken_commits": 0,
+   "unapproved_commits": 0,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 141,
+   "verdict_counts": {
+    "APPROVE": 275,
+    "REFINE": 44,
+    "REJECT": 540
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 8,
+   "mode": "ungoverned",
+   "final_source": "def f(x):\n    return math.log(math.exp(math.tanh(math.exp(x)) - math.cos(---x)))\n",
+   "final_test_mse": 0.33761322337611005,
+   "best_test_mse": 0.1969924748610397,
+   "commits": 68,
+   "regressions": 28,
+   "severe_regressions": 6,
+   "broken_commits": 0,
+   "unapproved_commits": 25,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 2,
+    "REFINE": 3,
+    "REJECT": 1
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 369,
+   "verdict_counts": {
+    "APPROVE": 294,
+    "REFINE": 94,
+    "REJECT": 243
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 9,
+   "mode": "governed",
+   "final_source": "def f(x):\n    return x + -(-(0.0815 * x) * (x - 0.8253)) / x * 3.5478 * (-5.3096 / 2.4271) - -0.6159\n",
+   "final_test_mse": 0.883516345020881,
+   "best_test_mse": 0.8825009904385428,
+   "commits": 72,
+   "regressions": 28,
+   "severe_regressions": 2,
+   "broken_commits": 0,
+   "unapproved_commits": 0,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 2,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 251,
+   "verdict_counts": {
+    "APPROVE": 294,
+    "REFINE": 11,
+    "REJECT": 444
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 9,
+   "mode": "ungoverned",
+   "final_source": "def f(x):\n    return math.exp(math.sin(x - 0.3444) + -(0.2238 / (x + x)) / (-0.0398 + x) * 3.3177)\n",
+   "final_test_mse": null,
+   "best_test_mse": 0.1853612845976201,
+   "commits": 93,
+   "regressions": 36,
+   "severe_regressions": 14,
+   "broken_commits": 8,
+   "unapproved_commits": 18,
+   "broken_by_verdict": {
+    "APPROVE": 8,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 14,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 65,
+   "invalid_proposals": 127,
+   "verdict_counts": {
+    "APPROVE": 397,
+    "REFINE": 136,
+    "REJECT": 340
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 10,
+   "mode": "governed",
+   "final_source": "def f(x):\n    return x - (-2.2072 - (-0.1249 * x - math.cos(math.tanh(0.4285))))\n",
+   "final_test_mse": 1.8361740369702093,
+   "best_test_mse": 1.6927819628868204,
+   "commits": 82,
+   "regressions": 33,
+   "severe_regressions": 0,
+   "broken_commits": 0,
+   "unapproved_commits": 0,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 36,
+   "verdict_counts": {
+    "APPROVE": 316,
+    "REFINE": 11,
+    "REJECT": 637
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 10,
+   "mode": "ungoverned",
+   "final_source": "def f(x):\n    return math.exp(math.log(math.tanh(-0.1823) * -math.exp(x) / 0.6361))\n",
+   "final_test_mse": 0.8215883719194523,
+   "best_test_mse": 0.28315323084614635,
+   "commits": 135,
+   "regressions": 46,
+   "severe_regressions": 8,
+   "broken_commits": 0,
+   "unapproved_commits": 44,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 2,
+    "REFINE": 4,
+    "REJECT": 2
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 170,
+   "verdict_counts": {
+    "APPROVE": 427,
+    "REFINE": 133,
+    "REJECT": 270
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 11,
+   "mode": "governed",
+   "final_source": "def f(x):\n    return (x + 3.175) * math.tanh(0.7205 + -(0.503 / (math.tanh(0.955 - x) * 1.104)) / 0.8597) / 1.8048\n",
+   "final_test_mse": 1.2130958199544548,
+   "best_test_mse": 0.8338656182621276,
+   "commits": 114,
+   "regressions": 49,
+   "severe_regressions": 0,
+   "broken_commits": 0,
+   "unapproved_commits": 0,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 65,
+   "verdict_counts": {
+    "APPROVE": 357,
+    "REFINE": 51,
+    "REJECT": 527
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 11,
+   "mode": "ungoverned",
+   "final_source": "def f(x):\n    return -(x - -x) * (-(0.0909 / 0.8597) * ((x / 0.9705 + math.cos(0.5436)) / 0.7702))\n",
+   "final_test_mse": 0.20700709359522074,
+   "best_test_mse": 0.1873020279227064,
+   "commits": 185,
+   "regressions": 71,
+   "severe_regressions": 12,
+   "broken_commits": 3,
+   "unapproved_commits": 59,
+   "broken_by_verdict": {
+    "APPROVE": 3,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 4,
+    "REFINE": 1,
+    "REJECT": 7
+   },
+   "steps_broken": 9,
+   "invalid_proposals": 119,
+   "verdict_counts": {
+    "APPROVE": 394,
+    "REFINE": 60,
+    "REJECT": 427
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 12,
+   "mode": "governed",
+   "final_source": "def f(x):\n    return x - -1.5509\n",
+   "final_test_mse": 2.5561439368472905,
+   "best_test_mse": 2.144183704416179,
+   "commits": 110,
+   "regressions": 47,
+   "severe_regressions": 0,
+   "broken_commits": 0,
+   "unapproved_commits": 0,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 24,
+   "verdict_counts": {
+    "APPROVE": 333,
+    "REFINE": 2,
+    "REJECT": 641
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 12,
+   "mode": "ungoverned",
+   "final_source": "def f(x):\n    return math.cos(math.tanh(-(math.cos(--1.181 / x) - x)) / (-x - x))\n",
+   "final_test_mse": 1.0793935305886833,
+   "best_test_mse": 0.8290385624424452,
+   "commits": 207,
+   "regressions": 85,
+   "severe_regressions": 0,
+   "broken_commits": 0,
+   "unapproved_commits": 27,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 184,
+   "verdict_counts": {
+    "APPROVE": 532,
+    "REFINE": 13,
+    "REJECT": 271
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 13,
+   "mode": "governed",
+   "final_source": "def f(x):\n    return x * math.cos(math.tanh(x / math.exp(x)) * x + -0.2635)\n",
+   "final_test_mse": 0.02435654743517094,
+   "best_test_mse": 0.022262177769408975,
+   "commits": 121,
+   "regressions": 40,
+   "severe_regressions": 0,
+   "broken_commits": 0,
+   "unapproved_commits": 0,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 148,
+   "verdict_counts": {
+    "APPROVE": 573,
+    "REFINE": 62,
+    "REJECT": 217
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 13,
+   "mode": "ungoverned",
+   "final_source": "def f(x):\n    return math.cos(-x - (-x / 1.8528 + -1.7056) - math.sqrt(0.5405)) * x\n",
+   "final_test_mse": 0.06437881292334238,
+   "best_test_mse": 0.06437881292334238,
+   "commits": 140,
+   "regressions": 52,
+   "severe_regressions": 5,
+   "broken_commits": 0,
+   "unapproved_commits": 35,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 1,
+    "REJECT": 4
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 176,
+   "verdict_counts": {
+    "APPROVE": 388,
+    "REFINE": 167,
+    "REJECT": 269
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 14,
+   "mode": "governed",
+   "final_source": "def f(x):\n    return (x + 0.7718) * math.tanh(0.709) + math.log(math.exp(math.cos(----1.1467)))\n",
+   "final_test_mse": 1.04876527427453,
+   "best_test_mse": 1.0485264342557576,
+   "commits": 126,
+   "regressions": 55,
+   "severe_regressions": 0,
+   "broken_commits": 0,
+   "unapproved_commits": 0,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 189,
+   "verdict_counts": {
+    "APPROVE": 375,
+    "REFINE": 13,
+    "REJECT": 423
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 14,
+   "mode": "ungoverned",
+   "final_source": "def f(x):\n    return (math.sin(x) + 1.2969) / 2.4824\n",
+   "final_test_mse": 0.9962120000949349,
+   "best_test_mse": 0.6167648900565301,
+   "commits": 181,
+   "regressions": 78,
+   "severe_regressions": 11,
+   "broken_commits": 6,
+   "unapproved_commits": 73,
+   "broken_by_verdict": {
+    "APPROVE": 6,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 7,
+    "REFINE": 0,
+    "REJECT": 4
+   },
+   "steps_broken": 44,
+   "invalid_proposals": 191,
+   "verdict_counts": {
+    "APPROVE": 392,
+    "REFINE": 50,
+    "REJECT": 367
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 15,
+   "mode": "governed",
+   "final_source": "def f(x):\n    return (x - -math.sqrt(math.cos(--0.7788))) / 1.1384 * math.sqrt(0.4682)\n",
+   "final_test_mse": 1.1952232431632046,
+   "best_test_mse": 0.9153033974137447,
+   "commits": 105,
+   "regressions": 42,
+   "severe_regressions": 0,
+   "broken_commits": 0,
+   "unapproved_commits": 0,
+   "broken_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "severe_by_verdict": {
+    "APPROVE": 0,
+    "REFINE": 0,
+    "REJECT": 0
+   },
+   "steps_broken": 0,
+   "invalid_proposals": 146,
+   "verdict_counts": {
+    "APPROVE": 393,
+    "REFINE": 34,
+    "REJECT": 427
+   },
+   "run_digest": null
+  },
+  {
+   "seed": 15,
+   "mode": "ungoverned",
+   "final_source": "def f(x):\n    return math.tanh(x) + math.exp(-math.log(0.9963)) * math.tanh(1.161)\n",
+   "final_test_mse": 0.7485329544606085,
+   "best_test_mse": 0.1735803875842813,
+   "commits": 181,
+   "regressions": 71,
+   "severe_regressions": 21,
+   "broken_commits": 3,
+   "unapproved_commits": 67,
+   "broken_by_verdict": {
+    "APPROVE": 1,
+    "REFINE": 1,
+    "REJECT": 1
+   },
+   "severe_by_verdict": {
+    "APPROVE": 6,
+    "REFINE": 6,
+    "REJECT": 9
+   },
+   "steps_broken": 19,
+   "invalid_proposals": 140,
+   "verdict_counts": {
+    "APPROVE": 365,
+    "REFINE": 146,
+    "REJECT": 349
+   },
+   "run_digest": null
+  }
+ ]
+}

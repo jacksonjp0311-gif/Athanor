@@ -12,3 +12,4 @@ data/archives/*
 !data/archives/.keep
 docs/build/*
 !docs/build/.keepdata/bench/
+data/selfmod/
