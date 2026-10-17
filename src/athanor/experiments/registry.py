@@ -58,6 +58,10 @@ def validate_config(cfg: dict) -> dict:
     archive['bins'] = list(bins)
     out['archive'] = archive
 
+    governor = dict(out.get('governor', {}) or {})
+    governor['enabled'] = bool(governor.get('enabled', True))
+    out['governor'] = governor
+
     gates = dict(out.get('gates', {}) or {})
     h20 = dict(gates.get('h20', {}) or {})
     h20['enabled'] = bool(h20.get('enabled', False))

@@ -1,0 +1,9 @@
+# Governed-vs-ungoverned comparison task (used by `athanor bench`).
+# Selection is coherence-blind (alpha = 1.0: fitness rewards only small proposal steps)
+# and proposals are large, so nothing but the governor pushes against drift.
+inherits: base.yaml
+alpha: 1.0
+generations: 40
+population: 12
+proposer_sigma: 0.5
+proposer_step_cap: 2.0

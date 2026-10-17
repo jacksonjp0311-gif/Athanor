@@ -11,4 +11,4 @@ venv/
 data/archives/*
 !data/archives/.keep
 docs/build/*
-!docs/build/.keep
+!docs/build/.keepdata/bench/
