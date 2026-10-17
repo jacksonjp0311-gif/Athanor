@@ -104,3 +104,52 @@ Almost every single-parameter change breaks feasibility. **The selected optimum 
 - **The conservative setting generalised.** It had 0 broken, 2 severe (vs 3 for non-adaptive validity + Athanor and 140 for ungoverned), and its worst committed MSE was 3.8. Its MSE@100 is within 6 % of ungoverned (1.247 vs 1.173) and MSE@1000 within 5 % (0.903 vs 0.862). **It does not match ungoverned speed on every measure:** median steps to < 1.5 is 34.5 vs 8.5, and median best-ever MSE is 0.819 vs 0.206.
 
 **Where it plateaued:** on the tuning seeds, at MSE@100 = 0.750 with 8 severe regressions (vs ungoverned 0.881 / 127). On held-out seeds, the best safe setting gets near-ungoverned error at steps 100 and 1000 with near-zero breakage and severe regressions. It still reaches good solutions about 4× more slowly by time-to-1.5, and its best-ever error is about 4× worse. Held-out results were not used for any further tuning.
+
+## 2.6.0: transfer to the TSP self-modifier
+
+Protocol: first carry the 2.5 settings over unchanged, then run one small tuning pass, then evaluate once on
+held-out seeds.
+- **Tuning data:** seeds 100–115 on a *separate* 32-instance tuning set (`tuning_sets()`). Held-out seeds 0–15
+  and the held-out instances were never used here.
+- **Unchanged 2.5 rule:** feasible = ≤ 2 broken and ≤ 10 severe over the 16 tuning seeds. Minimise median
+  ratio@50, then tie-break on ratio@1000.
+- **Base config:** every config is validity + adaptive (γ 6, p 3, basis best, floor 0.7) with the listed
+  overrides. `t½ = 0` means no time decay.
+- **Log:** [`tsp_selfmod/tuning_log.json`](tsp_selfmod/tuning_log.json) has all 36 settings.
+
+| round | grid | best feasible (τ, t½, cap): broken / severe / @50 / @1000 / never good | note |
+|---|---|---|---|
+| 1 | τ {0.70, 0.75} × t½ {50, 200, none} × cap {6, 12} | none feasible | every config ≥ 4 broken. The carried-over conservative (0.75, 50, 6) scored 4 / 4 / 1.061 / 1.089 / 7 |
+| 2 | τ {0.80 … 0.95} × t½ {200, none} | (0.80, none, 6): 1 / 4 / 1.085 / 1.042 / 6 | τ ≥ 0.85: all 16 seeds frozen |
+| 3 | τ {0.77, 0.78, 0.79, 0.81, 0.82} × t½ {400, none} | **(0.78, none, 6): 2 / 4 / 1.037 / 1.031 / 2** | 4.4% better @50 than round 2. τ 0.77 is infeasible (3 broken) |
+| 4 | τ {0.775, 0.78, 0.785} × cap {3, 12}, no decay | no improvement (cap 12 ties; cap 3 freezes all 16) | **plateau** (< 2%). Kept cap 6 (fewest changes from 2.5) |
+
+Selected: τ 0.78, no time decay; everything else as v2.5 (`experiments/tsp_selfmod/tuned.json`). Tuning seeds
+→ held-out seeds, broken/severe: 2/4 → 2/2. Held-out ratio@1000 was 1.046, the same as validity only (1.046),
+with severe regressions 2 vs 21.
+
+### Mathematics that emerged: the admission condition and the lockout window
+
+With `C = 1/(1+ΔΦ)`, a probe passes iff `ΔΦ ≤ 1/τ − 1`. An edit is APPROVEd iff `H7 ≥ τ`, i.e. iff at least
+`⌈τP⌉` of the `P` probes pass. With ΔΦ per probe = `r_i/(κ·tol)` (`r_i` = relative length change; the structural
+term is ≈ 0.005 here and is ignored), this gives
+
+  **APPROVE ⇔ tol ≥ r₍⌈τP⌉₎ · τ / (κ (1 − τ))**, where r₍k₎ is the k-th smallest probe change.
+
+Measured for the smallest "turn on 2-opt" edit (`budget(n) = 1`, P = 16, κ = 0.10), the required tol is:
+
+| τ | 0.70 | 0.75 | 0.78 | 0.80 | 0.82 | 0.85 |
+|---|---:|---:|---:|---:|---:|---:|
+| required tol | 2.34 | 3.01 | 3.83 | 4.32 | 5.40 | 6.71 |
+
+It explains every freeze in the log:
+- **Fixed tol 1** fails for every τ, so non-adaptive Athanor froze on 16 of 16 seeds.
+- **cap 3** is below the 3.83 needed at τ 0.78 (and about the same at 0.775 and 0.785), so round 4 froze on all 16 seeds.
+- **cap 6** < 6.71 at τ 0.85, so round 2 froze on all 16 seeds, while τ 0.82 (5.40 < 6) did not freeze.
+
+**Lockout window.** With the 2.5 decay `tol(t) = f + (cap − f)·2^(−t/t½)` (while e is large, so the cap
+binds), the edit can pass only for `t ≤ t½ · log₂((cap − f)/(tol_req − f))`. For the carried-over conservative
+setting (f 0.7, cap 6, t½ 50, τ 0.75) that is **≈ 60 steps**. If the unlocking edit is not proposed by then, it
+can never be admitted. That matches 9 of 16 held-out runs never reaching good. The half-life is measured in
+steps, so it encodes the 2.5 task's improvement timescale. That is the part of the schedule that did not
+transfer. The error-driven part (`γ·e^p`, best-so-far basis, cap) did.

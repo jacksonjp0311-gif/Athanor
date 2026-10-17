@@ -1,5 +1,29 @@
 # Changelog
 
+## 2.6.0 — 2026-10-16
+
+### Added
+- **Second self-modification testbed: a self-modifying TSP solver** (`athanor.selfmod.tsp_program`, `athanor.selfmod.tsp_experiment`, `experiments/tsp_selfmod/`).
+  - The agent's self is a six-function solver module. It rewrites its own source with AST mutations; a local LLM proposer was not feasible on CPU here.
+  - Real failure modes: crashes, deterministic loop timeouts (harness-owned tick counter), silent wrong answers that look better to the agent's lenient self-scoring, and held-out regressions.
+  - A unit-test-style check suite runs through the unchanged `validity_check`.
+  - Separate probe, training, held-out and tuning instance sets.
+- **Arms**: ungoverned, validity, athanor, validity+athanor, the v2.5 tuned and conservative settings carried over unchanged, and a setting retuned on seeds 100–115 (τ 0.78, no time decay; `experiments/tsp_selfmod/tuned.json`).
+  - Results: `docs/tsp_selfmod/results.*` and `docs/assets/tsp_selfmod.png`.
+  - Tuning log: `docs/tsp_selfmod/tuning_log.json` (36 settings, 4 rounds).
+  - Counterfactual gate verdicts on the ungoverned breaks: `docs/tsp_selfmod/shadow_gate.json`.
+- **Docs**: `docs/tsp_selfmod.md`, a transfer section in `docs/ALGORITHM_CARD.md`, and a 2.6 section in `docs/TUNING_LOG.md` with the admission condition `tol ≥ r₍⌈τP⌉₎·τ/(κ(1−τ))` and the half-life lockout window.
+- Tests for the TSP sandbox, failure modes, check suite, ΔΦ trajectory, determinism, unchanged carried-over arms, and exact reproduction of the committed results.
+
+### Changed
+- `scheduled_tolerance()` is factored out of `run_selfmod` so both testbeds share the exact schedule. The 2.5 results still reproduce bit-for-bit.
+
+### Results (held-out seeds 0–15, 1000 steps)
+- **v2.5 conservative, carried over:** 4 broken commits (= validity only), 5 severe (vs 21 for validity only), final ratio 1.100 (vs 1.046). 9 of 16 runs never reached ≤ 1.05. This is a partial transfer.
+- **Retuned:** 2 broken, 2 severe, final ratio 1.046, 3 runs never good. Tuning → held-out went 2/4 → 2/2 broken/severe.
+- **Fixed-tolerance Athanor:** frozen on all 16 seeds.
+- **Ungoverned:** broke on all 16 seeds (15 silent wrong answers). The gate would have rejected those 15 and approved the 1 timeout.
+
 ## 2.5.0 — 2026-10-17
 
 ### Added
