@@ -33,6 +33,7 @@ from ..agents.verifier_agent import VerifierAgent
 from ..core.types import Candidate, TelemetryBatch
 from ..evolution.dgm_loop import derive_seed
 from ..ledger import LedgerWriter
+from ..core.validity import validity_check
 from .agent import (MAX_NODES, SEED_SOURCE, BrokenProgram, compile_source, evaluate, mutate,
                     node_count, structural_distance)
 
@@ -40,8 +41,56 @@ BIG = 1e3
 DEFAULTS: Dict[str, Any] = {
     "steps": 1000, "minibatch": 8, "n_train": 40, "train_noise": 0.1, "n_probe": 32, "n_test": 200,
     "threshold_h7": 0.70, "refine_floor": 0.50, "refine_attempts": 2, "structure_weight": 0.5,
+    # adaptive schedule (used only when an arm sets gamma): tol = max(1, gamma * (rmse/sigma_y)^power)
+    "adaptive_power": 1.0,
+    "adaptive_floor": 1.0,
+    "adaptive_cap": None,       # upper bound of tol (None = unbounded)
+    "adaptive_halflife": None,  # steps; if set, the extra slack decays: tol = floor + (tol - floor) * 2^(-step/halflife)
+    "adaptive_basis": "current",  # "current" train error, or "best" (best-so-far: tol can only tighten)  # lower bound of tol; < 1 makes the gate stricter than the base gate near the target
+    # extra validity inputs: an evenly spaced grid of this many points over the training-input range
+    "validity_grid": 0,
 }
 MODES = ("governed", "ungoverned")
+
+# Arms for the 4/6-way comparison. ``gamma`` enables the adaptive drift tolerance.
+ARMS: Dict[str, Dict[str, Any]] = {
+    "ungoverned":         {"validity": False, "athanor": False, "gamma": None},
+    "validity":           {"validity": True,  "athanor": False, "gamma": None},
+    "athanor":            {"validity": False, "athanor": True,  "gamma": None},
+    "validity+athanor":   {"validity": True,  "athanor": True,  "gamma": None},
+}
+
+
+# Selected on tuning seeds 100-115 only (docs/TUNING_LOG.md, rounds 1-8). Not the default.
+TUNED_ADAPTIVE: Dict[str, Any] = {
+    "gamma": 6.0,
+    "cfg": {"threshold_h7": 0.70, "refine_floor": 0.50, "adaptive_power": 3.0, "adaptive_basis": "best",
+            "adaptive_cap": 6.0, "adaptive_floor": 0.7, "adaptive_halflife": 50},
+}
+# Neighbour with more safety margin on the tuning seeds (tau 0.75), fixed *before* held-out evaluation.
+TUNED_ADAPTIVE_CONSERVATIVE: Dict[str, Any] = {
+    "gamma": 6.0, "cfg": {**TUNED_ADAPTIVE["cfg"], "threshold_h7": 0.75},
+}
+
+
+def adaptive_arms(gamma: float) -> Dict[str, Dict[str, Any]]:
+    return {"athanor-adaptive": {"validity": False, "athanor": True, "gamma": float(gamma)},
+            "validity+athanor-adaptive": {"validity": True, "athanor": True, "gamma": float(gamma)}}
+
+
+def drift_tolerance(train_mse: float, sigma_y: float, gamma: float | None, power: float = 1.0,
+                    floor: float = 1.0, cap: float | None = None) -> float:
+    """Adaptive tolerance: loose while the agent is far from the target, tightening toward 1 as it improves.
+
+    ``tol = max(floor, gamma * (rmse_train / sigma_y) ** power)`` (floor defaults to 1). The behaviour term of ΔΦ is divided by ``tol``.
+    It uses only the agent's own training error, never held-out data. ``gamma=None`` gives 1.0 (default).
+    """
+    if gamma is None:
+        return 1.0
+    if not math.isfinite(train_mse):
+        return float(floor)  # a broken self gets no extra slack
+    tol = max(float(floor), float(gamma) * (math.sqrt(train_mse) / sigma_y) ** float(power))
+    return min(tol, float(cap)) if cap is not None else tol
 
 
 def target(x: np.ndarray) -> np.ndarray:
@@ -69,11 +118,11 @@ def mse(fn, xs, ys) -> float:
     return v if math.isfinite(v) else math.inf
 
 
-def edit_trajectory(old_fn, new_fn, old_src: str, new_src: str, task, cfg) -> np.ndarray:
+def edit_trajectory(old_fn, new_fn, old_src: str, new_src: str, task, cfg, tol: float = 1.0) -> np.ndarray:
     a, _ = evaluate(old_fn, task["xpr"])
     b, _ = evaluate(new_fn, task["xpr"])
     with np.errstate(all="ignore"):
-        beh = np.abs(b - a) / task["sigma_y"]
+        beh = np.abs(b - a) / (task["sigma_y"] * float(tol))
     beh[~np.isfinite(beh)] = BIG
     beh = np.minimum(beh, BIG)
     st = float(cfg["structure_weight"]) * structural_distance(old_src, new_src)
@@ -81,10 +130,20 @@ def edit_trajectory(old_fn, new_fn, old_src: str, new_src: str, task, cfg) -> np
     return np.vstack([np.zeros((1, 2)), np.cumsum(d, axis=0)])
 
 
-def run_selfmod(seed: int, governed: bool, cfg: Dict[str, Any] | None = None,
-                out_dir: str | None = None) -> Dict[str, Any]:
+def run_selfmod(seed: int, governed: bool | None = None, cfg: Dict[str, Any] | None = None,
+                out_dir: str | None = None, arm: Dict[str, Any] | None = None,
+                arm_name: str | None = None) -> Dict[str, Any]:
+    """Run one agent. Either ``governed`` (2.4 API: Athanor-only vs ungoverned) or an ``arm`` dict."""
     cfg = {**DEFAULTS, **(cfg or {})}
+    if arm is None:
+        arm = ARMS["athanor" if governed else "ungoverned"]
+        arm_name = arm_name or ("governed" if governed else "ungoverned")
+    arm_name = arm_name or "custom"
+    use_validity, use_athanor, gamma = bool(arm["validity"]), bool(arm["athanor"]), arm.get("gamma")
     task = make_task(seed, cfg)
+    xval = np.concatenate([task["xpr"], task["xtr"]])  # probes + the agent's own training inputs
+    if int(cfg.get("validity_grid", 0)) > 0:  # inputs only (no labels), within the training range
+        xval = np.concatenate([xval, np.linspace(task["xtr"].min(), task["xtr"].max(), int(cfg["validity_grid"]))])
     verifier = VerifierAgent(threshold_h7=cfg["threshold_h7"], refine_floor=cfg["refine_floor"])
     src = SEED_SOURCE
     fn = compile_source(src)
@@ -97,6 +156,9 @@ def run_selfmod(seed: int, governed: bool, cfg: Dict[str, Any] | None = None,
     series = {k: [] for k in ("test_mse", "broken", "dphi", "C", "h7", "committed")}
     counts = {"APPROVE": 0, "REFINE": 0, "REJECT": 0}
     commits = regressions = severe = broken_commits = proposals_invalid = unapproved_commits = 0
+    validity_rejections = 0
+    severe_events: List[Dict[str, Any]] = []
+    best_train = math.inf
     # what verdict the gate gave the commits that broke the program / severely regressed
     broken_by_verdict = {"APPROVE": 0, "REFINE": 0, "REJECT": 0}
     severe_by_verdict = {"APPROVE": 0, "REFINE": 0, "REJECT": 0}
@@ -106,6 +168,17 @@ def run_selfmod(seed: int, governed: bool, cfg: Dict[str, Any] | None = None,
         idx = brng.choice(len(task["xtr"]), size=int(cfg["minibatch"]), replace=False)
         xb, yb = task["xtr"][idx], task["ytr"][idx]
         cur_batch = mse(fn, xb, yb)
+        tol = 1.0
+        if gamma:
+            cur_train = mse(fn, task["xtr"], task["ytr"])
+            best_train = min(best_train, cur_train)
+            basis = best_train if cfg.get("adaptive_basis", "current") == "best" else cur_train
+            tol = drift_tolerance(basis, task["sigma_y"], gamma, float(cfg.get("adaptive_power", 1.0)),
+                                  float(cfg.get("adaptive_floor", 1.0)), cfg.get("adaptive_cap"))
+            hl = cfg.get("adaptive_halflife")
+            if hl:
+                fl = float(cfg.get("adaptive_floor", 1.0))
+                tol = fl + (tol - fl) * 2.0 ** (-step / float(hl))
 
         def propose(attempt: int, scale: float):
             rng = np.random.default_rng(derive_seed(seed, 4, step, attempt))
@@ -119,12 +192,15 @@ def run_selfmod(seed: int, governed: bool, cfg: Dict[str, Any] | None = None,
             return new_src, kind, new_fn
 
         def verdict_for(new_src, new_fn):
-            traj = edit_trajectory(fn, new_fn, src, new_src, task, cfg)
+            traj = edit_trajectory(fn, new_fn, src, new_src, task, cfg, tol=tol)
             c = Candidate(id=f"s{step}", genome=np.zeros(1), telemetry=TelemetryBatch(traj=traj, meta={}))
             return verifier.step(c)
 
         p = propose(0, 1.0)
-        row: Dict[str, Any] = {"step": step, "seed": seed, "mode": "governed" if governed else "ungoverned"}
+        def valid(new_fn) -> bool:
+            return validity_check(new_fn, [float(v) for v in xval])["passed"]
+
+        row: Dict[str, Any] = {"step": step, "seed": seed, "mode": arm_name, "tolerance": tol}
         committed = False
         trail = []
         if p is None:
@@ -135,8 +211,9 @@ def run_selfmod(seed: int, governed: bool, cfg: Dict[str, Any] | None = None,
             new_src, kind, new_fn = p
             cand = verdict_for(new_src, new_fn)
             improved = mse(new_fn, xb, yb) < cur_batch
-            trail.append({"attempt": 0, "kind": kind, "verdict": cand.verdict, "improved": improved})
-            if governed and improved:
+            ok = valid(new_fn) if (use_validity and improved) else True
+            trail.append({"attempt": 0, "kind": kind, "verdict": cand.verdict, "improved": improved, "valid": ok})
+            if use_athanor and improved and ok:
                 k = 0
                 while cand.verdict == "REFINE" and k < int(cfg["refine_attempts"]):
                     k += 1
@@ -146,10 +223,13 @@ def run_selfmod(seed: int, governed: bool, cfg: Dict[str, Any] | None = None,
                     new_src, kind, new_fn = q
                     cand = verdict_for(new_src, new_fn)
                     improved = mse(new_fn, xb, yb) < cur_batch
-                    trail.append({"attempt": k, "kind": kind, "verdict": cand.verdict, "improved": improved})
-                committed = improved and cand.verdict == "APPROVE"
-            elif not governed:
-                committed = improved
+                    ok = valid(new_fn) if (use_validity and improved) else True
+                    trail.append({"attempt": k, "kind": kind, "verdict": cand.verdict, "improved": improved, "valid": ok})
+                    if not ok:
+                        break
+            if improved and not ok:
+                validity_rejections += 1
+            committed = improved and ok and (cand.verdict == "APPROVE" or not use_athanor)
             counts[cand.verdict] += 1
             row.update({"verdict": cand.verdict, "reason": cand.reason, "improved_minibatch": bool(improved),
                         "h7": float(cand.dphi.h7), "dphi_mean": float(cand.dphi.summary["dphi_mean"]),
@@ -167,6 +247,8 @@ def run_selfmod(seed: int, governed: bool, cfg: Dict[str, Any] | None = None,
             if (not math.isfinite(test_mse)) or (math.isfinite(old_mse) and test_mse > 2 * old_mse):
                 severe += 1
                 severe_by_verdict[cand.verdict] += 1
+                severe_events.append({"step": step, "old": old_mse, "new": test_mse if math.isfinite(test_mse) else None,
+                                      "verdict": cand.verdict, "tol": tol})
             if not math.isfinite(test_mse):
                 broken_commits += 1
                 broken_by_verdict[cand.verdict] += 1
@@ -187,8 +269,10 @@ def run_selfmod(seed: int, governed: bool, cfg: Dict[str, Any] | None = None,
         with open(os.path.join(out_dir, "final_self.py"), "w", encoding="utf-8") as f:
             f.write(src)
     finite = [v for v in series["test_mse"] if v is not None]
+    reach = next((i for i, v in enumerate(series["test_mse"]) if v is not None and v < 1.5), None)
     return {
-        "seed": seed, "mode": "governed" if governed else "ungoverned",
+        "seed": seed, "mode": arm_name, "arm": dict(arm), "steps_to_1p5": reach,
+        "validity_rejections": validity_rejections, "severe_events": severe_events,
         "final_source": src, "final_test_mse": series["test_mse"][-1],
         "best_test_mse": min(finite) if finite else None,
         "commits": commits, "regressions": regressions, "severe_regressions": severe,

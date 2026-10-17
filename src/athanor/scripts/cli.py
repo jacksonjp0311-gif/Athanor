@@ -160,6 +160,21 @@ def _cmd_selfmod(args) -> int:
     return 0
 
 
+def _cmd_selfmod_arms(args) -> int:
+    from ..selfmod.evaluate import evaluate_all, compact_arms
+    from ..selfmod.arms import arms_markdown, arms_chart
+    res = evaluate_all(_parse_seeds(args.seeds), steps=int(args.steps))
+    os.makedirs(args.out, exist_ok=True)
+    with open(os.path.join(args.out, 'arms_results.json'), 'w', encoding='utf-8') as f:
+        json.dump(compact_arms(res), f, indent=1)
+    with open(os.path.join(args.out, 'arms_results.md'), 'w', encoding='utf-8') as f:
+        f.write(arms_markdown(res))
+    chart = args.chart or os.path.join(args.out, 'selfmod_arms.png')
+    arms_chart(res, chart)
+    print(json.dumps({'out': args.out, 'chart': chart, 'summary': res['summary']}))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(prog='athanor', description='ATHANOR coherence governor')
     ap.add_argument('--version', action='version', version=f'athanor {__version__}')
@@ -194,6 +209,13 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument('--full-json', action='store_true', help='include per-step series in results.json')
     p.add_argument('--ledgers', action='store_true', help='also write a hash-chained ledger + final_self.py per run')
     p.set_defaults(fn=_cmd_selfmod)
+
+    p = sub.add_parser('selfmod-arms', help='held-out comparison of all arms incl. validity gate and tuned adaptive schedule')
+    p.add_argument('--seeds', default='0-15')
+    p.add_argument('--steps', type=int, default=1000)
+    p.add_argument('--out', default='data/selfmod')
+    p.add_argument('--chart', default=None)
+    p.set_defaults(fn=_cmd_selfmod_arms)
 
     p = sub.add_parser('diff', help='compare two runs (exit 0 if identical)')
     p.add_argument('run_a')

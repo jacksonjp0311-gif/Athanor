@@ -5,7 +5,7 @@
 <p align="center">
   <a href="https://github.com/jacksonjp0311-gif/Athanor/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/jacksonjp0311-gif/Athanor/actions/workflows/ci.yml/badge.svg?branch=main"/></a>
   <img alt="Python 3.10 | 3.11 | 3.12" src="https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-3776AB?logo=python&logoColor=white"/>
-  <a href="https://github.com/jacksonjp0311-gif/Athanor/releases/latest"><img alt="Version 2.4.0" src="https://img.shields.io/badge/version-2.4.0-ffb347"/></a>
+  <a href="https://github.com/jacksonjp0311-gif/Athanor/releases/latest"><img alt="Version 2.5.0" src="https://img.shields.io/badge/version-2.5.0-ffb347"/></a>
   <a href="../LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-3ddc97"/></a>
 </p>
 
@@ -26,7 +26,7 @@ A system that rewrites itself needs a referee that is *outside* the thing being 
 - **Every run can be audited.** Edited, deleted, inserted, or reordered ledger rows are detected, and a run can be replayed and compared bit-for-bit through its digest.
 
 ## Contents
-[Governance loop](#governance-loop) · [Quickstart](#quickstart) · [Benchmark](#benchmark-governed-vs-ungoverned) · [Real self-modifying program](#real-world-test-a-self-modifying-program) · [CLI](#cli-reference) · [Configuration](#configuration-reference) · [Guarantees](#guarantees) · [Run artifacts](#run-artifacts) · [Architecture](#architecture) · [Testing](#testing) · [Theory](#theory--manuscripts) · [Roadmap](#roadmap) · [Changelog](../CHANGELOG.md)
+[Governance loop](#governance-loop) · [Quickstart](#quickstart) · [Benchmark](#benchmark-governed-vs-ungoverned) · [Real self-modifying program](#real-world-test-a-self-modifying-program) · [Algorithm card](../docs/ALGORITHM_CARD.md) · [CLI](#cli-reference) · [Configuration](#configuration-reference) · [Guarantees](#guarantees) · [Run artifacts](#run-artifacts) · [Architecture](#architecture) · [Testing](#testing) · [Theory](#theory--manuscripts) · [Roadmap](#roadmap) · [Changelog](../CHANGELOG.md)
 
 ## Governance loop
 
@@ -60,10 +60,10 @@ Install straight from GitHub (Python 3.10+):
 
 ```bash
 pip install git+https://github.com/jacksonjp0311-gif/Athanor.git            # latest main
-pip install git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.4.0     # pinned release
+pip install git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.5.0     # pinned release
 ```
 
-Each [GitHub release](https://github.com/jacksonjp0311-gif/Athanor/releases) also has the built wheel and sdist attached (for example `pip install athanor-2.4.0-py3-none-any.whl`). ATHANOR is **not published on PyPI**. The name `athanor` on PyPI belongs to an unrelated project, so `pip install athanor` will **not** install this package.
+Each [GitHub release](https://github.com/jacksonjp0311-gif/Athanor/releases) also has the built wheel and sdist attached (for example `pip install athanor-2.5.0-py3-none-any.whl`). ATHANOR is **not published on PyPI**. The name `athanor` on PyPI belongs to an unrelated project, so `pip install athanor` will **not** install this package.
 
 For development:
 
@@ -147,6 +147,32 @@ The benchmark above uses synthetic dynamics. [`athanor selfmod`](../docs/selfmod
 athanor selfmod --seeds 0-15 --steps 1000 --out docs/selfmod --chart docs/assets/selfmod.png
 ```
 
+### 2.5: pairing Athanor with a validity check, plus an adaptive schedule
+
+2.5.0 adds a hard **validity pre-gate** (reject edits that crash or go non-finite on the probes and training inputs) and an optional **adaptive drift tolerance**. The tolerance is loose while the agent is far from the target and tightens as its best training error falls and as time passes. It was tuned on separate seeds 100–115 until it plateaued, then evaluated **once** on held-out seeds 0–15:
+
+<p align="center"><img src="../docs/assets/selfmod_arms.png" alt="All arms on held-out seeds" width="100%"/></p>
+
+| Held-out seeds 0–15 | broken | severe | worst MSE | MSE@100 | MSE@1000 | best-ever | steps < 1.5 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| ungoverned | 23 | 140 | 2.2e143 | 1.173 | 0.862 | **0.206** | **8.5** |
+| validity only | 10 | 118 | 3.3e247 | 1.276 | 0.728 | 0.249 | 8.5 |
+| validity + athanor | **0** | 3 | 528 | 2.250 | 1.110 | 0.899 | 404.5 |
+| validity + athanor-adaptive (tuned) | **0** | 34 | 2.1e21 | **1.011** | **0.697** | 0.527 | 14.5 |
+| validity + athanor-adaptive, τ 0.75 | **0** | **2** | **3.8** | 1.247 | 0.903 | 0.819 | 34.5 |
+
+**Honest read:**
+- A crash check alone isn't enough: it still committed 10 breaking edits and 118 severe regressions.
+- The tuned adaptive arm is the fastest at step 1000, but its safety **overfit** the tuning seeds: 8 severe regressions became 34.
+- The conservative τ 0.75 neighbour was fixed *before* the held-out run. It keeps 0 broken and 2 severe, and is within 6 % of ungoverned error at step 100 and 5 % at step 1000. It still takes **4× longer** to get below MSE 1.5 and its best-ever error is 4× worse.
+- Tuning plateaued on the tuning seeds at MSE@100 = 0.750 with 8 severe (vs ungoverned 0.881 with 127). On the frontier the measured trade-off is about *severe + 1 ≈ 5.2·MSE@100^−1.9*.
+
+Details: [TUNING_LOG.md](../docs/TUNING_LOG.md) (all 195 settings, plateau, sensitivity, Pareto chart) · [ALGORITHM_CARD.md](../docs/ALGORITHM_CARD.md) (exact definitions, pseudocode, guarantees, failure modes) · [selfmod.md](../docs/selfmod.md).
+
+```bash
+athanor selfmod-arms --seeds 0-15 --out docs/selfmod --chart docs/assets/selfmod_arms.png
+```
+
 ## CLI reference
 
 | Command | What it does | Exit code |
@@ -157,6 +183,7 @@ athanor selfmod --seeds 0-15 --steps 1000 --out docs/selfmod --chart docs/assets
 | `athanor diff RUN_A RUN_B` | Compares two runs: digests, first divergent ledger row, changed config keys, verdict counts, promotions, and stats deltas. | `0` identical · `1` different |
 | `athanor bench [--config CFG] [--seeds 0-7] [--out DIR] [--chart PNG]` | Governed vs ungoverned comparison across seeds. Writes `results.json`, `results.md` and a chart. Without `--config` it uses a built-in copy of `configs/bench.yaml`. | `0` |
 | `athanor selfmod [--seeds 0-15] [--steps 1000] [--out DIR] [--chart PNG] [--ledgers]` | Governed vs ungoverned **real self-modifying program** (see [`docs/selfmod.md`](../docs/selfmod.md)). `--ledgers` keeps a hash-chained ledger and `final_self.py` per run. | `0` |
+| `athanor selfmod-arms [--seeds 0-15] [--steps 1000] [--out DIR] [--chart PNG]` | Held-out comparison of 7 arms: ungoverned, validity, athanor, validity+athanor, and the tuned adaptive variants. | `0` |
 | `athanor --version` | Prints the version. | `0` |
 
 `athanor --config CFG` (the 2.0 form) still works and is the same as `athanor run`. You can also use `python -m athanor ...`.
@@ -213,20 +240,21 @@ These are the properties ATHANOR is built and tested to provide. Each one has a 
 
 ```text
 src/athanor/
-├── core/          ΔΦ, C, H7 math (coherence.py), telemetry dynamics, types
+├── core/          ΔΦ, C, H7 math (coherence.py), validity pre-gate (validity.py), telemetry, types
 ├── agents/        Telemetry · Proposer · Verifier (H7/H20/H44 gates) · Selector · Archivist
 ├── adapters/      Pluggable proposal strategies (ProposerAdapter, GaussianNoiseAdapter)
 ├── evolution/     dgm_loop.run(): the governed loop; MAP-Elites archive
 ├── ledger/        Hash-chained LedgerWriter and verify_ledger
 ├── experiments/   Config loading, deep-merge inheritance, validation
 ├── bench.py       Governed-vs-ungoverned comparison (athanor bench)
-├── selfmod/       Real self-modifying program + governed experiment (athanor selfmod)
+├── selfmod/       Real self-modifying program, arms, adaptive schedule (athanor selfmod, selfmod-arms)
 ├── scripts/       CLI: run · verify · replay · diff · bench · selfmod
 └── utils/         Seeding, JSONL logging, plots and dashboard
 configs/           base.yaml, toy_experiment.yaml, bench.yaml
 docs/benchmark/    Committed benchmark results (results.md, results.json)
 docs/selfmod/      Committed self-modification results; write-up in docs/selfmod.md
-experiments/       Runnable experiment entry points (self_modify/)
+experiments/       Runnable experiment entry points (self_modify/: run, tune, analyze_tuning)
+docs/ALGORITHM_CARD.md, docs/TUNING_LOG.md, docs/tuning/   Algorithm card, tuning log and raw tuning data
 docs/              Architecture notes, LaTeX manuscripts, assets
 tests/             Unit and integration tests (pytest)
 ```
@@ -263,7 +291,8 @@ H7 coherence geometry law (`h7_coherence_geometry_law_v2_1.tex`), the Codex–DG
 - [x] Decision record, deterministic REFINE path, optional H20/H44 gates, JSON archive, `diff` (2.2)
 - [x] Governed-vs-ungoverned benchmark (`athanor bench`), wheel/sdist attached to GitHub releases (2.3)
 - [x] Real self-modifying program test (`athanor selfmod`) (2.4)
-- [ ] Benchmark ATHANOR against a simple "reject edits that crash on probes" baseline
+- [x] Validity pre-gate, 4-arm comparison, adaptive schedule tuned on separate seeds (2.5)
+- [ ] Robust (worst-case over seed subsets) tuning objective, since the tuned optimum overfit its safety
 - [ ] Pluggable telemetry backends for real model or agent traces (beyond the built-in linear dynamics)
 - [ ] Signed run digests (for example Sigstore or GPG) to make whole-file rewrites detectable
 - [ ] Remove `archive.pkl` once `archive.json` has been out for one release

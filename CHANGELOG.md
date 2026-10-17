@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.5.0 — 2026-10-17
+
+### Added
+- **Validity pre-gate** `athanor.core.validity.validity_check`: a hard reject on any exception or non-finite output over a validation input set. It runs before the coherence gate.
+- **Self-mod arms**: `ungoverned`, `validity`, `athanor`, `validity+athanor`, plus adaptive variants (`athanor.selfmod.arms`, `athanor selfmod-arms`). Held-out results are in `docs/selfmod/arms_results.*` and `docs/assets/selfmod_arms.png`.
+- **Adaptive drift tolerance** (off by default): `gamma`, `adaptive_power`, `adaptive_basis` (`current`/`best`), `adaptive_cap`, `adaptive_floor`, `adaptive_halflife`, `validity_grid`. Tuned values are `TUNED_ADAPTIVE` and `TUNED_ADAPTIVE_CONSERVATIVE`.
+- **Tuning on separate seeds** (100–115) with a pre-declared feasibility and objective rule: `experiments/self_modify/tune.py`, `analyze_tuning.py`. 195 settings over 8 rounds are logged in `docs/tuning/`, with a Pareto chart `docs/assets/tuning_pareto.png`.
+- **`docs/ALGORITHM_CARD.md`** (definitions, verdict rules, gates, pseudocode, defaults/tuned values, complexity, guarantees, failure modes, evaluation) and **`docs/TUNING_LOG.md`** (rounds, plateau, sensitivity, fitted trade-off, held-out generalisation).
+- Tests for the validity check, the tolerance schedule, arm equivalence with 2.4.0, the validity invariant, and exact reproduction of the committed 2.4.0 results.
+
+### Results (held-out seeds 0–15)
+- The validity-only arm still committed 10 breaking edits and 118 severe regressions.
+- The tuned adaptive validity+athanor arm had the best MSE@1000 (0.697 vs 0.862 ungoverned), but its severe regressions went from 8 (tuning seeds) to 34 (held-out): overfit.
+- The conservative τ 0.75 setting (fixed before held-out evaluation): 0 broken, 2 severe, MSE@100 1.247 vs 1.173 and MSE@1000 0.903 vs 0.862 ungoverned. It is still about 4× slower to reach MSE < 1.5.
+
+### Unchanged
+- Default behaviour: with default config, 2.5.0 reproduces the 2.4.0 self-mod results exactly.
+
 ## 2.4.0 — 2026-10-17
 
 ### Added

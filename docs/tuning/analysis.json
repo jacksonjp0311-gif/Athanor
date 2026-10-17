@@ -1,0 +1,340 @@
+{
+ "n_configs": 195,
+ "frontier": [
+  {
+   "m100": 0.6429753354980092,
+   "severe": 19,
+   "cfg": {
+    "threshold_h7": 0.7,
+    "adaptive_power": 3,
+    "adaptive_basis": "best",
+    "adaptive_cap": 4,
+    "adaptive_floor": 1.0,
+    "adaptive_halflife": 200,
+    "refine_floor": 0.5
+   },
+   "gamma": 6.0,
+   "round": 6
+  },
+  {
+   "m100": 0.6898268615213282,
+   "severe": 16,
+   "cfg": {
+    "threshold_h7": 0.7,
+    "adaptive_power": 3,
+    "adaptive_basis": "best",
+    "adaptive_cap": 4,
+    "adaptive_floor": 0.7,
+    "adaptive_halflife": 200,
+    "refine_floor": 0.5
+   },
+   "gamma": 6.0,
+   "round": 6
+  },
+  {
+   "m100": 0.7329810399179348,
+   "severe": 13,
+   "cfg": {
+    "threshold_h7": 0.7,
+    "adaptive_power": 3,
+    "adaptive_basis": "best",
+    "adaptive_cap": 4,
+    "adaptive_floor": 0.7,
+    "refine_floor": 0.5
+   },
+   "gamma": 4.0,
+   "round": 4
+  },
+  {
+   "m100": 0.7329810399179348,
+   "severe": 13,
+   "cfg": {
+    "threshold_h7": 0.7,
+    "adaptive_power": 3,
+    "adaptive_basis": "best",
+    "adaptive_cap": 4,
+    "adaptive_floor": 0.7,
+    "refine_floor": 0.5
+   },
+   "gamma": 4.0,
+   "round": 5
+  },
+  {
+   "m100": 0.7501131989533816,
+   "severe": 8,
+   "cfg": {
+    "threshold_h7": 0.7,
+    "adaptive_power": 3,
+    "adaptive_basis": "best",
+    "adaptive_cap": 6,
+    "adaptive_floor": 0.7,
+    "adaptive_halflife": 50,
+    "refine_floor": 0.5
+   },
+   "gamma": 6.0,
+   "round": 6
+  },
+  {
+   "m100": 0.7501131989533816,
+   "severe": 8,
+   "cfg": {
+    "threshold_h7": 0.7,
+    "adaptive_power": 3,
+    "adaptive_basis": "best",
+    "adaptive_cap": 6,
+    "adaptive_floor": 0.7,
+    "adaptive_halflife": 50,
+    "refine_floor": 0.5
+   },
+   "gamma": 6.0,
+   "round": 7
+  },
+  {
+   "m100": 0.7501131989533816,
+   "severe": 8,
+   "cfg": {
+    "threshold_h7": 0.7,
+    "adaptive_power": 3,
+    "adaptive_basis": "best",
+    "adaptive_cap": 6,
+    "adaptive_floor": 0.7,
+    "adaptive_halflife": 50,
+    "validity_grid": 256,
+    "refine_floor": 0.5
+   },
+   "gamma": 6.0,
+   "round": 8
+  },
+  {
+   "m100": 0.872817965993258,
+   "severe": 4,
+   "cfg": {
+    "threshold_h7": 0.7,
+    "adaptive_power": 3,
+    "adaptive_basis": "best",
+    "adaptive_cap": 5,
+    "adaptive_floor": 0.7,
+    "adaptive_halflife": 50,
+    "refine_floor": 0.5
+   },
+   "gamma": 6.0,
+   "round": 7
+  },
+  {
+   "m100": 0.9359718646598814,
+   "severe": 2,
+   "cfg": {
+    "threshold_h7": 0.7,
+    "adaptive_power": 3,
+    "adaptive_basis": "best",
+    "adaptive_cap": 5,
+    "adaptive_floor": 0.7,
+    "adaptive_halflife": 35,
+    "refine_floor": 0.5
+   },
+   "gamma": 6.0,
+   "round": 7
+  },
+  {
+   "m100": 1.0267711962846913,
+   "severe": 1,
+   "cfg": {
+    "threshold_h7": 0.75,
+    "adaptive_power": 3,
+    "adaptive_basis": "best",
+    "adaptive_cap": 6,
+    "adaptive_floor": 0.7,
+    "adaptive_halflife": 50,
+    "refine_floor": 0.5
+   },
+   "gamma": 6.0,
+   "round": 8
+  },
+  {
+   "m100": 2.9705296092593505,
+   "severe": 0,
+   "cfg": {
+    "threshold_h7": 0.8,
+    "refine_floor": 0.5,
+    "structure_weight": 0.5
+   },
+   "gamma": null,
+   "round": 1
+  },
+  {
+   "m100": 2.9705296092593505,
+   "severe": 0,
+   "cfg": {
+    "threshold_h7": 0.8,
+    "refine_floor": 0.5,
+    "structure_weight": 0.5
+   },
+   "gamma": 1.0,
+   "round": 1
+  },
+  {
+   "m100": 2.9705296092593505,
+   "severe": 0,
+   "cfg": {
+    "threshold_h7": 0.8,
+    "refine_floor": 0.5,
+    "structure_weight": 0.5
+   },
+   "gamma": 2.0,
+   "round": 1
+  },
+  {
+   "m100": 2.9705296092593505,
+   "severe": 0,
+   "cfg": {
+    "threshold_h7": 0.8,
+    "refine_floor": 0.5,
+    "structure_weight": 0.5
+   },
+   "gamma": 4.0,
+   "round": 1
+  }
+ ],
+ "frontier_fit": {
+  "model": "log(severe+1) = a + b*log(m100), fitted on unique frontier points",
+  "a": 1.6395092592527467,
+  "b": -1.9076860351968956,
+  "points": 8
+ },
+ "spearman_m100_vs_severe_adaptive": 0.007552011573436207,
+ "tau_sweep_nonadaptive": [
+  [
+   0.5,
+   0.9336822278999122,
+   54,
+   11.5
+  ],
+  [
+   0.6,
+   2.151584238881869,
+   75,
+   294.5
+  ],
+  [
+   0.7,
+   2.2467601604613967,
+   5,
+   489.0
+  ],
+  [
+   0.8,
+   2.9705296092593505,
+   0,
+   Infinity
+  ]
+ ],
+ "best_feasible_per_round": {
+  "1": {
+   "m100": 2.2467601604613967,
+   "final": 1.0571406778352732,
+   "cfg": {
+    "threshold_h7": 0.7,
+    "refine_floor": 0.5,
+    "structure_weight": 0.5
+   },
+   "gamma": null,
+   "severe": 5
+  },
+  "6": {
+   "m100": 0.7501131989533816,
+   "final": 0.6757239177717129,
+   "cfg": {
+    "threshold_h7": 0.7,
+    "adaptive_power": 3,
+    "adaptive_basis": "best",
+    "adaptive_cap": 6,
+    "adaptive_floor": 0.7,
+    "adaptive_halflife": 50,
+    "refine_floor": 0.5
+   },
+   "gamma": 6.0,
+   "severe": 8
+  },
+  "7": {
+   "m100": 0.7501131989533816,
+   "final": 0.6757239177717129,
+   "cfg": {
+    "threshold_h7": 0.7,
+    "adaptive_power": 3,
+    "adaptive_basis": "best",
+    "adaptive_cap": 6,
+    "adaptive_floor": 0.7,
+    "adaptive_halflife": 50,
+    "refine_floor": 0.5
+   },
+   "gamma": 6.0,
+   "severe": 8
+  },
+  "8": {
+   "m100": 0.7501131989533816,
+   "final": 0.6757239177717129,
+   "cfg": {
+    "threshold_h7": 0.7,
+    "adaptive_power": 3,
+    "adaptive_basis": "best",
+    "adaptive_cap": 6,
+    "adaptive_floor": 0.7,
+    "adaptive_halflife": 50,
+    "validity_grid": 256,
+    "refine_floor": 0.5
+   },
+   "gamma": 6.0,
+   "severe": 8
+  }
+ },
+ "plateau_trace": [
+  {
+   "round": 1,
+   "best_feasible_m100_so_far": 2.2467601604613967,
+   "configs": 24,
+   "feasible": 5
+  },
+  {
+   "round": 2,
+   "best_feasible_m100_so_far": 2.2467601604613967,
+   "configs": 12,
+   "feasible": 0
+  },
+  {
+   "round": 3,
+   "best_feasible_m100_so_far": 2.2467601604613967,
+   "configs": 12,
+   "feasible": 0
+  },
+  {
+   "round": 4,
+   "best_feasible_m100_so_far": 2.2467601604613967,
+   "configs": 24,
+   "feasible": 0
+  },
+  {
+   "round": 5,
+   "best_feasible_m100_so_far": 2.2467601604613967,
+   "configs": 27,
+   "feasible": 0
+  },
+  {
+   "round": 6,
+   "best_feasible_m100_so_far": 0.7501131989533816,
+   "configs": 32,
+   "feasible": 8
+  },
+  {
+   "round": 7,
+   "best_feasible_m100_so_far": 0.7501131989533816,
+   "configs": 54,
+   "feasible": 6
+  },
+  {
+   "round": 8,
+   "best_feasible_m100_so_far": 0.7501131989533816,
+   "configs": 10,
+   "feasible": 2
+  }
+ ]
+}
