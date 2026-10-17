@@ -97,8 +97,10 @@ From 2.7.0 on (details in [EVALS.md](EVALS.md)):
 7. ☐ If the optimum is narrow, fix a **conservative neighbour** before the held-out run. Then run held-out **once** and report both settings.
 8. ☐ Turn every bug and every failed config into a **discriminating eval case**, and put every config in a **versioned registry**.
 9. ☐ Promote only through the gate: **suite passes** with the candidate **and** a governor verdict vs the incumbent on fresh seeds. Record the decision in a hash-chained ledger.
-10. ☐ **Cite** every past result a decision depends on (file + line hashes), and **re-verify** the citations before tuning or promoting on them.
-11. ☐ Report what got **worse** as plainly as what got better (speed, best-ever error, seeds where nothing changed).
+10. ☐ Give every seed set **one purpose** and spend held-out and gate seeds once. Every promotion takes a **fresh gate block** (3.0: `athanor.seedsets`).
+11. ☐ Make validity and probe inputs **cover deployment sizes**: the 2.6 probes were smaller than the real inputs, and every governed TSP break hid in that gap.
+12. ☐ **Cite** every past result a decision depends on (file + line hashes), and **re-verify** the citations before tuning or promoting on them.
+13. ☐ Report what got **worse** as plainly as what got better (speed, best-ever error, seeds where nothing changed).
 
 ## How this method was actually run: a human + AI collaboration
 
@@ -119,6 +121,8 @@ Each version was one pass through the loop. These are the real messages and outc
 | 2.5.0 | "Keep tuning … until you perfect it … record any mathematics" | Validity pre-gate, 8 tuning rounds, 199 logged experiments, algorithm card, tuning log; 59 tests | Validity alone was weak; the selected setting overfit (8 → 34); still about 4× slower to first reach MSE < 1.5 |
 | 2.6.0 | "Ok keep going" | A second, larger self-modifier (a TSP solver that rewrites its own source) to test whether the tuned setting transfers; retuned on seeds 100–115 (τ 0.78, no time decay); 68 tests | Partial transfer: the carried-over conservative setting had 4 broken / 5 severe on held-out seeds and 9 of 16 runs never reached good; retuned 2 / 2; fixed-tolerance Athanor froze on all 16 seeds; every governed break was on inputs larger than any probe |
 | 2.7.0 | "integrate [bug2eval] … so we can version … get more explicit with the configuration tuning" | Bug2Eval suite (4 real bugs + 4 real tuning failures), versioned registry, eval-gated promotion (`adaptive@1.1.0` APPROVE, H7 0.8125), this method; 80 tests | The promoted config had 1 broken commit on the gate seeds (incumbent 0); seeds 0–15 reused in the cases are no longer strictly held-out; see the caveats in [EVALS.md](EVALS.md) |
+| 2.8.0 | Approved integrating his AgentSearch repo as an evidence layer | Citations with file and line SHA-256 for every eval case (29), `athanor search`, stale-evidence checks before promotion and tuning; 86 tests | A citation proves bytes are unchanged, not correct; the extra pins an AgentSearch release candidate |
+| 3.0.0 | "create a plan to get it operational, tested and benchmarked, pushed to GitHub and passing" | Public adapter API (`athanor.govern`), `doctor`, `demo`, the TSP eval cases T005–T007, never-reused gate seeds, size-scaled TSP validity inputs, and a unified benchmark on fresh seeds 3000–3015; 103 tests | Governed arms trade speed and best-case quality for safety (curve fit: final MSE 0.930 vs 0.433 ungoverned); the curve-fit incumbent sat exactly at its severe limit (10); a runaway-memory failure was found and capped |
 
 Where James's questions changed the work:
 - "So it doesn't work?" led to a plain explanation of the safety-for-speed trade-off rather than a softer one.

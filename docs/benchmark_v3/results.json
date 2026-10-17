@@ -1,0 +1,427 @@
+{
+ "schema": "athanor.bench_all/1",
+ "athanor_version": "3.0.0",
+ "seeds": [
+  3000,
+  3001,
+  3002,
+  3003,
+  3004,
+  3005,
+  3006,
+  3007,
+  3008,
+  3009,
+  3010,
+  3011,
+  3012,
+  3013,
+  3014,
+  3015
+ ],
+ "seed_sets": [
+  "bench-v3"
+ ],
+ "steps": 1000,
+ "arms": {
+  "selfmod": {
+   "ungoverned": {
+    "registry": "selfmod/ungoverned@1.0.0",
+    "arm": {
+     "validity": false,
+     "athanor": false,
+     "gamma": null
+    },
+    "cfg": {}
+   },
+   "validity": {
+    "registry": null,
+    "arm": {
+     "validity": true,
+     "athanor": false,
+     "gamma": null
+    },
+    "cfg": {}
+   },
+   "validity+athanor": {
+    "registry": "selfmod/validity-athanor@1.0.0",
+    "arm": {
+     "validity": true,
+     "athanor": true,
+     "gamma": null
+    },
+    "cfg": {}
+   },
+   "athanor adaptive (incumbent)": {
+    "registry": "selfmod/adaptive@1.1.0",
+    "arm": {
+     "validity": true,
+     "athanor": true,
+     "gamma": 6.0
+    },
+    "cfg": {
+     "threshold_h7": 0.75,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": 50
+    }
+   }
+  },
+  "tsp": {
+   "ungoverned": {
+    "registry": "tsp/ungoverned@1.0.0",
+    "arm": {
+     "validity": false,
+     "athanor": false,
+     "gamma": null
+    },
+    "cfg": {}
+   },
+   "validity": {
+    "registry": null,
+    "arm": {
+     "validity": true,
+     "athanor": false,
+     "gamma": null
+    },
+    "cfg": {}
+   },
+   "validity + scaled checks": {
+    "registry": null,
+    "arm": {
+     "validity": true,
+     "athanor": false,
+     "gamma": null
+    },
+    "cfg": {
+     "probe_scaling": "checks"
+    }
+   },
+   "validity+athanor": {
+    "registry": "tsp/validity-athanor@1.0.0",
+    "arm": {
+     "validity": true,
+     "athanor": true,
+     "gamma": null
+    },
+    "cfg": {}
+   },
+   "athanor adaptive 2.6 (adaptive@1.1.0)": {
+    "registry": "tsp/adaptive@1.1.0",
+    "arm": {
+     "validity": true,
+     "athanor": true,
+     "gamma": 6.0
+    },
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null
+    }
+   },
+   "athanor adaptive + scaled checks (incumbent, adaptive@1.2.0)": {
+    "registry": "tsp/adaptive@1.2.0",
+    "arm": {
+     "validity": true,
+     "athanor": true,
+     "gamma": 6.0
+    },
+    "cfg": {
+     "threshold_h7": 0.78,
+     "refine_floor": 0.5,
+     "adaptive_power": 3.0,
+     "adaptive_basis": "best",
+     "adaptive_cap": 6.0,
+     "adaptive_floor": 0.7,
+     "adaptive_halflife": null,
+     "probe_scaling": "checks"
+    }
+   }
+  }
+ },
+ "systems": {
+  "synthetic": {
+   "summary": {
+    "governed": {
+     "tail_h7_mean": 0.9137454710144928,
+     "tail_C_mean": 0.8005942887704198,
+     "tail_dphi_median": 0.2018948613355557,
+     "tail_dphi_mean": 1.431160311602677,
+     "max_dphi_worst": 45.753195609897375,
+     "verdict_counts": {
+      "APPROVE": 6582,
+      "REFINE": 1,
+      "REJECT": 1097
+     },
+     "promotions": 559,
+     "promoted_unapproved": 0
+    },
+    "ungoverned": {
+     "tail_h7_mean": 0.780955615942029,
+     "tail_C_mean": 0.7469828532465423,
+     "tail_dphi_median": 0.3273469777156909,
+     "tail_dphi_mean": 1.0557895852873722,
+     "max_dphi_worst": 82.97145239512126,
+     "verdict_counts": {
+      "APPROVE": 5484,
+      "REFINE": 424,
+      "REJECT": 1772
+     },
+     "promotions": 640,
+     "promoted_unapproved": 163
+    }
+   },
+   "per_seed": {
+    "h7_governed_higher": 10,
+    "h7_ungoverned_higher": 4,
+    "h7_tied": 2
+   },
+   "seconds": 11.2
+  },
+  "selfmod": {
+   "summary": {
+    "ungoverned": {
+     "runs": 16,
+     "broken_commits": 31,
+     "severe_regressions": 116,
+     "worst_mse": 2.067130224933038e+55,
+     "median_mse_100": 1.153433856582202,
+     "median_mse_final": 0.43345038352685933,
+     "median_best_mse": 0.2376138633886305,
+     "median_steps_to_1p5": 5.5,
+     "never_reached_1p5": 0,
+     "runs_broken_at_end": 0,
+     "commits": 2076,
+     "regressions": 830,
+     "validity_rejections": 0
+    },
+    "validity": {
+     "runs": 16,
+     "broken_commits": 8,
+     "severe_regressions": 84,
+     "worst_mse": 2.067130224933038e+55,
+     "median_mse_100": 1.153433856582202,
+     "median_mse_final": 0.8743338650976593,
+     "median_best_mse": 0.42518461723990786,
+     "median_steps_to_1p5": 5.5,
+     "never_reached_1p5": 0,
+     "runs_broken_at_end": 0,
+     "commits": 2231,
+     "regressions": 900,
+     "validity_rejections": 21
+    },
+    "validity+athanor": {
+     "runs": 16,
+     "broken_commits": 0,
+     "severe_regressions": 4,
+     "worst_mse": 28941.593841929276,
+     "median_mse_100": 2.1903803389775254,
+     "median_mse_final": 1.0437122044284894,
+     "median_best_mse": 0.7962347710190983,
+     "median_steps_to_1p5": 382.0,
+     "never_reached_1p5": 3,
+     "runs_broken_at_end": 0,
+     "commits": 1789,
+     "regressions": 740,
+     "validity_rejections": 11
+    },
+    "athanor adaptive (incumbent)": {
+     "runs": 16,
+     "broken_commits": 0,
+     "severe_regressions": 10,
+     "worst_mse": 5.1995762262442655e+44,
+     "median_mse_100": 1.0307933413175276,
+     "median_mse_final": 0.9303580682450318,
+     "median_best_mse": 0.8532097375149515,
+     "median_steps_to_1p5": 27.5,
+     "never_reached_1p5": 3,
+     "runs_broken_at_end": 0,
+     "commits": 1532,
+     "regressions": 652,
+     "validity_rejections": 2
+    }
+   },
+   "seconds": 5.8
+  },
+  "tsp": {
+   "summary": {
+    "ungoverned": {
+     "runs": 16,
+     "broken_commits": 16,
+     "broken_by_kind": {
+      "crash": 0,
+      "timeout": 0,
+      "invalid": 16
+     },
+     "runs_broken_at_end": 16,
+     "broken_step_fraction": 0.9533125,
+     "severe_regressions": 16,
+     "regressions": 23,
+     "worst_committed_ratio": 1.179969606981296,
+     "broken_by_verdict": {
+      "APPROVE": 0,
+      "REFINE": 0,
+      "REJECT": 0,
+      "UNGATED": 16
+     },
+     "median_held_50": Infinity,
+     "median_held_1000": Infinity,
+     "median_best_held": 1.1366959615515277,
+     "median_steps_to_good": Infinity,
+     "never_good": 9,
+     "commits": 47,
+     "validity_rejections": 0,
+     "frozen_runs": 0
+    },
+    "validity": {
+     "runs": 16,
+     "broken_commits": 4,
+     "broken_by_kind": {
+      "crash": 0,
+      "timeout": 4,
+      "invalid": 0
+     },
+     "runs_broken_at_end": 2,
+     "broken_step_fraction": 0.0801875,
+     "severe_regressions": 15,
+     "regressions": 227,
+     "worst_committed_ratio": 1.6198288278882156,
+     "broken_by_verdict": {
+      "APPROVE": 0,
+      "REFINE": 0,
+      "REJECT": 0,
+      "UNGATED": 4
+     },
+     "median_held_50": 1.1771816438120328,
+     "median_held_1000": 1.0451529156959367,
+     "median_best_held": 1.0302578122258677,
+     "median_steps_to_good": 93.5,
+     "never_good": 1,
+     "commits": 511,
+     "validity_rejections": 400,
+     "frozen_runs": 0
+    },
+    "validity + scaled checks": {
+     "runs": 16,
+     "broken_commits": 0,
+     "broken_by_kind": {
+      "crash": 0,
+      "timeout": 0,
+      "invalid": 0
+     },
+     "runs_broken_at_end": 0,
+     "broken_step_fraction": 0.0,
+     "severe_regressions": 11,
+     "regressions": 233,
+     "worst_committed_ratio": 1.6198288278882156,
+     "broken_by_verdict": {
+      "APPROVE": 0,
+      "REFINE": 0,
+      "REJECT": 0,
+      "UNGATED": 0
+     },
+     "median_held_50": 1.1771816438120328,
+     "median_held_1000": 1.043740246496665,
+     "median_best_held": 1.0302578122258677,
+     "median_steps_to_good": 93.5,
+     "never_good": 0,
+     "commits": 495,
+     "validity_rejections": 391,
+     "frozen_runs": 0
+    },
+    "validity+athanor": {
+     "runs": 16,
+     "broken_commits": 0,
+     "broken_by_kind": {
+      "crash": 0,
+      "timeout": 0,
+      "invalid": 0
+     },
+     "runs_broken_at_end": 0,
+     "broken_step_fraction": 0.0,
+     "severe_regressions": 0,
+     "regressions": 0,
+     "worst_committed_ratio": 1.1771816438120328,
+     "broken_by_verdict": {
+      "APPROVE": 0,
+      "REFINE": 0,
+      "REJECT": 0,
+      "UNGATED": 0
+     },
+     "median_held_50": 1.1771816438120328,
+     "median_held_1000": 1.1771816438120328,
+     "median_best_held": 1.1771816438120328,
+     "median_steps_to_good": Infinity,
+     "never_good": 16,
+     "commits": 0,
+     "validity_rejections": 397,
+     "frozen_runs": 16
+    },
+    "athanor adaptive 2.6 (adaptive@1.1.0)": {
+     "runs": 16,
+     "broken_commits": 2,
+     "broken_by_kind": {
+      "crash": 0,
+      "timeout": 2,
+      "invalid": 0
+     },
+     "runs_broken_at_end": 1,
+     "broken_step_fraction": 0.027375,
+     "severe_regressions": 2,
+     "regressions": 84,
+     "worst_committed_ratio": 1.2114342788873755,
+     "broken_by_verdict": {
+      "APPROVE": 2,
+      "REFINE": 0,
+      "REJECT": 0,
+      "UNGATED": 0
+     },
+     "median_held_50": 1.1771816438120328,
+     "median_held_1000": 1.0680942817877375,
+     "median_best_held": 1.041404763954787,
+     "median_steps_to_good": 585.0,
+     "never_good": 7,
+     "commits": 195,
+     "validity_rejections": 398,
+     "frozen_runs": 0
+    },
+    "athanor adaptive + scaled checks (incumbent, adaptive@1.2.0)": {
+     "runs": 16,
+     "broken_commits": 0,
+     "broken_by_kind": {
+      "crash": 0,
+      "timeout": 0,
+      "invalid": 0
+     },
+     "runs_broken_at_end": 0,
+     "broken_step_fraction": 0.0,
+     "severe_regressions": 0,
+     "regressions": 93,
+     "worst_committed_ratio": 1.2114342788873755,
+     "broken_by_verdict": {
+      "APPROVE": 0,
+      "REFINE": 0,
+      "REJECT": 0,
+      "UNGATED": 0
+     },
+     "median_held_50": 1.1771816438120328,
+     "median_held_1000": 1.049195897664604,
+     "median_best_held": 1.041404763954787,
+     "median_steps_to_good": 585.0,
+     "never_good": 7,
+     "commits": 199,
+     "validity_rejections": 409,
+     "frozen_runs": 0
+    }
+   },
+   "seconds": 101.5
+  }
+ }
+}

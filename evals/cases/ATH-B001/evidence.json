@@ -1,6 +1,6 @@
 {
   "agentsearch_version": "1.0.0rc5",
-  "athanor_version": "2.8.0",
+  "athanor_version": "3.0.0",
   "citations": [
     {
       "note": null,
@@ -20,14 +20,14 @@
       "start_line": 5
     },
     {
-      "end_line": 150,
+      "end_line": 203,
       "excerpt": "\n### Fixed\n- `utils.logging.log_jsonl` wrote a literal `\\n` instead of a newline, producing one-line \"JSONL\".\n- `inherits:` did a shallow `dict.update`, silently dropping nested keys (e.g. `archive.novelty_eps`); now a deep merge with cycle detection.\n- Telemetry seeds `seed + g*10000 + i + attempt` collided (refine attempt 1 of candidate *i* reused candidate *i+1*'s seed); now derived via `SeedSequence`.",
       "lines_sha256": "37f046fc4f52c2cd48ff9c83fb20adc134e4b982a528a2e22c65b2455d89e258",
       "note": null,
       "path": "CHANGELOG.md",
       "pattern": "`utils.logging.log_jsonl` wrote a literal",
-      "sha256": "ab41d21f466fd176ff4240f458ceba23dc23ea68e5156801a99f4bcb77f5647b",
-      "start_line": 146
+      "sha256": "189c8d67234ecf4e0a42676a298c814f34019980f4ea825fea9a246bcd1e44bf",
+      "start_line": 199
     }
   ],
   "schema": "athanor.evidence/1"

@@ -9,6 +9,9 @@
     athanor evals {list,capture,run}      # Bug2Eval regression suite (pip install "athanor[evals]")
     athanor registry {list,show,lineage,register,promote,verify}  # versioned configs, eval-gated promotion
     athanor search {index,status,find,grep,read,verify,cite}  # AgentSearch evidence (pip install "athanor[search]")
+    athanor bench --all                # unified benchmark: synthetic, curve-fit selfmod, TSP (held-out seeds 3000-3015)
+    athanor doctor                     # install check + self-test
+    athanor demo                       # run -> verify -> replay -> evals run, one command
 
 ``athanor --config CFG`` (the original form) is still accepted and equals ``run``.
 """
@@ -133,6 +136,18 @@ def _parse_seeds(text: str) -> List[int]:
 
 
 def _cmd_bench(args) -> int:
+    if args.all:
+        from ..bench_all import run_all, write
+        from ..seedsets import BENCH_SEEDS
+        seeds = _parse_seeds(args.seeds) if args.seeds else list(BENCH_SEEDS)
+        systems = [x.strip() for x in args.systems.split(',')] if args.systems else ["synthetic", "selfmod", "tsp"]
+        res = run_all(seeds, steps=int(args.steps), workers=int(args.workers), systems=systems)
+        out = args.out if args.out != 'data/bench' else 'data/bench_all'
+        paths = write(res, out, args.chart)
+        print(json.dumps({**paths, "seconds": {k: v.get("seconds") for k, v in res["systems"].items()}}))
+        return 0
+    if args.seeds is None:
+        args.seeds = '0-7'
     from ..bench import run_bench, render_markdown, render_chart, default_bench_config
     cfg = load_config(args.config) if args.config else default_bench_config()
     res = run_bench(cfg, _parse_seeds(args.seeds))
@@ -197,9 +212,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument('run_path')
     p.add_argument('--out-dir', default=None, help='keep replay artifacts here (default: temp dir)')
     p.set_defaults(fn=_cmd_replay)
-    p = sub.add_parser('bench', help='compare governed vs ungoverned runs across seeds')
+    p = sub.add_parser('bench', help='compare governed vs ungoverned runs across seeds (--all: all three systems)')
+    p.add_argument('--all', action='store_true',
+                   help='unified benchmark: synthetic loop, self-modifying curve fit and TSP solver, '
+                        'ungoverned vs validity vs governed, on held-out seeds 3000-3015')
+    p.add_argument('--systems', default=None, help='with --all: comma list of synthetic,selfmod,tsp')
+    p.add_argument('--steps', type=int, default=1000, help='with --all: steps for the self-modifying systems')
+    p.add_argument('--workers', type=int, default=8)
     p.add_argument('--config', default=None, help='default: built-in copy of configs/bench.yaml')
-    p.add_argument('--seeds', default='0-7', help="e.g. '0-7' or '1,3,5'")
+    p.add_argument('--seeds', default=None, help="e.g. '0-7' or '1,3,5' (default 0-7; with --all 3000-3015)")
     p.add_argument('--out', default='data/bench')
     p.add_argument('--chart', default=None, help='chart path (default: OUT/benchmark.png)')
     p.set_defaults(fn=_cmd_bench)
@@ -229,7 +250,18 @@ def build_parser() -> argparse.ArgumentParser:
     _add_eval_parsers(sub)
     from .search_cli import add_parsers as _add_search_parsers
     _add_search_parsers(sub)
+    from .ops_cli import add_parsers as _add_ops_parsers
+    _add_ops_parsers(sub)
     return ap
+
+
+_HINTS = [
+    (FileNotFoundError, "a file or directory was not found; check the path (run `athanor doctor` to check the install)"),
+    (PermissionError, "permission denied; choose an output directory you can write to (--out / --out-dir)"),
+    (KeyError, "a required key is missing; check the config against `configs/base.yaml`"),
+    (ImportError, "a dependency is missing; run `athanor doctor`"),
+    (ValueError, None),
+]
 
 
 def main(argv: Optional[List[str]] = None) -> int:
@@ -237,4 +269,17 @@ def main(argv: Optional[List[str]] = None) -> int:
     if argv and argv[0].startswith('--config'):
         argv = ['run'] + argv  # legacy: `athanor --config X`
     args = build_parser().parse_args(argv)
-    return int(args.fn(args))
+    try:
+        return int(args.fn(args))
+    except KeyboardInterrupt:
+        print("interrupted", file=sys.stderr)
+        return 130
+    except Exception as exc:  # noqa: BLE001 - one clear line instead of a traceback (ATHANOR_DEBUG=1 for it)
+        if os.environ.get("ATHANOR_DEBUG"):
+            raise
+        hint = next((h for t, h in _HINTS if isinstance(exc, t)), None)
+        print(f"athanor {args.cmd}: error: {type(exc).__name__}: {exc}", file=sys.stderr)
+        if hint:
+            print(f"hint: {hint}", file=sys.stderr)
+        print("(set ATHANOR_DEBUG=1 for the full traceback)", file=sys.stderr)
+        return 2

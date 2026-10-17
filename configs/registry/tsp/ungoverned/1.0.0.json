@@ -1,0 +1,29 @@
+{
+  "evidence": [
+    {
+      "broken_commits": 16,
+      "path": "docs/tsp_selfmod/results.md",
+      "seeds": "0-15",
+      "severe_regressions": 17,
+      "sha256": "6adcf36da4139b254bb9d9a67bf0ae9bee89da00c20751ab9396e82362b187ac",
+      "source": "docs/tsp_selfmod/results.md"
+    }
+  ],
+  "family": "tsp",
+  "name": "ungoverned",
+  "parent": null,
+  "reason": "2.6.0 TSP baseline: every improving self-edit is committed.",
+  "ref": "tsp/ungoverned@1.0.0",
+  "registered_with_athanor": "3.0.0",
+  "schema": "athanor.config/1",
+  "spec": {
+    "arm": {
+      "athanor": false,
+      "gamma": null,
+      "validity": false
+    },
+    "cfg": {}
+  },
+  "spec_hash": "0188c385b13bb2e83132d804b01caca2459ad4c623156f22666c48fc80f33556",
+  "version": "1.0.0"
+}

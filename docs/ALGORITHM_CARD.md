@@ -1,4 +1,4 @@
-# ATHANOR Algorithm Card (v2.8.0)
+# ATHANOR Algorithm Card (v3.0.0)
 
 ## Purpose
 
@@ -104,6 +104,39 @@ This is the same verdict rule as for a self-edit, with a config change as the ed
 
 **Evidence freshness (2.8.0, optional `athanor[search]`).** Before promotion or a tuning round relies on a past result, each citation `{path, sha256, lines, lines_sha256}` is re-verified: `fresh` (same file bytes) · `changed-lines-intact` · `moved` · `stale` (cited lines changed) · `missing`. Only `stale`/`missing` are hard: with `--require-fresh-evidence` the promotion decision becomes `refine` and the tuner stops. Registry evidence from the tuner is a hashed row slice of the append-only tuning log. See [SEARCH.md](SEARCH.md).
 
+## Public adapter API (new in 3.0.0)
+
+`athanor.govern(initial, propose, evaluate, probe, scale=…, check=None)` and `athanor.Governor(probe, scale=…).judge(cur, cand)` (`governor.py`) apply the same verdict rule to any program:
+
+```
+p_old, p_new ← probe(cur), probe(cand)                  (fixed probe inputs; crash or non-finite ⇒ drift BIG = 1000)
+d_i  ← min(|p_new,i − p_old,i| / (scale · tolerance), BIG)    per probe i
+X    ← [0; cumsum(d)]   ⇒ ΔΦ_i = d_i,  C_i = 1/(1+d_i),  H7 = mean_i[C_i ≥ τ]
+verdict: APPROVE if H7 ≥ τ · REFINE if H7 ≥ refine_floor · REJECT otherwise   (VerifierAgent, unchanged)
+commit  ⇔ evaluate(cand) < evaluate(cur)  ∧  check(cand)  ∧  verdict = APPROVE   (REFINE ⇒ re-propose at scale 0.5ᵏ, k ≤ 2)
+```
+
+With τ = 0.70 a probe is coherent when its drift is at most `1/τ − 1 ≈ 0.43 · scale`. `scale` is the user's one required judgement: the size of a behaviour change that counts as one unit.
+
+## Seed-set policy and gate seeds (new in 3.0.0)
+
+Tuning 100–115 · spent held-out 0–15 · spent 2.7 gate 200–215 · 3.0 benchmark held-out 3000–3015 · gate pool 10000 + 16k (one fresh block per promotion, never reused) · dry-run scratch 90000–90015. `promote` refuses overlapping explicit gate seeds unless `--allow-seed-reuse`, which is recorded. Details: [EVALS.md](EVALS.md#seed-set-policy).
+
+## Size-scaled validity inputs (TSP, new in 3.0.0)
+
+The 2.6 probes and checks had 8–16 cities, while deployment instances have up to 45. Every governed TSP break in 2.6 was a timeout or crash that only occurred on the larger instances. `probe_scaling = "checks"` adds one uniform and one clustered instance at 50 %, 75 % and 100 % of the deployment size n_max (here 23, 34 and 45 cities) to the validity check suite. `"checks+probes"` also adds them to the ΔΦ probes. The default stays off, so the 2.6 results reproduce exactly.
+
+| measured | broken | severe | ratio@50 | ratio@final | never good |
+|---|---:|---:|---:|---:|---:|
+| tuning seeds 100–115, adaptive τ 0.78, no scaling | 2 | 4 | 1.037 | 1.031 | 2 |
+| same, `checks` | **0** | 2 | 1.037 | 1.031 | 2 |
+| same, `checks+probes` | 0 | 1 | 1.083 | 1.030 | 7 |
+| held-out 3000–3015, adaptive 2.6 (`tsp/adaptive@1.1.0`) | 2 | 2 | 1.177 | 1.068 | 7 |
+| held-out 3000–3015, + `checks` (`tsp/adaptive@1.2.0`) | **0** | **0** | 1.177 | 1.049 | 7 |
+| held-out 3000–3015, validity only → + `checks` | 4 → **0** | 15 → 11 | 1.177 → 1.177 | 1.045 → 1.044 | 1 → 0 |
+
+`checks` was selected on the tuning seeds: it tied with no scaling on the objective and had fewer breaks. `checks+probes` was slower, with 7 of 16 runs never good. The cost was some extra validity calls on improving proposals. On spent seeds 0–15 `checks` gave 1 broken / 1 severe against 2 / 2, so one held-out timeout remained there.
+
 ## Complexity
 
 | Operation | Cost |
@@ -146,10 +179,14 @@ This is the same verdict rule as for a self-edit, with a config change as the ed
 | Probes smaller than deployment inputs (TSP, 2.6) | Every committed break in the governed TSP arms was an APPROVEd timeout or crash that only occurs on held-out instances larger than any probe |
 | Step-based decay is task-specific (TSP, 2.6) | Carried-over t½ = 50 locks out the one large beneficial edit after about 60 steps; 9 of 16 held-out runs never reach good |
 | Fixed tolerance freezes on a big "unlock" edit (TSP, 2.6) | Non-adaptive Athanor: 0 commits on all 16 held-out seeds |
+| Runaway memory in a self-edited program (TSP, found in 3.0) | On held-out seed 3005 a validity-only program grew a list until the OOM killer stopped the whole worker pool. Workers now cap their address space at 2 GB, so this raises `MemoryError` and is scored as a crash. The results were identical under a 2 GB and a 5 GB cap |
+| Curve-fit incumbent sits on its severe limit (3.0 benchmark) | `selfmod/adaptive@1.1.0`: 10 severe regressions on held-out seeds 3000–3015 (limit 10), against 4 for fixed-tolerance validity + Athanor |
 
-Each failure mode above that came from a self-mod config is now a captured regression case (ATH-T001 overfit, ATH-T002 feedback, ATH-T003 cliff, ATH-T004 no governor). A future config that falls into one of them again is `BLOCKED` at promotion.
+Each failure mode above that came from a config is now a captured regression case: ATH-T001 overfit, ATH-T002 feedback, ATH-T003 cliff, ATH-T004 no governor, and for TSP ATH-T005 partial transfer, ATH-T006 frozen gate and ATH-T007 no governor. A future config that falls into one of them again is `BLOCKED` at promotion.
 
 ## Evaluation summary (held-out seeds 0–15, 1000 steps, self-modifying program)
+
+> 3.0.0: the unified benchmark on fresh held-out seeds 3000–3015 across all three systems is in [benchmark_v3/results.md](benchmark_v3/results.md) and the README. The table below is the 2.5 evaluation on seeds 0–15, which are now spent.
 
 | Arm | broken | severe | worst MSE | MSE@100 | MSE@1000 | best-ever | steps < 1.5 |
 |---|---:|---:|---:|---:|---:|---:|---:|

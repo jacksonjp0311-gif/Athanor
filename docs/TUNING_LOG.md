@@ -120,6 +120,18 @@ Future rounds: `tune.py --register-best selfmod/<name>@<semver> --parent <ref>` 
 
 **Where it plateaued:** on the tuning seeds, at MSE@100 = 0.750 with 8 severe regressions (vs ungoverned 0.881 / 127). On held-out seeds, the best safe setting gets near-ungoverned error at steps 100 and 1000 with near-zero breakage and severe regressions. It still reaches good solutions about 4× more slowly by time-to-1.5, and its best-ever error is about 4× worse. Held-out results were not used for any further tuning.
 
+## 3.0.0: size-scaled validity inputs (TSP, tuning seeds only)
+
+The question was whether adding inputs at the deployment size to the validity checks (and optionally to the ΔΦ probes) removes the 2.6 held-out timeouts. Three settings were run on the TSP tuning seeds 100–115 with the tuning instance set, for three arms: validity only, the carried-over conservative setting, and the 2.6 retune (raw data in `docs/tsp_selfmod/probe_scaling_tuning.json`). The selection rule was the 2.6 one (feasible broken ≤ 2 and severe ≤ 10, then median ratio @50, then @1000). A safety tie-break was added before the held-out run: on an objective tie, prefer fewer broken commits.
+
+| arm | scaling | broken | severe | @50 | @1000 | never good |
+|---|---|---:|---:|---:|---:|---:|
+| validity | none / checks / checks+probes | 7 / 1 / 1 | 13 / 9 / 9 | 1.033 (all) | 1.037 / 1.038 / 1.038 | 0 |
+| conservative (2.5) | none / checks / checks+probes | 4 / 1 / 0 | 4 / 1 / 0 | 1.061 / 1.061 / 1.083 | 1.089 / 1.040 / 1.081 | 7 / 7 / 10 |
+| retune τ 0.78 (2.6) | none / checks / checks+probes | 2 / **0** / 0 | 4 / **2** / 1 | 1.037 / **1.037** / 1.083 | 1.031 / **1.031** / 1.030 | 2 / **2** / 7 |
+
+Selected: the 2.6 retune with `checks`, registered as `tsp/adaptive@1.2.0`. It tied on the objective and broke less. `checks+probes` was rejected because it slows early progress. Adding large instances to the ΔΦ probes makes more edits look incoherent: the median ratio at step 50 went from 1.037 to 1.083. Held-out result on the fresh seeds 3000–3015: [ALGORITHM_CARD.md](ALGORITHM_CARD.md#size-scaled-validity-inputs-tsp-new-in-300).
+
 ## 2.6.0: transfer to the TSP self-modifier
 
 Protocol: first carry the 2.5 settings over unchanged, then run one small tuning pass, then evaluate once on

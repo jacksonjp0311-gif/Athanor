@@ -37,7 +37,10 @@ CHECKPOINTS = (50, 1000)  # early / late held-out checkpoints (step counts)
 TSP_DEFAULTS: Dict[str, Any] = {
     "steps": 1000, "minibatch": 4, "n_train": 24, "threshold_h7": 0.7, "refine_floor": 0.5,
     "refine_attempts": 2, "structure_weight": 0.5, "eval_set": "held",
+    # 3.0: size-scaled probe/validity inputs. None (2.6 behaviour) | "checks" | "checks+probes"
+    "probe_scaling": None, "deploy_n_max": None,
 }
+SCALE_FRACTIONS = (0.5, 0.75, 1.0)   # scaled inputs at these fractions of the deployment size
 
 
 # ------------------------------------------------------------- instances
@@ -98,6 +101,26 @@ def tuning_sets() -> Dict[str, Any]:
     return {"probes": base["probes"], "held": tune, "held_ref": [reference_length(D) for D in tune]}
 
 
+@lru_cache(maxsize=None)
+def scaled_inputs(n_max: int) -> Tuple[Tuple[Tuple[float, ...], ...], ...]:
+    """Validity/probe inputs that scale with the task: one uniform and one clustered instance at
+    each of 50 %, 75 % and 100 % of the largest deployment size ``n_max``. Generated from their own
+    seed, so they share no instance with training, probes, tuning or held-out sets."""
+    rng = np.random.default_rng(derive_seed(9005, int(n_max)))
+    out = []
+    for f in SCALE_FRACTIONS:
+        n = max(3, int(math.ceil(f * n_max)))
+        for kind in ("uniform", "clustered"):
+            out.append(tuple(tuple(r) for r in _instance(rng, n, kind)))
+    return tuple(out)
+
+
+def deploy_n_max(cfg: Dict[str, Any], sets: Dict[str, Any]) -> int:
+    """The largest instance the solver is deployed on: ``cfg['deploy_n_max']`` or the largest
+    evaluation instance (only its *size* is used; the agent never sees held-out scores)."""
+    return int(cfg.get("deploy_n_max") or max(len(D) for D in sets["held"]))
+
+
 @lru_cache(maxsize=64)
 def training_set(seed: int, n_train: int) -> Dict[str, Any]:
     tr = _instances((seed, 11), n_train, 10, 30)
@@ -138,11 +161,12 @@ def tsp_trajectory(old_len, new_len, old_src: str, new_src: str, cfg, tol: float
 
 
 # ------------------------------------------------------------- unit-test-style check suite
-def check_suite(train: Sequence) -> List[Tuple[str, Any]]:
+def check_suite(train: Sequence, extra: Sequence = ()) -> List[Tuple[str, Any]]:
     """Checks the agent's program must pass (no held-out data): its own training + probe instances,
-    edge cases, and unit tests of the heuristic helpers."""
+    edge cases, unit tests of the heuristic helpers, and (3.0, optional) size-scaled inputs."""
     sets = fixed_sets()
     cases: List[Tuple[str, Any]] = [("solve", D) for D in list(sets["probes"]) + list(train)]
+    cases += [("solve", [list(r) for r in D]) for D in extra]
     cases += [("solve", [[0.0, 1.0, 1.0], [1.0, 0.0, 1.0], [1.0, 1.0, 0.0]]),  # n = 3
               ("solve", [[0.0] * 5 for _ in range(5)])]                        # duplicate points
     cases += [("priority", (d, k, n)) for d in (0.0, 1.5, 70.0) for k, n in ((1, 10), (9, 10), (20, 45))]
@@ -199,7 +223,13 @@ def run_tsp(seed: int, arm: Dict[str, Any], arm_name: str = "custom", cfg: Dict[
     sets = tuning_sets() if cfg.get("eval_set") == "tuning" else fixed_sets()
     ts = training_set(seed, int(cfg["n_train"]))
     train, train_ref, probes = ts["train"], ts["train_ref"], sets["probes"]
-    suite = check_suite(train)
+    scaling = cfg.get("probe_scaling")
+    if scaling not in (None, "checks", "checks+probes"):
+        raise ValueError(f"probe_scaling must be None, 'checks' or 'checks+probes', not {scaling!r}")
+    extra = scaled_inputs(deploy_n_max(cfg, sets)) if scaling else ()
+    if scaling == "checks+probes":
+        probes = list(probes) + [[list(r) for r in D] for D in extra]
+    suite = check_suite(train, extra)
     verifier = VerifierAgent(threshold_h7=cfg["threshold_h7"], refine_floor=cfg["refine_floor"])
     src = SEED_PROGRAM
     prog = Program(src)
@@ -335,15 +365,33 @@ def _job(args):
     return run_tsp(seed, arm, name, cfg, out)
 
 
+WORKER_MEMORY_LIMIT_GB = 2   # 3.0: a self-edited program that allocates without bound fails with MemoryError
+
+
+def _limit_memory(gb: float) -> None:
+    """Cap a worker's address space so runaway allocation by the agent's own code raises MemoryError
+    (scored as a crash by ``run_instance``) instead of exhausting the machine. Normal runs peak under
+    100 MB. Found in 3.0 on held-out seed 3005: a validity-only program grew a list until the OOM
+    killer stopped the whole pool; its results are identical under a 2 GB and a 5 GB cap."""
+    try:
+        import resource
+        lim = int(gb * (1 << 30))
+        resource.setrlimit(resource.RLIMIT_AS, (lim, lim))
+    except (ImportError, ValueError, OSError):  # non-POSIX or not permitted: run without the cap
+        pass
+
+
 def run_tsp_arms(seeds: Sequence[int], arms: Dict[str, Dict[str, Any]] | None = None,
-                 cfg: Dict[str, Any] | None = None, workers: int = 8, ledger_dir: str | None = None):
+                 cfg: Dict[str, Any] | None = None, workers: int = 8, ledger_dir: str | None = None,
+                 memory_limit_gb: float | None = WORKER_MEMORY_LIMIT_GB):
     from concurrent.futures import ProcessPoolExecutor
     arms = arms or tsp_arms()
     jobs = [(s, n, a, cfg, ledger_dir) for n, a in arms.items() for s in seeds]
     if workers <= 1:
         runs = [_job(j) for j in jobs]
     else:
-        with ProcessPoolExecutor(workers) as ex:
+        init = (_limit_memory, (memory_limit_gb,)) if memory_limit_gb else (None, ())
+        with ProcessPoolExecutor(workers, initializer=init[0], initargs=init[1]) as ex:
             runs = list(ex.map(_job, jobs))
     return {"seeds": list(seeds), "arms": {n: {k: v for k, v in a.items()} for n, a in arms.items()},
             "summary": summarize_tsp(runs, list(arms)), "runs": runs}

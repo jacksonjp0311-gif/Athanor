@@ -1,0 +1,38 @@
+{
+  "agentsearch_version": "1.0.0rc5",
+  "athanor_version": "3.0.0",
+  "citations": [
+    {
+      "note": null,
+      "path": "configs/registry/tsp/validity-athanor/1.0.0.json",
+      "sha256": "ac4deb110aaa10a0c3fce0abc7daf80105b9b34d66a3580282aa0ff31cd8d7c7",
+      "total_lines": 28,
+      "whole_file": true
+    },
+    {
+      "note": null,
+      "path": "configs/registry/tsp/adaptive/1.1.0.json",
+      "sha256": "e5d639a5b2146a71c2d287b8219e1c411aa461a533eff3b337842b38e7dc40c2",
+      "total_lines": 37,
+      "whole_file": true
+    },
+    {
+      "end_line": 12,
+      "excerpt": "| validity | 4 (0/4/0) | 1 | 21 | 2.376 | 1.177 | 1.046 | 1.032 | 75.5 (0) | 0 | 2.3 |\n| athanor | 0 (0/0/0) | 0 | 0 | 1.177 | 1.177 | 1.177 | 1.177 | broken/never (16) | 16 | 0.0 |\n| validity+athanor | 0 (0/0/0) | 0 | 0 | 1.177 | 1.177 | 1.177 | 1.177 | broken/never (16) | 16 | 0.0 |\n| validity+athanor-conservative | 4 (1/3/0) | 0 | 5 | 1.201 | 1.177 | 1.100 | 1.098 | broken/never (9) | 0 | 4.0 |\n| validity+athanor-adaptive | 6 (0/6/0) | 1 | 7 | 1.201 | 1.167 | 1.053 | 1.032 | 57.0 (6) | 0 | 4.4 |",
+      "lines_sha256": "db6f2c1556866ce322bdba34fb7712473827b412e5ec444e5cda7f375fa20bdd",
+      "note": null,
+      "path": "docs/tsp_selfmod/results.md",
+      "pattern": "| validity+athanor |",
+      "sha256": "6adcf36da4139b254bb9d9a67bf0ae9bee89da00c20751ab9396e82362b187ac",
+      "start_line": 8
+    },
+    {
+      "note": null,
+      "path": "docs/tsp_selfmod/results.json",
+      "sha256": "daeba0114b62a2c183038033d2a182c075372e239a4f5bbd0aa482408a2ffb50",
+      "total_lines": 5258,
+      "whole_file": true
+    }
+  ],
+  "schema": "athanor.evidence/1"
+}

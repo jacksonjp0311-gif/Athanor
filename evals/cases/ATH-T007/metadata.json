@@ -1,0 +1,50 @@
+{
+  "artifacts": {
+    "after": {
+      "bytes": 1847,
+      "path": "artifacts/workspace_after.tar.gz",
+      "sha256": "02dd87ab7bcb851752f556de3c4189682ae461a9e0cf77c2f8be1d86bc86cf9e"
+    },
+    "before": {
+      "bytes": 1781,
+      "path": "artifacts/workspace_before.tar.gz",
+      "sha256": "5df12c7f296e2e902026653062c82f2b74eaa2682dde32c2b8b4a4fe9c816e4b"
+    },
+    "prompt": {
+      "bytes": 259,
+      "path": "prompt.md",
+      "sha256": "8061908c5181d9758bec0de3f543362842b8a3e13a843390b46ca1fe81439d47"
+    }
+  },
+  "case_id": "ATH-T007",
+  "created_at": "2026-10-17T12:21:13Z",
+  "expected": {
+    "after": "pass",
+    "before": "fail",
+    "verify_exit_code": 0
+  },
+  "schema_version": "1.0",
+  "source": {
+    "after": "/tmp/athanor-capture-67im4qn3/after",
+    "before": "/tmp/athanor-capture-67im4qn3/before",
+    "changed_files": [],
+    "kind": "directory_pair"
+  },
+  "tags": [
+    "athanor",
+    "tuning",
+    "tsp"
+  ],
+  "title": "Ungoverned TSP self-modification ships silent wrong answers",
+  "verification": {
+    "argv": [
+      "python",
+      "verify_config.py"
+    ],
+    "protected_paths": [
+      "verify_config.py",
+      "case.json"
+    ],
+    "timeout_sec": 900
+  }
+}

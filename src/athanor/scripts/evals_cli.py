@@ -141,7 +141,8 @@ def _reg_register(a) -> int:
 def _reg_promote(a) -> int:
     from ..evals.promotion import GATE_SEEDS, promote
     rep = promote(Registry(a.registry), a.ref, cases_root=a.cases, out_dir=a.out,
-                  seeds=_seeds(a.gate_seeds) if a.gate_seeds else GATE_SEEDS, steps=a.steps,
+                  seeds=_seeds(a.gate_seeds) if a.gate_seeds else None,
+                  allow_seed_reuse=a.allow_seed_reuse, steps=a.steps,
                   allow_refine=a.allow_refine, dry_run=a.dry_run, src_root=a.src, bootstrap=a.bootstrap,
                   require_fresh_evidence=a.require_fresh_evidence)
     _print(rep)
@@ -257,7 +258,11 @@ def add_parsers(sub) -> None:
     p.set_defaults(fn=_g_reg_register)
     p = rs.add_parser("promote", help="eval suite + Athanor verdict vs the incumbent; records the decision")
     p.add_argument("ref")
-    p.add_argument("--gate-seeds", default=None, help="default 200-215 (fresh seeds)")
+    p.add_argument("--gate-seeds", default=None,
+                   help="default: the next never-used block of 16 from the gate pool (10000+); "
+                        "--dry-run defaults to scratch seeds 90000-90015. See docs/EVALS.md#seed-set-policy")
+    p.add_argument("--allow-seed-reuse", action="store_true",
+                   help="allow --gate-seeds that overlap spent/reserved sets (recorded in the ledger)")
     p.add_argument("--steps", type=int, default=1000)
     p.add_argument("--allow-refine", action="store_true")
     p.add_argument("--bootstrap", action="store_true", help="first promotion in a family (no incumbent)")

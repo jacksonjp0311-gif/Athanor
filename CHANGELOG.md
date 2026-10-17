@@ -1,5 +1,58 @@
 # Changelog
 
+## 3.0.0 — 2026-10-17
+
+Operational release: usable from any program, checked by one command, benchmarked on fresh held-out seeds.
+
+### Added
+- **Public adapter API** (`athanor.governor`, exported from `athanor`).
+  - `athanor.govern(initial, propose, evaluate, probe, *, scale, check=None, steps, seed, ledger=None, governed=True)` runs a governed self-modification loop for any program.
+  - `athanor.Governor(probe, scale=…).judge(current, candidate)` gates a single edit.
+  - The verdict is ATHANOR's unchanged ΔΦ → C → H7 → `VerifierAgent` pipeline on per-probe drift `|Δprobe| / scale`.
+  - `athanor.GovernorError` gives clear messages for bad settings or probe output.
+  - Example: `examples/govern_quickstart.py`.
+- **`athanor doctor`**: checks Python, dependencies and extras, runs a governor self-test and a run + ledger verify + determinism check, and verifies the registry and eval cases when run inside a checkout. `--json` for machine output.
+- **`athanor demo`**: one command for run → verify → replay from `config.json` (identical digest) → eval suite (bug cases; `--full-evals` for all).
+- **Clear CLI errors**: one line plus a hint and exit code 2 instead of a traceback (`ATHANOR_DEBUG=1` restores it).
+- **`athanor bench --all`** (`athanor.bench_all`): the unified benchmark.
+  - Three systems: the synthetic loop, the curve-fitting self-modifier and the TSP self-modifier.
+  - Arms: ungoverned, validity and governed, using the registry configs.
+  - Seeds: the new held-out set 3000–3015.
+  - Output: `docs/benchmark_v3/results.{md,json}` and `docs/assets/benchmark_v3.png`.
+- **TSP family in the eval suite and registry**: the `tsp/*` registry entries and three cases that re-measure the 2.6 results exactly.
+  - ATH-T005: partial transfer, broken 4 → 2.
+  - ATH-T006: frozen fixed-tolerance gate, 16 frozen runs → 0.
+  - ATH-T007: no governor, 16 broken → 2.
+  - The verifier template and capture dispatch on the family. The suite now has 11 cases.
+- **TSP promotion signature**: held-out tour ratio at checkpoints divided by κ = 0.10, with a broken program counted as 2.0.
+- **Seed-set policy** (`athanor.seedsets`, documented in `docs/EVALS.md#seed-set-policy`).
+  - Each promotion takes the next never-used gate block of 16 seeds from 10000 up.
+  - Explicit gate seeds that overlap tuning, held-out, benchmark or already-gated seeds are refused unless `--allow-seed-reuse`, which is recorded in the ledger.
+  - Dry runs use scratch seeds 90000–90015.
+- **Size-scaled TSP validity inputs**: `probe_scaling = "checks" | "checks+probes"` adds instances at 50/75/100 % of the deployment size to the validity checks (and optionally to the ΔΦ probes). The default is off, so 2.6 reproduces exactly.
+- **Worker memory cap** for TSP runs (2 GB address space per worker), so a self-edited program that allocates without bound fails as a crash instead of taking down the machine.
+- Docs: README (operational quickstart, adapter API, unified benchmark), algorithm card (adapter API, seed policy, size-scaled inputs, new failure modes), EVALS (TSP cases, seed policy, TSP promotion), TUNING_LOG (3.0 probe-scaling selection), METHOD (two checklist steps, 2.8 and 3.0 rows).
+- CI runs `athanor doctor`, `athanor demo`, the adapter example and a `bench --all` smoke run. The wheel job checks doctor, demo, the API and `bench --all` from the built wheel.
+- Tests: adapter API (verdicts, validity, determinism, ungoverned baseline, ledger, errors, example), seed policy, size-scaled inputs, TSP promotion signature, bench arms match the registry, doctor/demo/CLI errors. 103 tests in total.
+
+### Results
+- **Unified benchmark, held-out seeds 3000–3015** (unsafe commits / severe regressions / final quality):
+  - curve fit: ungoverned 31 / 116 / MSE 0.433; validity 8 / 84 / 0.874; validity + Athanor 0 / 4 / 1.044; Athanor adaptive (incumbent) **0** / 10 / 0.930.
+  - TSP: ungoverned 16 / 16 / broken; validity 4 / 15 / ratio 1.045; validity + scaled checks 0 / 11 / 1.044; fixed-tolerance Athanor 0 / 0 / frozen; Athanor adaptive 2.6: 2 / 2 / 1.068; **Athanor adaptive + scaled checks (incumbent) 0 / 0 / 1.049**.
+  - synthetic loop: promotions of non-APPROVED parents 163 → **0**; tail H7 0.781 → 0.914 (governed higher on 10 of 16 seeds, lower on 4).
+- **Size-scaled checks** on the fresh seeds: validity only went from 4 broken to 0 and the adaptive arm from 2/2 to 0/0, with no loss of speed. On spent seeds 0–15 the adaptive arm went from 2/2 to 1/1.
+- **TSP promotion through the gate**: `tsp/adaptive@1.2.0` over `@1.1.0` on gate block 10000–10015 gave suite 11/11 PASS and APPROVE, H7 1.000. Broken commits 0 vs 2, severe 5 vs 7, identical median ratio.
+
+### Caveats
+- Governed arms are slower and reach worse best-case quality. On the curve fit, ungoverned had the best final MSE (0.433 vs 0.930) and reached MSE < 1.5 in 5.5 vs 27.5 steps. On TSP every governed arm was still at the seed program at step 50, and 7 of 16 runs never reached ratio ≤ 1.05.
+- The curve-fit incumbent had 10 severe regressions on the fresh seeds, exactly at the limit of 10.
+- Size scaling uses the deployment size (largest evaluation instance). In the adapter API, choosing probe inputs that cover deployment is still the user's job.
+- The memory cap is per worker process and POSIX-only. Serial runs (`workers=1`) are not capped.
+- `bench-v3` seeds are now spent by the published table. Future benchmarks need a new set.
+
+### Unchanged
+- Defaults reproduce 2.6 exactly (`probe_scaling` off; existing tests still pass). The CLI is backwards compatible: `athanor bench` without `--all` is unchanged, and `promote --gate-seeds` still works but refuses spent seeds.
+
 ## 2.8.0 — 2026-10-17
 
 ### Added

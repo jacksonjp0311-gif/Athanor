@@ -1,6 +1,6 @@
 {
   "agentsearch_version": "1.0.0rc5",
-  "athanor_version": "2.8.0",
+  "athanor_version": "3.0.0",
   "citations": [
     {
       "note": null,
@@ -23,7 +23,7 @@
       "note": null,
       "path": "docs/TUNING_LOG.md",
       "pattern": "The selected setting overfit its safety",
-      "sha256": "2136c8a513e98cd21fbed9f85327818fb811aff00a92aff7c43ca60afc172d13",
+      "sha256": "39b86239298405ad3c15bec6080e79ea0484df791c2e3004af652fd8ce0978a0",
       "start_line": 116
     },
     {

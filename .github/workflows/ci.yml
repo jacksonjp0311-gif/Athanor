@@ -28,6 +28,12 @@ jobs:
           athanor replay "$RUNNER_TEMP/runs/ci"
           athanor replay "$RUNNER_TEMP/runs/ci" --out-dir "$RUNNER_TEMP/replay"
           athanor diff "$RUNNER_TEMP/runs/ci" "$(ls -d "$RUNNER_TEMP"/replay/run_*)"
+      - name: Operational commands (doctor, demo, adapter example, unified bench smoke)
+        run: |
+          athanor doctor
+          athanor demo --out "$RUNNER_TEMP/demo" --skip-evals
+          python examples/govern_quickstart.py
+          athanor bench --all --seeds 3000 --steps 50 --workers 2 --out "$RUNNER_TEMP/bench_all"
       - name: Eval suite (Bug2Eval regression cases + registry integrity)
         run: |
           athanor registry verify
@@ -48,6 +54,7 @@ jobs:
         run: |
           python -m venv /tmp/core && /tmp/core/bin/pip install -q -r requirements.txt -e .
           /tmp/core/bin/athanor --version
+          (cd /tmp && /tmp/core/bin/athanor doctor && /tmp/core/bin/athanor demo --out /tmp/demo)
           /tmp/core/bin/athanor registry verify
           /tmp/core/bin/athanor evals run --out /tmp/ev | grep -q "bug2eval is not installed"
           /tmp/core/bin/athanor search status | grep -q "AgentSearch is not installed"
@@ -69,6 +76,9 @@ jobs:
           /tmp/clean/bin/pip install dist/*.whl
           cd /tmp && /tmp/clean/bin/athanor --version
           /tmp/clean/bin/athanor bench --seeds 0 --out /tmp/bench
+          cd /tmp && /tmp/clean/bin/athanor doctor && /tmp/clean/bin/athanor demo --out /tmp/demo
+          /tmp/clean/bin/python -c "import athanor; g = athanor.Governor(lambda p: [p, 2 * p]); print(g.judge(1.0, 1.01).verdict)"
+          /tmp/clean/bin/athanor bench --all --seeds 3000 --steps 30 --workers 2 --out /tmp/bench_all
       - uses: actions/upload-artifact@v4
         with:
           name: dist

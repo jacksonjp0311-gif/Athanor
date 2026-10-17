@@ -82,8 +82,11 @@ Ledger rows contain only deterministic fields (no timings), so the **suite diges
 | ATH-T002 | tuning | Feedback trap: `adaptive-basis-current@1.0.0` vs `adaptive@1.0.0`, tuning seeds 100–115 | severe **30** → **8** (limit ≤ 10) |
 | ATH-T003 | tuning | Threshold cliff: `validity-athanor@1.1.0` (τ 0.80) vs `@1.0.0`, seeds 100–115 | median steps to MSE < 1.5: never → 489 (limit ≤ 1000) |
 | ATH-T004 | tuning | No governor: `ungoverned@1.0.0` vs `validity-athanor@1.0.0`, seeds 0–15 | broken 23 / severe 140 → 0 / 3 |
+| ATH-T005 | tuning (TSP, 3.0) | Partial transfer: `tsp/adaptive@1.0.0` (2.5 conservative setting carried over) vs `tsp/adaptive@1.1.0` (2.6 retune), seeds 0–15 | broken **4** / severe 5 → **2** / 2 |
+| ATH-T006 | tuning (TSP, 3.0) | Frozen gate: `tsp/validity-athanor@1.0.0` (fixed tolerance) vs `tsp/adaptive@1.1.0` | frozen runs **16** / never good 16 → **0** / 3 (limits ≤ 0, ≤ 8) |
+| ATH-T007 | tuning (TSP, 3.0) | No governor: `tsp/ungoverned@1.0.0` vs `tsp/adaptive@1.1.0` | broken **16** (15 silent wrong answers) / severe 17 → 2 / 2 |
 
-The bug cases snapshot the **real** `src/` tree at `ad23756` (before 2.1.0) and `31c1c4a` (2.1.0). The tuning cases re-measure the numbers in [TUNING_LOG.md](TUNING_LOG.md) and [selfmod/arms_results.md](selfmod/arms_results.md), and capture reproduced every one of them exactly. All limits are the pre-registered feasibility rule from the tuning protocol (broken ≤ 2, severe ≤ 10), plus a speed target for T003. `python evals/seed_history.py` rebuilds the registry and the cases from scratch.
+The bug cases snapshot the **real** `src/` tree at `ad23756` (before 2.1.0) and `31c1c4a` (2.1.0). The tuning cases re-measure the numbers in [TUNING_LOG.md](TUNING_LOG.md) and [selfmod/arms_results.md](selfmod/arms_results.md), and capture reproduced every one of them exactly. All limits are the pre-registered feasibility rule from the tuning protocol (broken ≤ 2, severe ≤ 10), plus a speed target for T003 and a no-freeze / reach-good target for T006. The TSP cases (3.0) re-measure [tsp_selfmod/results.md](tsp_selfmod/results.md) exactly; each takes about 30–40 s on 8 cores. `python evals/seed_history.py` rebuilds the registry and the cases from scratch.
 
 Tests check that the suite passes on the current code, and that it reports **4/4 REGRESSION** when the pre-2.1.0 `src/` is injected (`tests/unit/test_evals.py`). They also check that the overfit config is **BLOCKED** by ATH-T001 and that an edited case is an **ERROR**.
 
@@ -97,7 +100,7 @@ athanor evals capture bug --id ATH-B005 --title "..." --before-ref <buggy> --aft
 # A tuning failure: register both configs, then name the seeds and the violated limits.
 athanor registry register selfmod/adaptive@1.2.0 --parent selfmod/adaptive@1.1.0 \
     --set cfg.adaptive_halflife=35 --reason "round 9: shorter half-life"
-athanor evals capture tuning --id ATH-T005 --title "..." --bad selfmod/adaptive@1.2.0 \
+athanor evals capture tuning --id ATH-T008 --title "..." --bad selfmod/adaptive@1.2.0 \
     --good selfmod/adaptive@1.1.0 --seeds 0-15 --limit severe_regressions<=10 --limit broken_commits<=2
 ```
 
@@ -122,6 +125,11 @@ actually fail (for tuning, it must *violate a limit*, exit 1, and not merely cra
 | `selfmod/adaptive@1.0.0` | rejected (historical) | rounds 6–7 selected setting |
 | `selfmod/adaptive-basis-current@1.0.0` | rejected (historical) | round 8 sensitivity |
 | `selfmod/adaptive@1.1.0` | **promoted** through the gate (see below) | conservative τ 0.75 |
+| `tsp/ungoverned@1.0.0` | rejected (historical) | 2.6.0 TSP baseline |
+| `tsp/validity-athanor@1.0.0` | rejected (historical) | 2.6.0 fixed tolerance (froze) |
+| `tsp/adaptive@1.0.0` | rejected (historical) | 2.5 conservative setting carried over |
+| `tsp/adaptive@1.1.0` | promoted (bootstrap) → retired | 2.6.0 retune, τ 0.78 |
+| `tsp/adaptive@1.2.0` | **promoted** through the gate on gate block 10000–10015 | 3.0.0: + size-scaled validity inputs |
 
 ## Eval-gated, Athanor-governed promotion
 
@@ -148,9 +156,26 @@ The candidate traded one broken commit for far fewer severe regressions and much
 
 With `athanor[search]` (Python 3.11+), each case can carry `evidence.json`: the lines it rests on, cited through AgentSearch with the SHA-256 of the file and of the cited lines. Every `athanor evals run` re-verifies them (row field `evidence: {checked, stale, hard}`, summary fields `evidence_checked` and `stale_evidence`). Stale evidence is reported but does not change a case's status. `athanor registry promote --require-fresh-evidence` records `refine` instead of promoting when a cited result has changed or is gone. Registry entries registered by `tune.py --register-best` pin their rows of `docs/tuning/log.json` by hash. Full design: [SEARCH.md](SEARCH.md).
 
+## Seed-set policy
+
+Every reported number comes from a named seed set with one purpose (`athanor/seedsets.py`). Held-out and gate seeds are **spent** once a result on them has been looked at, and are never used to choose anything again.
+
+| Set | Seeds | Purpose | Status |
+|---|---|---|---|
+| tuning | 100–115 | tuning (selfmod 2.5, TSP 2.6, probe scaling 3.0) | reusable for tuning only |
+| heldout-v2 | 0–15 | held-out report of 2.4–2.6 | **spent**: the eval cases check these seeds on every run |
+| gate-v2.7 | 200–215 | 2.7 promotion of `selfmod/adaptive@1.1.0` | **spent** |
+| bench-v3 | 3000–3015 | held-out seeds of the 3.0 unified benchmark | used once, for the published table |
+| gate pool | 10000 + 16k | promotion gates: each real promotion takes the next unused block of 16 | block 10000–10015 spent by `tsp/adaptive@1.2.0` |
+| dry-run | 90000–90015 | `promote --dry-run` scratch seeds | never reported as held-out |
+
+`athanor registry promote` with no `--gate-seeds` takes the next block that no recorded decision has used; the ledger records `gate_seeds` and `gate_seed_source`. Explicit `--gate-seeds` that overlap the tuning, held-out, benchmark or a previously gated block are **refused** unless `--allow-seed-reuse` is given, and then the overlap is recorded as `seed_reuse`. A dry run uses the scratch seeds, so looking does not spend a gate block.
+
+**TSP promotion (3.0).** For the `tsp` family the behaviour signature is the held-out tour ratio at the same checkpoints, divided by the testbed's a-priori scale κ = 0.10, with a broken program counted as ratio 2.0. **Measured:** `tsp/adaptive@1.2.0` over `tsp/adaptive@1.1.0` gave suite 11/11 PASS and **APPROVE, H7 = 1.000** (mean ΔΦ 2.3·10⁻⁵) on gate block 10000–10015. On those seeds the candidate had 0 broken commits and 5 severe regressions, against 2 and 7. Median ratio was identical for both: 1.113 at step 50 and 1.040 at the end.
+
 ## Caveats
 
-- **The suite is a floor, not an objective.** Tuning cases ATH-T001 and ATH-T004 run on the held-out seeds 0–15. Once a gate checks those seeds over and over, they stop being truly held out for later configs, so confirm any new config once on fresh seeds before quoting held-out numbers. The promotion verdict already uses separate seeds (200–215).
+- **The suite is a floor, not an objective.** Tuning cases ATH-T001 and ATH-T004 run on the held-out seeds 0–15. Once a gate checks those seeds over and over, they stop being truly held out for later configs, so confirm any new config once on fresh seeds before quoting held-out numbers. Since 3.0 the promotion verdict takes a fresh, never-reused gate block for every decision (see the seed-set policy).
 - **The step-size rule measures how much behaviour changes, not whether it improves.** A config that gets better in a large jump is held back (REFINE or REJECT), on purpose, the same way Athanor treats self-edits.
 - **Bug verifiers check behaviour, not a proof.** Each one encodes one observable symptom of the original bug.
 - **Bug2Eval verifier protection is tamper detection, not a sandbox.** Only run cases you trust.

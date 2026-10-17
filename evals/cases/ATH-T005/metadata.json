@@ -1,0 +1,50 @@
+{
+  "artifacts": {
+    "after": {
+      "bytes": 1840,
+      "path": "artifacts/workspace_after.tar.gz",
+      "sha256": "10a1127f0ab15088d5c712abf07f46d3e0cdc89bc85ccebc965c6f7360e32d88"
+    },
+    "before": {
+      "bytes": 1843,
+      "path": "artifacts/workspace_before.tar.gz",
+      "sha256": "f9f03cac6c1818ac8c1a1cf38ec838bf4af02602d2153678fe077fdd974f8459"
+    },
+    "prompt": {
+      "bytes": 264,
+      "path": "prompt.md",
+      "sha256": "ede05bef843521540e576f9744da2c7c66cb9409961a8eb0a36fd90307152db0"
+    }
+  },
+  "case_id": "ATH-T005",
+  "created_at": "2026-10-17T12:20:00Z",
+  "expected": {
+    "after": "pass",
+    "before": "fail",
+    "verify_exit_code": 0
+  },
+  "schema_version": "1.0",
+  "source": {
+    "after": "/tmp/athanor-capture-0ok48bid/after",
+    "before": "/tmp/athanor-capture-0ok48bid/before",
+    "changed_files": [],
+    "kind": "directory_pair"
+  },
+  "tags": [
+    "athanor",
+    "tuning",
+    "tsp"
+  ],
+  "title": "The 2.5 conservative setting does not transfer to the TSP solver",
+  "verification": {
+    "argv": [
+      "python",
+      "verify_config.py"
+    ],
+    "protected_paths": [
+      "verify_config.py",
+      "case.json"
+    ],
+    "timeout_sec": 900
+  }
+}
