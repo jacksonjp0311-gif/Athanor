@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "athanor"
-version = "2.3.0"
+version = "2.4.0"
 description = "ATHANOR: a deterministic coherence governor for recursive AI systems (ΔΦ → C → H7 → verdict)"
 readme = "README.md"
 license = "MIT"

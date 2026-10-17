@@ -5,7 +5,7 @@
 <p align="center">
   <a href="https://github.com/jacksonjp0311-gif/Athanor/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/jacksonjp0311-gif/Athanor/actions/workflows/ci.yml/badge.svg?branch=main"/></a>
   <img alt="Python 3.10 | 3.11 | 3.12" src="https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-3776AB?logo=python&logoColor=white"/>
-  <a href="https://github.com/jacksonjp0311-gif/Athanor/releases/latest"><img alt="Version 2.3.0" src="https://img.shields.io/badge/version-2.3.0-ffb347"/></a>
+  <a href="https://github.com/jacksonjp0311-gif/Athanor/releases/latest"><img alt="Version 2.4.0" src="https://img.shields.io/badge/version-2.4.0-ffb347"/></a>
   <a href="../LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-3ddc97"/></a>
 </p>
 
@@ -26,7 +26,7 @@ A system that rewrites itself needs a referee that is *outside* the thing being 
 - **Every run can be audited.** Edited, deleted, inserted, or reordered ledger rows are detected, and a run can be replayed and compared bit-for-bit through its digest.
 
 ## Contents
-[Governance loop](#governance-loop) · [Quickstart](#quickstart) · [Benchmark](#benchmark-governed-vs-ungoverned) · [CLI](#cli-reference) · [Configuration](#configuration-reference) · [Guarantees](#guarantees) · [Run artifacts](#run-artifacts) · [Architecture](#architecture) · [Testing](#testing) · [Theory](#theory--manuscripts) · [Roadmap](#roadmap) · [Changelog](../CHANGELOG.md)
+[Governance loop](#governance-loop) · [Quickstart](#quickstart) · [Benchmark](#benchmark-governed-vs-ungoverned) · [Real self-modifying program](#real-world-test-a-self-modifying-program) · [CLI](#cli-reference) · [Configuration](#configuration-reference) · [Guarantees](#guarantees) · [Run artifacts](#run-artifacts) · [Architecture](#architecture) · [Testing](#testing) · [Theory](#theory--manuscripts) · [Roadmap](#roadmap) · [Changelog](../CHANGELOG.md)
 
 ## Governance loop
 
@@ -60,10 +60,10 @@ Install straight from GitHub (Python 3.10+):
 
 ```bash
 pip install git+https://github.com/jacksonjp0311-gif/Athanor.git            # latest main
-pip install git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.3.0     # pinned release
+pip install git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.4.0     # pinned release
 ```
 
-Each [GitHub release](https://github.com/jacksonjp0311-gif/Athanor/releases) also has the built wheel and sdist attached (`pip install athanor-2.3.0-py3-none-any.whl`). ATHANOR is **not published on PyPI**. The name `athanor` on PyPI belongs to an unrelated project, so `pip install athanor` will **not** install this package.
+Each [GitHub release](https://github.com/jacksonjp0311-gif/Athanor/releases) also has the built wheel and sdist attached (for example `pip install athanor-2.4.0-py3-none-any.whl`). ATHANOR is **not published on PyPI**. The name `athanor` on PyPI belongs to an unrelated project, so `pip install athanor` will **not** install this package.
 
 For development:
 
@@ -124,6 +124,29 @@ Measured with v2.3.0, seeds 0–7. Population means per generation; "last 10" me
 
 Full per-seed results are in [`docs/benchmark/results.md`](../docs/benchmark/results.md) and [`results.json`](../docs/benchmark/results.json), including every run digest.
 
+## Real-world test: a self-modifying program
+
+The benchmark above uses synthetic dynamics. [`athanor selfmod`](../docs/selfmod.md) tests ATHANOR on an **actual self-modifying program**: an agent that parses its own Python source with `ast`, mutates it, recompiles it and keeps the edit if it lowers error on a noisy 8-point minibatch. Edits can genuinely break it (`log` of a negative, division by zero, overflow). ΔΦ is measured from real changes: output divergence on 32 probe inputs plus AST structural distance. ATHANOR's unchanged ΔΦ → C → H7 → verdict pipeline gates each self-edit.
+
+<p align="center"><img src="../docs/assets/selfmod.png" alt="Self-modifying program: governed vs ungoverned over 16 seeds" width="100%"/></p>
+
+16 seeds × 1000 self-edits. Lower is better for every row.
+
+| | Governed | Ungoverned |
+|---|---:|---:|
+| Commits that **broke** the program on held-out inputs | **0** | 23 |
+| Severe regressions (>2× worse held-out error, or broken) | **3** | 140 |
+| Worst held-out MSE ever committed | **528** | 2.2 × 10¹⁴³ |
+| Median held-out MSE after 100 steps | 2.250 | **1.173** |
+| Median held-out MSE after 1000 steps | 1.110 | **0.862** |
+| Median best-ever held-out MSE | 0.899 | **0.206** |
+
+**Honest read:** the governed agent avoided almost all catastrophic and breaking self-edits, but it improved **much more slowly** and ended **worse** on the typical seed (ungoverned is better on 9/16 seeds at step 1000). The gate directly blocks most severe regressions: it would have refused 84 of the 140 ungoverned ones. It does **not** reliably detect crashes, though. It would have approved 20 of the 23 breaking edits, because they fail on only a few inputs. The governed run avoids those mostly indirectly, through its slower, lower-drift path. It is a stability-for-speed trade on this toy system. The [full write-up](../docs/selfmod.md) covers the ΔΦ definition, the per-seed results and the caveats.
+
+```bash
+athanor selfmod --seeds 0-15 --steps 1000 --out docs/selfmod --chart docs/assets/selfmod.png
+```
+
 ## CLI reference
 
 | Command | What it does | Exit code |
@@ -133,6 +156,7 @@ Full per-seed results are in [`docs/benchmark/results.md`](../docs/benchmark/res
 | `athanor replay RUN [--out-dir DIR]` | Re-runs from `RUN/config.json` and compares the digest with the original ledger head. | `0` match · `1` mismatch · `2` no config |
 | `athanor diff RUN_A RUN_B` | Compares two runs: digests, first divergent ledger row, changed config keys, verdict counts, promotions, and stats deltas. | `0` identical · `1` different |
 | `athanor bench [--config CFG] [--seeds 0-7] [--out DIR] [--chart PNG]` | Governed vs ungoverned comparison across seeds. Writes `results.json`, `results.md` and a chart. Without `--config` it uses a built-in copy of `configs/bench.yaml`. | `0` |
+| `athanor selfmod [--seeds 0-15] [--steps 1000] [--out DIR] [--chart PNG] [--ledgers]` | Governed vs ungoverned **real self-modifying program** (see [`docs/selfmod.md`](../docs/selfmod.md)). `--ledgers` keeps a hash-chained ledger and `final_self.py` per run. | `0` |
 | `athanor --version` | Prints the version. | `0` |
 
 `athanor --config CFG` (the 2.0 form) still works and is the same as `athanor run`. You can also use `python -m athanor ...`.
@@ -196,10 +220,13 @@ src/athanor/
 ├── ledger/        Hash-chained LedgerWriter and verify_ledger
 ├── experiments/   Config loading, deep-merge inheritance, validation
 ├── bench.py       Governed-vs-ungoverned comparison (athanor bench)
-├── scripts/       CLI: run · verify · replay · diff · bench
+├── selfmod/       Real self-modifying program + governed experiment (athanor selfmod)
+├── scripts/       CLI: run · verify · replay · diff · bench · selfmod
 └── utils/         Seeding, JSONL logging, plots and dashboard
 configs/           base.yaml, toy_experiment.yaml, bench.yaml
 docs/benchmark/    Committed benchmark results (results.md, results.json)
+docs/selfmod/      Committed self-modification results; write-up in docs/selfmod.md
+experiments/       Runnable experiment entry points (self_modify/)
 docs/              Architecture notes, LaTeX manuscripts, assets
 tests/             Unit and integration tests (pytest)
 ```
@@ -235,6 +262,8 @@ H7 coherence geometry law (`h7_coherence_geometry_law_v2_1.tex`), the Codex–DG
 - [x] Hash-chained verdict ledger, `verify`, `replay` (2.1)
 - [x] Decision record, deterministic REFINE path, optional H20/H44 gates, JSON archive, `diff` (2.2)
 - [x] Governed-vs-ungoverned benchmark (`athanor bench`), wheel/sdist attached to GitHub releases (2.3)
+- [x] Real self-modifying program test (`athanor selfmod`) (2.4)
+- [ ] Benchmark ATHANOR against a simple "reject edits that crash on probes" baseline
 - [ ] Pluggable telemetry backends for real model or agent traces (beyond the built-in linear dynamics)
 - [ ] Signed run digests (for example Sigstore or GPG) to make whole-file rewrites detectable
 - [ ] Remove `archive.pkl` once `archive.json` has been out for one release
@@ -246,7 +275,7 @@ Publishing a GitHub release runs [`.github/workflows/release.yml`](../.github/wo
 
 ## Scope & intended use
 
-ATHANOR is a research framework. The built-in telemetry is a synthetic linear dynamical system used to exercise the governor. It does not model any particular AI system. The project makes no claims about benchmarks or real-world safety performance.
+ATHANOR is a research framework. The built-in telemetry is a synthetic linear dynamical system used to exercise the governor. It does not model any particular AI system. The self-modification test is a small symbolic-regression program, not an LLM or a general agent. The project makes no claims about benchmarks or real-world safety performance.
 
 ## License
 
