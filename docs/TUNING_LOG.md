@@ -92,6 +92,21 @@ Almost every single-parameter change breaks feasibility. **The selected optimum 
 
 ![Pareto chart](assets/tuning_pareto.png)
 
+## Versioned configs and captured failures (2.7.0)
+
+Every setting named in this log that later mattered is an immutable entry in [`configs/registry/`](../configs/registry/), and every failure it documents is a Bug2Eval regression case ([EVALS.md](EVALS.md)):
+
+| This log | Registry ref | Status | Captured as |
+|---|---|---|---|
+| Round 0 baseline: ungoverned | `selfmod/ungoverned@1.0.0` | rejected | ATH-T004 (bad side) |
+| Round 0 baseline: validity + athanor, τ 0.7 | `selfmod/validity-athanor@1.0.0` | bootstrap incumbent, then retired | ATH-T003 / T004 (good side) |
+| Round 1: τ 0.8 | `selfmod/validity-athanor@1.1.0` | rejected | ATH-T003 (threshold cliff) |
+| Rounds 6–7 selected setting | `selfmod/adaptive@1.0.0` | rejected (overfit) | ATH-T001 (bad side), ATH-T002 (good side) |
+| Round 8: basis = current | `selfmod/adaptive-basis-current@1.0.0` | rejected | ATH-T002 (feedback trap) |
+| Conservative τ 0.75 neighbour | `selfmod/adaptive@1.1.0` | **promoted** through the gate | ATH-T001 (good side) |
+
+Future rounds: `tune.py --register-best selfmod/<name>@<semver> --parent <ref>` registers the round's best feasible setting as a candidate, and `athanor registry promote` decides. No tuning result becomes a default without passing every captured case.
+
 ## Held-out evaluation (seeds 0–15, run once, after tuning stopped)
 
 | | tuning seeds | held-out seeds |

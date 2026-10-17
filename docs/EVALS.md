@@ -132,7 +132,17 @@ actually fail (for tuning, it must *violate a limit*, exit 1, and not merely cra
 3. APPROVE promotes (the old incumbent is retired). REFINE records `refine` (use `--allow-refine` to accept it). REJECT rejects. `--dry-run` evaluates without recording.
 
 **Result of the real promotion recorded in the registry** (`selfmod/adaptive@1.1.0` over `selfmod/validity-athanor@1.0.0`):
-see the `promote` event in `configs/registry/ledger.jsonl`, or run `athanor registry show selfmod/adaptive@1.1.0`. The gate run is summarised in the [CHANGELOG](../CHANGELOG.md) 2.7.0 entry.
+
+| | suite | verdict | H7 | mean ΔΦ | max ΔΦ |
+|---|---|---|---|---|---|
+| gate | 8/8 PASS | **APPROVE** | 0.8125 (13/16 seeds) | 0.296 | 0.654 |
+
+| gate seeds 200–215, 1000 steps | broken | severe | MSE@100 | MSE@final | median steps to MSE < 1.5 | never reached |
+|---|---|---|---|---|---|---|
+| candidate `adaptive@1.1.0` | 1 | 5 | 1.199 | 0.844 | 32.5 | 2 |
+| incumbent `validity-athanor@1.0.0` | 0 | 13 | 2.161 | 0.880 | 398 | 3 |
+
+The candidate traded one broken commit for far fewer severe regressions and much faster progress. The incumbent's 13 severe regressions on these seeds are above the limit of 10 used by the tuning cases. The decision is the `promote` event in `configs/registry/ledger.jsonl` (`athanor registry show selfmod/adaptive@1.1.0`).
 
 ## Caveats
 
