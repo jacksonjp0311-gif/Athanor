@@ -1,5 +1,62 @@
 # Changelog
 
+## 2.7.0 — 2026-10-17
+
+### Added
+- **Bug2Eval regression suite** (`athanor.evals`, optional extra `athanor[evals]`, which pins [Bug2Eval](https://github.com/jacksonjp0311-gif/bug2eval) v0.1.3). Every fixed bug and every failed config is a versioned, deterministic case in `evals/cases/`. A case is refused unless its captured *before* fails and its *after* passes, and its verifier is protected (identical in both snapshots, SHA-256 checked).
+  - `athanor evals list`, `evals run [--kind] [--case] [--candidate REF] [--strict] [--out]`, `evals capture bug …`, `evals capture tuning …`.
+  - Statuses: PASS, DRIFT, STALE, BLOCKED, REGRESSION, ERROR. Results go to a hash-chained `ledger.jsonl` and `summary.json` with a deterministic suite digest.
+  - Bug cases inject the working-tree `src/` into the captured *before* workspace, so a reintroduced bug shows up as `REGRESSION`. Tuning cases inject a registry config, so a config that falls into a captured failure shows up as `BLOCKED`.
+- **Seeded from real history** (`evals/seed_history.py`):
+  - ATH-B001…B004: the four bugs fixed in 2.1.0 (log JSONL newline, nested config inheritance, seed overlap under REFINE, run-folder collision), captured from the real `src/` at `ad23756` → `31c1c4a`.
+  - ATH-T001: overfit tuned setting vs conservative τ 0.75 (severe 34 → 2, seeds 0–15).
+  - ATH-T002: `adaptive_basis = current` feedback trap (severe 30 → 8, seeds 100–115).
+  - ATH-T003: τ 0.80 threshold cliff (never reaches MSE < 1.5 → median 489 steps, seeds 100–115).
+  - ATH-T004: no governor (broken/severe 23/140 → 0/3, seeds 0–15).
+- **Versioned config registry** (`athanor.config_registry`, `configs/registry/`, `athanor registry list|show|lineage|register|promote|verify`). Entries are immutable and content-hashed, semver is enforced against the parent (arm change = major, cfg change = minor), lineage is tracked, and status comes only from a hash-chained registry ledger. `experiments/self_modify/tune.py --register-best REF --parent P` hands a tuning result to the registry as a candidate.
+- **Eval-gated, Athanor-governed promotion** (`athanor registry promote`). The full suite runs with the candidate injected; any REGRESSION, BLOCKED or ERROR rejects. Then Athanor's own ΔΦ → C → H7 → verdict pipeline compares candidate and incumbent per-seed log-MSE signatures on fresh gate seeds 200–215. APPROVE promotes, REFINE holds, REJECT rejects, and every decision is recorded.
+- **`docs/EVALS.md`** (design, statuses, cases, registry, promotion, caveats) and **`docs/METHOD.md`** (a system-agnostic tuning and governance method with a checklist, using only measured numbers, plus an account of how it was run as a human + AI collaboration from 2.1 to 2.7). Both are linked from the README and the algorithm card. The algorithm card and tuning log gain promotion and registry sections.
+- CI runs `athanor registry verify` and the full eval suite, and checks that core ATHANOR still works without the `[evals]` extra.
+- Tests for the registry (immutability, semver, lineage, tamper detection) and the evals (old source → 4/4 REGRESSION, overfit config → BLOCKED, tampered case → ERROR, capture round-trip and refusal, identical-config APPROVE). 80 tests in total.
+
+### Results
+- `selfmod/adaptive@1.1.0` (conservative τ 0.75) promoted over `selfmod/validity-athanor@1.0.0`: suite 8/8 PASS, **APPROVE, H7 = 0.8125** (13 of 16 gate seeds coherent), mean ΔΦ 0.296, max 0.654.
+- On gate seeds 200–215 the candidate had 1 broken commit and 5 severe regressions against 0 and 13 for the incumbent, MSE@100 1.199 vs 2.161, final MSE 0.844 vs 0.880, and a median 32.5 vs 398 steps to reach MSE < 1.5.
+
+### Caveats
+- The promoted config had one broken commit on the gate seeds where the incumbent had none. The gate is a drift limit, not a proof of safety.
+- Seeds 0–15 are used by ATH-T001 and ATH-T004, so for configs checked by the suite they are no longer strictly held-out. Confirm new configs once on fresh seeds.
+- Tuning-case fingerprints are exact floats; a different numpy build could show `DRIFT` (a warning, failing only with `--strict`).
+- The `[evals]` extra is a direct Git dependency, so it works with `pip install` from GitHub but would not be accepted by PyPI.
+- No TSP (2.6) tuning cases yet; the suite covers the self-modifying program family only.
+
+### Unchanged
+- Core behaviour and results: 2.5 and 2.6 results reproduce exactly. Bug2Eval is optional and core ATHANOR runs without it.
+
+## 2.6.0 — 2026-10-16
+
+### Added
+- **Second self-modification testbed: a self-modifying TSP solver** (`athanor.selfmod.tsp_program`, `athanor.selfmod.tsp_experiment`, `experiments/tsp_selfmod/`).
+  - The agent's self is a six-function solver module. It rewrites its own source with AST mutations; a local LLM proposer was not feasible on CPU here.
+  - Real failure modes: crashes, deterministic loop timeouts (harness-owned tick counter), silent wrong answers that look better to the agent's lenient self-scoring, and held-out regressions.
+  - A unit-test-style check suite runs through the unchanged `validity_check`.
+  - Separate probe, training, held-out and tuning instance sets.
+- **Arms**: ungoverned, validity, athanor, validity+athanor, the v2.5 tuned and conservative settings carried over unchanged, and a setting retuned on seeds 100–115 (τ 0.78, no time decay; `experiments/tsp_selfmod/tuned.json`).
+  - Results: `docs/tsp_selfmod/results.*` and `docs/assets/tsp_selfmod.png`.
+  - Tuning log: `docs/tsp_selfmod/tuning_log.json` (36 settings, 4 rounds).
+  - Counterfactual gate verdicts on the ungoverned breaks: `docs/tsp_selfmod/shadow_gate.json`.
+- **Docs**: `docs/tsp_selfmod.md`, a transfer section in `docs/ALGORITHM_CARD.md`, and a 2.6 section in `docs/TUNING_LOG.md` with the admission condition `tol ≥ r₍⌈τP⌉₎·τ/(κ(1−τ))` and the half-life lockout window.
+- Tests for the TSP sandbox, failure modes, check suite, ΔΦ trajectory, determinism, unchanged carried-over arms, and exact reproduction of the committed results.
+
+### Changed
+- `scheduled_tolerance()` is factored out of `run_selfmod` so both testbeds share the exact schedule. The 2.5 results still reproduce bit-for-bit.
+
+### Results (held-out seeds 0–15, 1000 steps)
+- **v2.5 conservative, carried over:** 4 broken commits (= validity only), 5 severe (vs 21 for validity only), final ratio 1.100 (vs 1.046). 9 of 16 runs never reached ≤ 1.05. This is a partial transfer.
+- **Retuned:** 2 broken, 2 severe, final ratio 1.046, 3 runs never good. Tuning → held-out went 2/4 → 2/2 broken/severe.
+- **Fixed-tolerance Athanor:** frozen on all 16 seeds.
+- **Ungoverned:** broke on all 16 seeds (15 silent wrong answers). The gate would have rejected those 15 and approved the 1 timeout.
+
 ## 2.5.0 — 2026-10-17
 
 ### Added

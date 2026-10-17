@@ -1,0 +1,18 @@
+{
+ "selected_in": "docs/tsp_selfmod/tuning_log.json round 3 (plateau confirmed in round 4)",
+ "rule": "feasible (broken<=2, severe<=10 on tuning seeds 100-115, tuning instance set) then min median ratio@50, tie-break @1000; ties -> fewer changes from the carried-over setting",
+ "arm": {
+  "validity": true,
+  "athanor": true,
+  "gamma": 6.0,
+  "cfg": {
+   "threshold_h7": 0.78,
+   "refine_floor": 0.5,
+   "adaptive_power": 3.0,
+   "adaptive_basis": "best",
+   "adaptive_cap": 6.0,
+   "adaptive_floor": 0.7,
+   "adaptive_halflife": null
+  }
+ }
+}

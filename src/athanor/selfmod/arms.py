@@ -12,7 +12,8 @@ from .experiment import ARMS, DEFAULTS, run_selfmod
 
 ARM_COLORS = {"ungoverned": "#7aa2ff", "validity": "#3ddc97", "athanor": "#ffb347",
               "validity+athanor": "#ff7a1a", "athanor-adaptive": "#c792ea",
-              "validity+athanor-adaptive": "#ff5d9e", "validity+athanor-adaptive-τ0.75": "#ffd28a"}
+              "validity+athanor-adaptive": "#ff5d9e", "validity+athanor-adaptive-τ0.75": "#ffd28a",
+              "validity+athanor-conservative": "#ffd28a", "validity+athanor-tuned": "#00e5ff"}
 
 
 def _color(n):
