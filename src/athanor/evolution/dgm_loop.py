@@ -51,6 +51,11 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
     pop       = int(config.get('population', 16))
     gens      = int(config.get('generations', 24))
     refine_attempts = int(config.get('refine_attempts', 2))
+    # governor.enabled=false is the ungoverned baseline: verdicts are still measured and
+    # ledgered, but they do not trigger REFINE retries or block parent promotion.
+    governed = bool((config.get('governor', {}) or {}).get('enabled', True))
+    if not governed:
+        refine_attempts = 0
     dphi_mode = str(config.get('dphi_mode', 'l2'))
 
     bins = tuple(config.get('archive', {}).get('bins', [16,16]))
@@ -102,6 +107,7 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
     for g in range(gens):
         best = None
         parent_before = parent.id
+        gen_rows = []
 
         for i in range(pop):
             cid = f'g{g:03d}_c{i:03d}'
@@ -147,11 +153,17 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
                 'refine_trail': trail,
             })
 
+            gen_rows.append((h7, float(child.dphi.summary.get('dphi_mean', 0.0)) if child.dphi else 0.0,
+                             float(child.dphi.summary.get('C_mean', 0.0)) if child.dphi else 0.0))
+
             if (best is None) or (child.score_f > best.score_f):
                 best = child
 
         if best is None:
             why = 'empty generation'
+        elif not governed:
+            parent = best
+            why = f'ungoverned: best-fitness candidate promoted ({best.verdict})'
         elif best.verdict == 'APPROVE':
             parent = best
             why = 'best-fitness candidate was APPROVED'
@@ -164,6 +176,12 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
             'best_verdict': best.verdict if best else None,
             'best_f': float(best.score_f) if best else None,
             'reason': why,
+            'pop_h7_mean': float(np.mean([r[0] for r in gen_rows])) if gen_rows else 0.0,
+            'pop_dphi_mean': float(np.mean([r[1] for r in gen_rows])) if gen_rows else 0.0,
+            'pop_C_mean': float(np.mean([r[2] for r in gen_rows])) if gen_rows else 0.0,
+            'parent_h7': float(parent.dphi.h7) if parent.dphi else None,
+            'parent_dphi_mean': float(parent.dphi.summary.get('dphi_mean', 0.0)) if parent.dphi else None,
+            'parent_C_mean': float(parent.dphi.summary.get('C_mean', 0.0)) if parent.dphi else None,
         })
 
     archive_pkl = os.path.join(run_path, 'archive.pkl')
@@ -188,6 +206,7 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
     record = {
         'schema': 'athanor.decision_record/1',
         'run_digest': writer.head,
+        'governed': governed,
         'gates': {'H7': {'threshold': threshold, 'refine_floor': refine_floor},
                   'H20': gates_cfg.get('h20', {'enabled': False}),
                   'H44': gates_cfg.get('h44', {'enabled': False})},

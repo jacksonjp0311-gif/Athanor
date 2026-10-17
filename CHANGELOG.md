@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.3.0 — 2026-10-17
+
+### Added
+- **`athanor bench`** (`athanor.bench`): governed vs ungoverned comparison on the same task across seeds. Writes `results.json`, `results.md` and a 4-panel chart (ΔΦ, C, H7 per generation, plus verdict counts). Committed results for seeds 0–7 are in `docs/benchmark/` and `docs/assets/benchmark.png`, and the README shows the measured numbers, including the seeds where the governor makes no difference and the ones where it stays below τ.
+- `configs/bench.yaml`, with a built-in copy so `athanor bench` works from an installed wheel.
+- `governor.enabled` config switch (default `true`). `false` gives the ungoverned baseline: verdicts are recorded but don't block promotion, and REFINE retries are off.
+- Decision record lineage now includes per-generation population means (`pop_dphi_mean`, `pop_C_mean`, `pop_h7_mean`) and the parent's metrics. `decision_record.json` also records `governed`.
+- `release.yml`: on a published GitHub release, builds the sdist and wheel, checks the tag against the version, and attaches both. CI gains a `package` job (build, `twine check`, clean-venv wheel smoke test).
+
+### Changed
+- Packaging metadata for distribution: readme, SPDX license, classifiers, keywords, project URLs, pinned minimum dependency versions; `dev` extra adds `build` and `twine`.
+- README: install from GitHub (`pip install git+https://github.com/jacksonjp0311-gif/Athanor.git`) or from the release wheel. Not published on PyPI (the `athanor` name there belongs to an unrelated project).
+
 ## 2.2.0 — 2026-10-16
 
 ### Added

@@ -4,6 +4,7 @@
     athanor verify RUN_PATH            # check the hash-chained verdict ledger
     athanor replay RUN_PATH [--out-dir DIR]   # re-run from config.json, compare digests
     athanor diff RUN_A RUN_B           # compare two runs (digest, first divergence, stats)
+    athanor bench [--config CFG] [--seeds 0-7] [--out DIR]   # governed vs ungoverned
 
 ``athanor --config CFG`` (the original form) is still accepted and equals ``run``.
 """
@@ -113,6 +114,35 @@ def _cmd_diff(args) -> int:
     return 0 if out['identical'] else 1
 
 
+def _parse_seeds(text: str) -> List[int]:
+    seeds: List[int] = []
+    for part in str(text).split(','):
+        part = part.strip()
+        if '-' in part:
+            a, b = part.split('-', 1)
+            seeds.extend(range(int(a), int(b) + 1))
+        elif part:
+            seeds.append(int(part))
+    if not seeds:
+        raise ValueError('no seeds given')
+    return seeds
+
+
+def _cmd_bench(args) -> int:
+    from ..bench import run_bench, render_markdown, render_chart, default_bench_config
+    cfg = load_config(args.config) if args.config else default_bench_config()
+    res = run_bench(cfg, _parse_seeds(args.seeds))
+    os.makedirs(args.out, exist_ok=True)
+    with open(os.path.join(args.out, 'results.json'), 'w', encoding='utf-8') as f:
+        json.dump(res, f, indent=2)
+    with open(os.path.join(args.out, 'results.md'), 'w', encoding='utf-8') as f:
+        f.write(render_markdown(res))
+    chart = args.chart or os.path.join(args.out, 'benchmark.png')
+    render_chart(res, chart)
+    print(json.dumps({'out': args.out, 'chart': chart, 'summary': res['summary'], 'per_seed': res['per_seed']}))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(prog='athanor', description='ATHANOR coherence governor')
     ap.add_argument('--version', action='version', version=f'athanor {__version__}')
@@ -132,6 +162,13 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument('run_path')
     p.add_argument('--out-dir', default=None, help='keep replay artifacts here (default: temp dir)')
     p.set_defaults(fn=_cmd_replay)
+    p = sub.add_parser('bench', help='compare governed vs ungoverned runs across seeds')
+    p.add_argument('--config', default=None, help='default: built-in copy of configs/bench.yaml')
+    p.add_argument('--seeds', default='0-7', help="e.g. '0-7' or '1,3,5'")
+    p.add_argument('--out', default='data/bench')
+    p.add_argument('--chart', default=None, help='chart path (default: OUT/benchmark.png)')
+    p.set_defaults(fn=_cmd_bench)
+
     p = sub.add_parser('diff', help='compare two runs (exit 0 if identical)')
     p.add_argument('run_a')
     p.add_argument('run_b')
