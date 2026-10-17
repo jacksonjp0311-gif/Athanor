@@ -58,6 +58,21 @@ def validate_config(cfg: dict) -> dict:
     archive['bins'] = list(bins)
     out['archive'] = archive
 
+    gates = dict(out.get('gates', {}) or {})
+    h20 = dict(gates.get('h20', {}) or {})
+    h20['enabled'] = bool(h20.get('enabled', False))
+    h20['sigma'] = float(h20.get('sigma', 0.05))
+    h20['min_immunity'] = float(h20.get('min_immunity', 0.90))
+    if h20['sigma'] < 0 or not (0.0 <= h20['min_immunity'] <= 1.0):
+        raise ValueError("gates.h20 needs sigma >= 0 and min_immunity in [0,1]")
+    h44 = dict(gates.get('h44', {}) or {})
+    h44['enabled'] = bool(h44.get('enabled', False))
+    h44['min_excess'] = float(h44.get('min_excess', 0.0))
+    if not (0.0 <= h44['min_excess'] <= 1.0):
+        raise ValueError("gates.h44.min_excess must be in [0,1]")
+    gates['h20'], gates['h44'] = h20, h44
+    out['gates'] = gates
+
     run = dict(out.get('run', {}) or {})
     out_dir = str(run.get('out_dir', 'data/archives')).strip()
     if not out_dir:

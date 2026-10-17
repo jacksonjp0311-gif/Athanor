@@ -61,7 +61,9 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
     telemetry = TelemetryAgent(steps=steps, noise=float(config.get('telemetry_noise', 0.02)), seed=seed)
     proposer  = ProposerAgent(sigma=float(config.get('proposer_sigma', 0.12)),
                               step_cap=float(config.get('proposer_step_cap', 0.50)))
-    verifier  = VerifierAgent(threshold_h7=threshold, dphi_mode=dphi_mode, refine_floor=refine_floor)
+    gates_cfg = config.get('gates', {}) or {}
+    verifier  = VerifierAgent(threshold_h7=threshold, dphi_mode=dphi_mode, refine_floor=refine_floor,
+                              h20=gates_cfg.get('h20'), h44=gates_cfg.get('h44'))
     selector  = SelectorAgent(alpha=alpha)
     archivist = ArchivistAgent(bins=bins)
 
@@ -82,29 +84,39 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
     writer = LedgerWriter(ledger_path)
     ledger = writer.append
 
+    lineage = []  # per-generation parent decisions (the decision record)
+
+    def evaluate(cid: str, g: int, i: int, attempt: int):
+        # Each (gen, idx, attempt) owns independent proposal / telemetry / gate streams,
+        # so a candidate's outcome never depends on how many REFINE retries others used.
+        prng = np.random.default_rng(derive_seed(seed, 1, g, i, attempt))
+        c = proposer.step(parent, rng=prng, child_id=cid)
+        telemetry.seed = derive_seed(seed, g, i, attempt)
+        c = telemetry.step(c)
+        return verifier.step(c, gate_seed=derive_seed(seed, 2, g, i, attempt))
+
+    def attempt_row(c, attempt: int, sigma: float):
+        return {'attempt': attempt, 'id': c.id, 'sigma': float(sigma), 'verdict': c.verdict,
+                'reason': c.reason, 'h7': float(c.dphi.h7) if c.dphi else 0.0}
+
     for g in range(gens):
         best = None
+        parent_before = parent.id
 
         for i in range(pop):
             cid = f'g{g:03d}_c{i:03d}'
-            child = proposer.step(parent, rng=rng, child_id=cid)
+            sigma0 = proposer.sigma
+            child = evaluate(cid, g, i, 0)
+            trail = [attempt_row(child, 0, sigma0)]
 
-            telemetry.seed = derive_seed(seed, g, i, 0)
-            child = telemetry.step(child)
-            child = verifier.step(child)
-
-            if child.verdict == 'REFINE':
-                attempts = 0
-                sigma0 = proposer.sigma
-                while attempts < refine_attempts and child.verdict == 'REFINE':
-                    attempts += 1
-                    proposer.sigma = sigma0 * (0.75 ** attempts)
-                    child2 = proposer.step(parent, rng=rng, child_id=f'{cid}_r{attempts}')
-                    telemetry.seed = derive_seed(seed, g, i, attempts)
-                    child2 = telemetry.step(child2)
-                    child2 = verifier.step(child2)
-                    child = child2
-                proposer.sigma = sigma0
+            # Deterministic REFINE path: shrink sigma geometrically (0.75^k) and retry.
+            attempts = 0
+            while attempts < refine_attempts and child.verdict == 'REFINE':
+                attempts += 1
+                proposer.sigma = sigma0 * (0.75 ** attempts)
+                child = evaluate(f'{cid}_r{attempts}', g, i, attempts)
+                trail.append(attempt_row(child, attempts, proposer.sigma))
+            proposer.sigma = sigma0
 
             child = selector.step(child)
             admitted = archivist.step(child)
@@ -130,17 +142,36 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
                 'dphi_mean': float(child.dphi.summary.get('dphi_mean', 0.0)) if child.dphi else 0.0,
                 'C_mean': float(child.dphi.summary.get('C_mean', 0.0)) if child.dphi else 0.0,
                 'delta_norm': float(child.tags.get('delta_norm', 0.0)),
+                'parent_id': parent.id,
+                'checks': child.tags.get('checks', []),
+                'refine_trail': trail,
             })
 
             if (best is None) or (child.score_f > best.score_f):
                 best = child
 
-        if best is not None and best.verdict == 'APPROVE':
+        if best is None:
+            why = 'empty generation'
+        elif best.verdict == 'APPROVE':
             parent = best
+            why = 'best-fitness candidate was APPROVED'
+        else:
+            why = f'best-fitness candidate was {best.verdict}; parent kept'
+        lineage.append({
+            'gen': g, 'parent_before': parent_before, 'parent_after': parent.id,
+            'promoted': parent.id != parent_before,
+            'best_id': best.id if best else None,
+            'best_verdict': best.verdict if best else None,
+            'best_f': float(best.score_f) if best else None,
+            'reason': why,
+        })
 
     archive_pkl = os.path.join(run_path, 'archive.pkl')
     with open(archive_pkl, 'wb') as f:
         pickle.dump(archivist.archive, f)
+
+    with open(os.path.join(run_path, 'archive.json'), 'w', encoding='utf-8') as f:
+        json.dump(archivist.archive.to_dict(), f, indent=2, sort_keys=True)
 
     stats = archivist.archive.stats()
     stats.update({
@@ -153,6 +184,20 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
 
     with open(os.path.join(run_path, 'archive_stats.json'), 'w', encoding='utf-8') as f:
         json.dump(stats, f, indent=2)
+
+    record = {
+        'schema': 'athanor.decision_record/1',
+        'run_digest': writer.head,
+        'gates': {'H7': {'threshold': threshold, 'refine_floor': refine_floor},
+                  'H20': gates_cfg.get('h20', {'enabled': False}),
+                  'H44': gates_cfg.get('h44', {'enabled': False})},
+        'verdict_counts': verdict_counts,
+        'promotions': sum(1 for x in lineage if x['promoted']),
+        'final_parent': parent.id,
+        'lineage': lineage,
+    }
+    with open(os.path.join(run_path, 'decision_record.json'), 'w', encoding='utf-8') as f:
+        json.dump(record, f, indent=2)
 
     cfg_hash = sha256_json(config)
     git_hash = os.environ.get('ATHANOR_GIT_HASH', '')

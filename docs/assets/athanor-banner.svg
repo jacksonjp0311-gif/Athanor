@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400" role="img" aria-labelledby="t d">
+<title id="t">ATHANOR</title>
+<desc id="d">ATHANOR banner: a crucible inside concentric coherence rings, with the flow ΔΦ → C → H7 → verdict.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#07080d"/><stop offset="0.55" stop-color="#0d0f18"/><stop offset="1" stop-color="#140c08"/>
+  </linearGradient>
+  <radialGradient id="core" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0" stop-color="#fff4d6"/><stop offset="0.25" stop-color="#ffc35a"/>
+    <stop offset="0.6" stop-color="#ff7a1a" stop-opacity="0.55"/><stop offset="1" stop-color="#ff5a00" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="halo" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0" stop-color="#ff8a2a" stop-opacity="0.35"/><stop offset="1" stop-color="#ff8a2a" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#ffe2a3"/><stop offset="0.5" stop-color="#ffb347"/><stop offset="1" stop-color="#ff7a1a"/>
+  </linearGradient>
+  <linearGradient id="vessel" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#2a2f3d"/><stop offset="1" stop-color="#11131b"/>
+  </linearGradient>
+  <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+    <path d="M32 0H0V32" fill="none" stroke="#ffffff" stroke-opacity="0.035" stroke-width="1"/>
+  </pattern>
+</defs>
+<rect width="1280" height="400" fill="url(#bg)"/>
+<rect width="1280" height="400" fill="url(#grid)"/>
+<circle cx="250" cy="200" r="230" fill="url(#halo)"/>
+<circle cx="250" cy="200" r="170" fill="none" stroke="#ffb347" stroke-opacity="0.18" stroke-width="1.0" stroke-dasharray="2 6"/>
+<circle cx="250" cy="200" r="140" fill="none" stroke="#ffb347" stroke-opacity="0.32" stroke-width="1.4" stroke-dasharray="5 5"/>
+<circle cx="250" cy="200" r="112" fill="none" stroke="#ffb347" stroke-opacity="0.46" stroke-width="1.8" stroke-dasharray="8 4"/>
+<circle cx="250" cy="200" r="86" fill="none" stroke="#ffb347" stroke-opacity="0.60" stroke-width="2.2" stroke-dasharray="11 3"/>
+<line x1="432.0" y1="200.0" x2="442.0" y2="200.0" stroke="#ffd28a" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="431.3" y1="215.9" x2="436.3" y2="216.3" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="429.2" y1="231.6" x2="434.2" y2="232.5" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="425.8" y1="247.1" x2="430.6" y2="248.4" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="421.0" y1="262.2" x2="425.7" y2="264.0" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="414.9" y1="276.9" x2="419.5" y2="279.0" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="407.6" y1="291.0" x2="416.3" y2="296.0" stroke="#ffd28a" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="399.1" y1="304.4" x2="403.2" y2="307.3" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="389.4" y1="317.0" x2="393.3" y2="320.2" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="378.7" y1="328.7" x2="382.2" y2="332.2" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="367.0" y1="339.4" x2="370.2" y2="343.3" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="354.4" y1="349.1" x2="357.3" y2="353.2" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="341.0" y1="357.6" x2="346.0" y2="366.3" stroke="#ffd28a" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="326.9" y1="364.9" x2="329.0" y2="369.5" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="312.2" y1="371.0" x2="314.0" y2="375.7" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="297.1" y1="375.8" x2="298.4" y2="380.6" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="281.6" y1="379.2" x2="282.5" y2="384.2" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="265.9" y1="381.3" x2="266.3" y2="386.3" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="250.0" y1="382.0" x2="250.0" y2="392.0" stroke="#ffd28a" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="234.1" y1="381.3" x2="233.7" y2="386.3" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="218.4" y1="379.2" x2="217.5" y2="384.2" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="202.9" y1="375.8" x2="201.6" y2="380.6" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="187.8" y1="371.0" x2="186.0" y2="375.7" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="173.1" y1="364.9" x2="171.0" y2="369.5" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="159.0" y1="357.6" x2="154.0" y2="366.3" stroke="#ffd28a" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="145.6" y1="349.1" x2="142.7" y2="353.2" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="133.0" y1="339.4" x2="129.8" y2="343.3" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="121.3" y1="328.7" x2="117.8" y2="332.2" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="110.6" y1="317.0" x2="106.7" y2="320.2" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="100.9" y1="304.4" x2="96.8" y2="307.3" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="92.4" y1="291.0" x2="83.7" y2="296.0" stroke="#ffd28a" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="85.1" y1="276.9" x2="80.5" y2="279.0" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="79.0" y1="262.2" x2="74.3" y2="264.0" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="74.2" y1="247.1" x2="69.4" y2="248.4" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="70.8" y1="231.6" x2="65.8" y2="232.5" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="68.7" y1="215.9" x2="63.7" y2="216.3" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="68.0" y1="200.0" x2="58.0" y2="200.0" stroke="#ffd28a" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="68.7" y1="184.1" x2="63.7" y2="183.7" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="70.8" y1="168.4" x2="65.8" y2="167.5" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="74.2" y1="152.9" x2="69.4" y2="151.6" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="79.0" y1="137.8" x2="74.3" y2="136.0" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="85.1" y1="123.1" x2="80.5" y2="121.0" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="92.4" y1="109.0" x2="83.7" y2="104.0" stroke="#ffd28a" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="100.9" y1="95.6" x2="96.8" y2="92.7" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="110.6" y1="83.0" x2="106.7" y2="79.8" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="121.3" y1="71.3" x2="117.8" y2="67.8" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="133.0" y1="60.6" x2="129.8" y2="56.7" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="145.6" y1="50.9" x2="142.7" y2="46.8" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="159.0" y1="42.4" x2="154.0" y2="33.7" stroke="#ffd28a" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="173.1" y1="35.1" x2="171.0" y2="30.5" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="187.8" y1="29.0" x2="186.0" y2="24.3" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="202.9" y1="24.2" x2="201.6" y2="19.4" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="218.4" y1="20.8" x2="217.5" y2="15.8" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="234.1" y1="18.7" x2="233.7" y2="13.7" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="250.0" y1="18.0" x2="250.0" y2="8.0" stroke="#ffd28a" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="265.9" y1="18.7" x2="266.3" y2="13.7" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="281.6" y1="20.8" x2="282.5" y2="15.8" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="297.1" y1="24.2" x2="298.4" y2="19.4" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="312.2" y1="29.0" x2="314.0" y2="24.3" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="326.9" y1="35.1" x2="329.0" y2="30.5" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="341.0" y1="42.4" x2="346.0" y2="33.7" stroke="#ffd28a" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="354.4" y1="50.9" x2="357.3" y2="46.8" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="367.0" y1="60.6" x2="370.2" y2="56.7" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="378.7" y1="71.3" x2="382.2" y2="67.8" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="389.4" y1="83.0" x2="393.3" y2="79.8" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="399.1" y1="95.6" x2="403.2" y2="92.7" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="407.6" y1="109.0" x2="416.3" y2="104.0" stroke="#ffd28a" stroke-opacity="0.55" stroke-width="1.2"/>
+<line x1="414.9" y1="123.1" x2="419.5" y2="121.0" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="421.0" y1="137.8" x2="425.7" y2="136.0" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="425.8" y1="152.9" x2="430.6" y2="151.6" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="429.2" y1="168.4" x2="434.2" y2="167.5" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<line x1="431.3" y1="184.1" x2="436.3" y2="183.7" stroke="#ffd28a" stroke-opacity="0.25" stroke-width="1.2"/>
+<path d="M262.0 0.4 A200 200 0 0 1 398.6 66.2" fill="none" stroke="#ffb347" stroke-width="4" stroke-linecap="round"/>
+<path d="M413.6 84.9 A200 200 0 0 1 447.3 232.7" fill="none" stroke="#ffb347" stroke-width="4" stroke-linecap="round"/>
+<path d="M442.0 256.1 A200 200 0 0 1 347.4 374.7" fill="none" stroke="#ffb347" stroke-width="4" stroke-linecap="round"/>
+<path d="M325.8 385.1 A200 200 0 0 1 174.2 385.1" fill="none" stroke="#ffb347" stroke-width="4" stroke-linecap="round"/>
+<path d="M152.6 374.7 A200 200 0 0 1 58.0 256.1" fill="none" stroke="#ffb347" stroke-width="4" stroke-linecap="round"/>
+<path d="M52.7 232.7 A200 200 0 0 1 86.4 84.9" fill="none" stroke="#ffb347" stroke-width="4" stroke-linecap="round"/>
+<path d="M101.4 66.2 A200 200 0 0 1 238.0 0.4" fill="none" stroke="#5a6170" stroke-width="4" stroke-linecap="round"/>
+<circle cx="250" cy="200" r="78" fill="url(#core)"/>
+<g transform="translate(250,200)">
+  <path d="M-46 -30 L46 -30 L38 34 Q36 48 22 48 L-22 48 Q-36 48 -38 34 Z" fill="url(#vessel)" stroke="#ffcf7a" stroke-opacity="0.85" stroke-width="2"/>
+  <rect x="-54" y="-38" width="108" height="10" rx="4" fill="#1b1f2a" stroke="#ffcf7a" stroke-opacity="0.85" stroke-width="2"/>
+  <path d="M-20 -38 Q-26 -62 -8 -80 Q-12 -60 2 -54 Q4 -72 18 -86 Q14 -62 22 -48 Q26 -42 20 -38 Z" fill="url(#gold)" opacity="0.95"/>
+  <ellipse cx="0" cy="-30" rx="40" ry="5" fill="#ffb347" opacity="0.55"/>
+  <path d="M-22 6 Q-12 -2 0 6 T22 6" fill="none" stroke="#ffcf7a" stroke-opacity="0.7" stroke-width="1.6"/>
+  <path d="M-18 22 Q-9 15 0 22 T18 22" fill="none" stroke="#ffcf7a" stroke-opacity="0.45" stroke-width="1.4"/>
+</g>
+<text x="520" y="150" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="88" font-weight="800" letter-spacing="14" fill="url(#gold)">ATHANOR</text>
+<text x="524" y="192" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="22" font-weight="500" fill="#c9ced8">A deterministic coherence governor for recursive AI systems</text>
+<text x="524" y="222" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="15" fill="#7d8494" letter-spacing="1.5">MEASURE DRIFT · GATE CHANGE · LEDGER EVERY VERDICT</text>
+<rect x="524" y="262" width="118" height="58" rx="12" fill="#121521" stroke="#ffb347" stroke-opacity="0.35" stroke-width="1.5"/>
+<text x="583.0" y="290" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="21" font-weight="700" fill="#ffd28a">ΔΦ</text>
+<text x="583.0" y="309" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#7d8494" letter-spacing="1">DRIFT</text>
+<path d="M650 291 H672" stroke="#ffb347" stroke-width="2" stroke-opacity="0.8"/><path d="M668 285 L676 291 L668 297" fill="none" stroke="#ffb347" stroke-width="2"/>
+<rect x="684" y="262" width="118" height="58" rx="12" fill="#121521" stroke="#ffb347" stroke-opacity="0.53" stroke-width="1.5"/>
+<text x="743.0" y="290" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="21" font-weight="700" fill="#ffd28a">C</text>
+<text x="743.0" y="309" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#7d8494" letter-spacing="1">COHERENCE</text>
+<path d="M810 291 H832" stroke="#ffb347" stroke-width="2" stroke-opacity="0.8"/><path d="M828 285 L836 291 L828 297" fill="none" stroke="#ffb347" stroke-width="2"/>
+<rect x="844" y="262" width="118" height="58" rx="12" fill="#121521" stroke="#ffb347" stroke-opacity="0.71" stroke-width="1.5"/>
+<text x="903.0" y="290" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="21" font-weight="700" fill="#ffd28a">H7</text>
+<text x="903.0" y="309" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#7d8494" letter-spacing="1">HORIZON</text>
+<path d="M970 291 H992" stroke="#ffb347" stroke-width="2" stroke-opacity="0.8"/><path d="M988 285 L996 291 L988 297" fill="none" stroke="#ffb347" stroke-width="2"/>
+<rect x="1004" y="262" width="150" height="58" rx="12" fill="#121521" stroke="#ffb347" stroke-opacity="0.89" stroke-width="1.5"/>
+<text x="1079.0" y="290" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="21" font-weight="700" fill="#ffd28a">VERDICT</text>
+<text x="1079.0" y="309" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#7d8494" letter-spacing="1">GATE</text>
+<circle cx="1178" cy="270" r="4" fill="#3ddc97"/><text x="1190" y="275" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="13" fill="#3ddc97">APPROVE</text>
+<circle cx="1178" cy="290" r="4" fill="#ffb347"/><text x="1190" y="295" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="13" fill="#ffb347">REFINE</text>
+<circle cx="1178" cy="310" r="4" fill="#ff5d5d"/><text x="1190" y="315" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="13" fill="#ff5d5d">REJECT</text>
+<text x="1252" y="380" text-anchor="end" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#4b5161">C = 1 / (1 + |ΔΦ|)   ·   H7 = mean(C mean(C ≥ τ)gt;= τ)</text>
+</svg>

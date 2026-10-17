@@ -17,3 +17,11 @@ archive:
 run:
   out_dir: data/archives
   # tag: my_run            # optional fixed folder name instead of run_<UTC timestamp>
+gates:                     # optional gates; they can only downgrade APPROVE -> REFINE
+  h20:                     # noise immunity: perturb ΔΦ by U(-sigma, sigma), require I20 >= min_immunity
+    enabled: false
+    sigma: 0.05
+    min_immunity: 0.90
+  h44:                     # boundary excess: require H7 - threshold_h7 >= min_excess
+    enabled: false
+    min_excess: 0.0

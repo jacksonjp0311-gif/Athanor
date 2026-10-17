@@ -24,3 +24,5 @@ jobs:
           athanor run --config configs/toy_experiment.yaml --out-dir "$RUNNER_TEMP/runs" --tag ci
           athanor verify "$RUNNER_TEMP/runs/ci"
           athanor replay "$RUNNER_TEMP/runs/ci"
+          athanor replay "$RUNNER_TEMP/runs/ci" --out-dir "$RUNNER_TEMP/replay"
+          athanor diff "$RUNNER_TEMP/runs/ci" "$(ls -d "$RUNNER_TEMP"/replay/run_*)"
