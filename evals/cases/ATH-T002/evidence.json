@@ -1,0 +1,38 @@
+{
+  "agentsearch_version": "1.0.0rc5",
+  "athanor_version": "2.8.0",
+  "citations": [
+    {
+      "note": null,
+      "path": "configs/registry/selfmod/adaptive-basis-current/1.0.0.json",
+      "sha256": "b4aa5b9ad938b0e4fdc2d53dfda0f9a8e18b74269a8f9ebe3c4d75cd0da965b4",
+      "total_lines": 35,
+      "whole_file": true
+    },
+    {
+      "note": null,
+      "path": "configs/registry/selfmod/adaptive/1.0.0.json",
+      "sha256": "f3015e8dd13e4f335503b19c5d3db150cca6ffde438d2c77a2b297c12e52db75",
+      "total_lines": 37,
+      "whole_file": true
+    },
+    {
+      "end_line": 93,
+      "excerpt": "\n  At τ = 0.8 the threshold sits right at the structural cost of the smallest structural edit (`x → x + c` costs `w_s · 0.5 = 0.25`, and C ≥ 0.8 needs ΔΦ ≤ 0.25), so nothing structural passes. τ, w_s and the probe set interact through `ΔΦ_max = 1/τ − 1`.\n- **Feedback instability.** With `basis = current`, the tolerance is a positive feedback on regressions (worse error → looser gate → worse edits). Measured: severe 30 vs 8 for the otherwise-selected setting.\n\n![Pareto chart](assets/tuning_pareto.png)",
+      "lines_sha256": "cc38f2829895144c087249864cdba539cb58a7e54ada0f1412c0dc78cc284a6a",
+      "note": null,
+      "path": "docs/TUNING_LOG.md",
+      "pattern": "Measured: severe 30 vs 8",
+      "sha256": "2136c8a513e98cd21fbed9f85327818fb811aff00a92aff7c43ca60afc172d13",
+      "start_line": 89
+    },
+    {
+      "note": null,
+      "path": "docs/tuning/log.json",
+      "sha256": "84a3cad179a7a8177598a646276ed33f4c26fad3c00b14d2329ec570c1a585ab",
+      "total_lines": 6958,
+      "whole_file": true
+    }
+  ],
+  "schema": "athanor.evidence/1"
+}

@@ -14,3 +14,4 @@ docs/build/*
 !docs/build/.keepdata/bench/
 data/selfmod/
 data/evals/
+.athanor/

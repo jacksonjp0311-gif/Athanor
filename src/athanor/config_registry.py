@@ -191,9 +191,10 @@ class Registry:
         for other in self.refs(family):
             if other.split("@")[0] == f"{family}/{name}" and semver(other.split("@")[1]) >= semver(version):
                 raise ValueError(f"{ref} is not newer than existing {other}")
+        evidence = _hash_evidence(evidence or [], os.path.dirname(os.path.dirname(os.path.abspath(self.root))))
         entry = {"schema": SCHEMA, "ref": ref, "family": family, "name": name, "version": version,
                  "spec": spec, "spec_hash": spec_hash(spec), "parent": parent, "reason": str(reason).strip(),
-                 "evidence": list(evidence or []), "registered_with_athanor": __version__}
+                 "evidence": evidence, "registered_with_athanor": __version__}
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "w", encoding="utf-8") as f:
             json.dump(entry, f, indent=2, sort_keys=True, ensure_ascii=False)
@@ -236,3 +237,51 @@ class Registry:
                 errors.append(f"{ref}: registered in ledger but entry file is missing")
         return {"ok": not errors, "entries": len(self.refs()), "events": len(self.events()),
                 "head": led.head if led else GENESIS_HASH, "errors": errors}
+
+
+def _hash_evidence(evidence: List[Dict[str, Any]], repo: str) -> List[Dict[str, Any]]:
+    """Pin each evidence item whose ``source`` is a repo file with that file's SHA-256 (since 2.8.0),
+    so promotion can later check it with AgentSearch ``verify_evidence`` and flag stale results."""
+    out = []
+    for item in evidence:
+        item = dict(item) if isinstance(item, dict) else {"note": item}
+        src = item.get("source")
+        full = os.path.join(repo, src) if isinstance(src, str) else None
+        if full and os.path.isfile(full) and "rows" in item and "rows_sha256" not in item:
+            # a slice of a JSON log that keeps growing: pin the rows, not the whole file
+            item["rows_sha256"] = rows_digest(full, *item["rows"])
+            item["path"] = src.replace(os.sep, "/")
+        elif full and os.path.isfile(full) and "sha256" not in item and "rows" not in item:
+            with open(full, "rb") as f:
+                item["sha256"] = hashlib.sha256(f.read()).hexdigest()
+            item["path"] = src.replace(os.sep, "/")
+        out.append(item)
+    return out
+
+
+def rows_digest(path: str, start: int, end: int) -> str:
+    """SHA-256 of rows ``[start, end)`` of a JSON-list log, in canonical JSON."""
+    with open(path, encoding="utf-8") as f:
+        rows = json.load(f)
+    if not isinstance(rows, list) or end > len(rows) or start < 0 or start >= end:
+        raise ValueError(f"{path}: rows [{start}, {end}) out of range")
+    return hashlib.sha256(json.dumps(rows[start:end], sort_keys=True, separators=(",", ":"),
+                                     ensure_ascii=False).encode("utf-8")).hexdigest()
+
+
+def check_row_evidence(evidence: List[Dict[str, Any]], repo: str) -> List[Dict[str, Any]]:
+    """Re-verify pinned JSON-log row slices (no AgentSearch needed). Statuses: fresh, stale, missing."""
+    out = []
+    for item in evidence:
+        if not (isinstance(item, dict) and item.get("rows_sha256") and item.get("path")):
+            continue
+        full = os.path.join(repo, item["path"])
+        res = {"path": item["path"], "rows": item.get("rows")}
+        try:
+            cur = rows_digest(full, *item["rows"])
+        except (OSError, ValueError) as e:
+            out.append({**res, "status": "missing", "detail": str(e)})
+            continue
+        out.append({**res, "status": "fresh" if cur == item["rows_sha256"] else "stale",
+                    "detail": None if cur == item["rows_sha256"] else "cited log rows changed"})
+    return out

@@ -1,5 +1,31 @@
 # Changelog
 
+## 2.8.0 — 2026-10-17
+
+### Added
+- **AgentSearch evidence layer** (`athanor.search`, optional extra `athanor[search]`, Python 3.11+). The extra pins [AgentSearch](https://github.com/jacksonjp0311-gif/AgentSearch) `agentsearch-local` 1.0.0rc5. All file access goes through its five read-only tools; the index is derived state in `.athanor/search/` (git-ignored). Design: `docs/SEARCH.md`.
+  - **Citations at capture time.** `athanor evals capture … --cite PATH[:text]` (on by default when the extra is installed, `--no-evidence` to skip) and `athanor evals evidence` write `evals/cases/<ID>/evidence.json`: path, file SHA-256, cited line range, cited-lines SHA-256, excerpt.
+  - **`athanor search index|status|find|grep|read|verify|cite`** over run ledgers and decision records (`--scope runs`), configs, the registry, eval cases, the tuning logs, docs and source.
+  - **Stale-evidence checks.** Statuses: `fresh`, `changed-lines-intact`, `moved`, `stale`, `missing`; only `stale` and `missing` are hard.
+    - Every `athanor evals run` re-verifies case citations (row `evidence: {checked, stale, hard}`, summary `evidence_checked`, `stale_evidence`). Case statuses are unchanged by it.
+    - `athanor registry promote --require-fresh-evidence` records `refine` instead of promoting on hard staleness. Every promotion event records `evidence_checked` and `stale_evidence`.
+    - `experiments/self_modify/tune.py` re-verifies the tuning cases' citations and the `--parent` entry's evidence before a round. `--require-fresh-evidence` stops on hard staleness.
+    - `athanor evals evidence --check` exits 1 only on hard staleness.
+- **Registry evidence pinning.** Evidence items that name a repo file get its SHA-256 at registration. Items with `rows: [start, end]` (as written by `tune.py --register-best`) get a SHA-256 of exactly those rows of the JSON log. Later rounds can append to `docs/tuning/log.json` without making them stale, and this check needs no AgentSearch.
+- **Seeded citations** (`evals/seed_evidence.py`): 29 citations across the 8 cases. They cover the fixed source lines and 2.1.0 CHANGELOG lines (bugs), and the TUNING_LOG lines, `docs/tuning/log.json`, `docs/selfmod/arms_results.*` and registry entries (tuning failures).
+- CI builds the index and runs `athanor evals evidence --check` on 3.11 and 3.12. It checks that `athanor search` degrades with an install hint on 3.10 and in a clean core install.
+- Tests: the five tools and scopes, all five citation statuses, the evidence file round-trip, registry hash pinning, citations attached to a real case and flagged stale in the suite check and the promotion evidence check, and pinned log rows surviving appends but not edits. The search tests skip cleanly on Python < 3.11 or without the extra. 86 tests.
+- Docs: `docs/SEARCH.md`; evidence sections in the README, `docs/EVALS.md`, `docs/ALGORITHM_CARD.md` and `docs/METHOD.md` (a new checklist step: cite past results and re-verify them before relying on them).
+
+### Caveats
+- A citation proves the cited bytes are unchanged, not that they are correct.
+- `changed-lines-intact` and `moved` are soft by design: the surrounding text may have changed meaning.
+- Registry entries registered before 2.8.0 carry no hashes, so they have nothing to verify.
+- The extra is a direct Git dependency on an AgentSearch release candidate; it installs from GitHub, not PyPI.
+
+### Unchanged
+- Core behaviour, results, eval cases and registry decisions. Core ATHANOR and the `[evals]` suite work without the extra.
+
 ## 2.7.0 — 2026-10-17
 
 ### Added

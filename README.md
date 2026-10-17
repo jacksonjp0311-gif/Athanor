@@ -5,7 +5,7 @@
 <p align="center">
   <a href="https://github.com/jacksonjp0311-gif/Athanor/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/jacksonjp0311-gif/Athanor/actions/workflows/ci.yml/badge.svg?branch=main"/></a>
   <img alt="Python 3.10 | 3.11 | 3.12" src="https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-3776AB?logo=python&logoColor=white"/>
-  <a href="https://github.com/jacksonjp0311-gif/Athanor/releases/latest"><img alt="Version 2.7.0" src="https://img.shields.io/badge/version-2.7.0-ffb347"/></a>
+  <a href="https://github.com/jacksonjp0311-gif/Athanor/releases/latest"><img alt="Version 2.8.0" src="https://img.shields.io/badge/version-2.8.0-ffb347"/></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-3ddc97"/></a>
 </p>
 
@@ -26,7 +26,7 @@ A system that rewrites itself needs a referee that is *outside* the thing being 
 - **Every run can be audited.** Edited, deleted, inserted, or reordered ledger rows are detected, and a run can be replayed and compared bit-for-bit through its digest.
 
 ## Contents
-[Governance loop](#governance-loop) · [Quickstart](#quickstart) · [Benchmark](#benchmark-governed-vs-ungoverned) · [Real self-modifying program](#real-world-test-a-self-modifying-program) · [Transfer test](#26-transfer-test-a-self-modifying-tsp-solver) · [Evals & versioned configs](#evals-and-versioned-configs-27) · [Algorithm card](docs/ALGORITHM_CARD.md) · [Method](docs/METHOD.md) · [CLI](#cli-reference) · [Configuration](#configuration-reference) · [Guarantees](#guarantees) · [Run artifacts](#run-artifacts) · [Architecture](#architecture) · [Testing](#testing) · [Theory](#theory--manuscripts) · [Roadmap](#roadmap) · [Changelog](CHANGELOG.md)
+[Governance loop](#governance-loop) · [Quickstart](#quickstart) · [Benchmark](#benchmark-governed-vs-ungoverned) · [Real self-modifying program](#real-world-test-a-self-modifying-program) · [Transfer test](#26-transfer-test-a-self-modifying-tsp-solver) · [Evals & versioned configs](#evals-and-versioned-configs-27) · [Search & evidence](#search-and-evidence-28) · [Algorithm card](docs/ALGORITHM_CARD.md) · [Method](docs/METHOD.md) · [CLI](#cli-reference) · [Configuration](#configuration-reference) · [Guarantees](#guarantees) · [Run artifacts](#run-artifacts) · [Architecture](#architecture) · [Testing](#testing) · [Theory](#theory--manuscripts) · [Roadmap](#roadmap) · [Changelog](CHANGELOG.md)
 
 ## Governance loop
 
@@ -60,15 +60,16 @@ Install straight from GitHub (Python 3.10+):
 
 ```bash
 pip install git+https://github.com/jacksonjp0311-gif/Athanor.git            # latest main
-pip install git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.7.0     # pinned release
+pip install git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.8.0     # pinned release
 ```
 
-Each [GitHub release](https://github.com/jacksonjp0311-gif/Athanor/releases) also has the built wheel and sdist attached (for example `pip install athanor-2.7.0-py3-none-any.whl`). ATHANOR is **not published on PyPI**. The name `athanor` on PyPI belongs to an unrelated project, so `pip install athanor` will **not** install this package.
+Each [GitHub release](https://github.com/jacksonjp0311-gif/Athanor/releases) also has the built wheel and sdist attached (for example `pip install athanor-2.8.0-py3-none-any.whl`). ATHANOR is **not published on PyPI**. The name `athanor` on PyPI belongs to an unrelated project, so `pip install athanor` will **not** install this package.
 
 Optional extra for the regression suite and eval-gated config promotion ([docs/EVALS.md](docs/EVALS.md)):
 
 ```bash
-pip install "athanor[evals] @ git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.7.0"   # adds Bug2Eval
+pip install "athanor[evals] @ git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.8.0"          # adds Bug2Eval
+pip install "athanor[evals,search] @ git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.8.0"   # + AgentSearch evidence layer (Python 3.11+)
 ```
 
 For development:
@@ -237,6 +238,25 @@ athanor registry promote selfmod/adaptive@1.2.0     # suite + Athanor verdict; d
 
 Full design, statuses and caveats: [docs/EVALS.md](docs/EVALS.md). The reusable procedure behind all of this, including how it was run as a human + AI collaboration: [docs/METHOD.md](docs/METHOD.md).
 
+## Search and evidence (2.8)
+
+Promotion and tuning lean on past results: a line in the tuning log, a row of `docs/tuning/log.json`, a held-out table. With the optional `athanor[search]` extra (Python 3.11+, [AgentSearch](https://github.com/jacksonjp0311-gif/AgentSearch)), every case records the lines it rests on, with the SHA-256 of the file and of the cited lines. Those citations are **re-verified before they are relied on**, in every suite run, every promotion and every tuning round:
+
+```text
+fresh · changed-lines-intact · moved      → reported
+stale · missing (cited lines changed/gone) → hard: promote --require-fresh-evidence holds (refine), tune.py --require-fresh-evidence stops
+```
+
+The 8 seeded cases carry 29 citations: the fixed source lines, the 2.1.0 CHANGELOG lines, TUNING_LOG lines such as "Measured: severe 30 vs 8", the raw tuning and held-out records, and the registry entries. Configs that `tune.py --register-best` registers pin their exact rows of the tuning log by hash, so later rounds can append without making them stale. `athanor search` gives local, read-only search over run ledgers, decision records, configs, the registry, eval cases and the tuning logs.
+
+```bash
+athanor search index && athanor search grep "severe 30 vs 8" --scope docs
+athanor evals evidence --check                       # exit 1 only on stale/missing evidence
+athanor registry promote REF --require-fresh-evidence
+```
+
+Details: [docs/SEARCH.md](docs/SEARCH.md). Core ATHANOR and the eval suite work without the extra.
+
 ## CLI reference
 
 | Command | What it does | Exit code |
@@ -253,7 +273,9 @@ Full design, statuses and caveats: [docs/EVALS.md](docs/EVALS.md). The reusable 
 | `athanor evals capture tuning --id ID --title T --bad REF --good REF --seeds S --limit M<=X` | Captures a tuning failure: the bad config must violate a limit and the good one must satisfy every limit. | `0` · `2` refused |
 | `athanor registry list · show REF · lineage REF · verify` | The versioned config registry. `verify` recomputes every content hash and the ledger chain. | `0` · `1` corrupt |
 | `athanor registry register REF [--parent P] [--set cfg.k=v] --reason R` | Adds an immutable config. Semver is enforced: an arm change is major, a cfg change is minor. | `0` · `2` |
-| `athanor registry promote REF [--gate-seeds 200-215] [--allow-refine] [--bootstrap] [--dry-run]` | Eval suite with REF injected, then an Athanor verdict vs the incumbent. The decision is recorded. | `0` promoted · `1` not |
+| `athanor registry promote REF [--gate-seeds 200-215] [--allow-refine] [--bootstrap] [--dry-run] [--require-fresh-evidence]` | Eval suite with REF injected, then an Athanor verdict vs the incumbent. The decision is recorded. Stale evidence holds it with `--require-fresh-evidence`. | `0` promoted · `1` not |
+| `athanor search index · status · find Q · grep TEXT [--scope runs\|configs\|registry\|tuning\|evals\|docs\|src] · read PATH · cite PATH --pattern P · verify PATH SHA` | Local, read-only AgentSearch index over the repo, plus citations with file and line SHA-256 (needs `athanor[search]`, Python 3.11+). | `0` · `2` unavailable |
+| `athanor evals evidence [--case ID] [--cite PATH[:text]] [--check]` | Attaches citations to cases, or re-verifies them with `--check`. | `0` · `1` stale/missing · `2` unavailable |
 | `athanor --version` | Prints the version. | `0` |
 
 `athanor --config CFG` (the 2.0 form) still works and is the same as `athanor run`. You can also use `python -m athanor ...`.
@@ -320,7 +342,8 @@ src/athanor/
 ├── selfmod/       Real self-modifying program, arms, adaptive schedule (athanor selfmod, selfmod-arms)
 ├── evals/         Bug2Eval integration: capture, suite runner, eval-gated promotion (athanor evals)
 ├── config_registry.py  Versioned, content-hashed config registry (athanor registry)
-├── scripts/       CLI: run · verify · replay · diff · bench · selfmod · evals · registry
+├── search.py      AgentSearch evidence layer: index, citations, stale-evidence checks (athanor search)
+├── scripts/       CLI: run · verify · replay · diff · bench · selfmod · evals · registry · search
 └── utils/         Seeding, JSONL logging, plots and dashboard
 configs/           base.yaml, toy_experiment.yaml, bench.yaml
 docs/benchmark/    Committed benchmark results (results.md, results.json)
@@ -328,6 +351,7 @@ docs/selfmod/      Committed self-modification results; write-up in docs/selfmod
 experiments/       Runnable experiment entry points (self_modify/: run, tune, analyze_tuning)
 docs/ALGORITHM_CARD.md, docs/TUNING_LOG.md, docs/tuning/   Algorithm card, tuning log and raw tuning data
 docs/EVALS.md, docs/METHOD.md   Eval suite + registry design; the reusable tuning/governance method
+docs/SEARCH.md     Evidence layer: citations, statuses, stale-evidence checks
 evals/cases/       Bug2Eval regression cases (bugs + tuning failures); evals/verifiers/ their verifier sources
 configs/registry/  Versioned config registry entries + hash-chained registry ledger
 docs/              Architecture notes, LaTeX manuscripts, assets
@@ -353,7 +377,7 @@ pip install -e ".[dev]"
 pytest -q
 ```
 
-The suite covers the coherence math, config validation and inheritance, the ledger (edit, delete, and reorder detection), determinism and REFINE-stream independence, the H20 and H44 gates, the decision record, the archive JSON round-trip, `diff`, and the CLI end to end (run → verify → replay → tamper). CI runs it on Python 3.10, 3.11, and 3.12, and also runs a run → verify → replay smoke check, `athanor registry verify` and the full eval suite (`athanor evals run`). It also checks that core ATHANOR still works without the `[evals]` extra.
+The suite covers the coherence math, config validation and inheritance, the ledger (edit, delete, and reorder detection), determinism and REFINE-stream independence, the H20 and H44 gates, the decision record, the archive JSON round-trip, `diff`, and the CLI end to end (run → verify → replay → tamper). CI runs it on Python 3.10, 3.11, and 3.12, and also runs a run → verify → replay smoke check, `athanor registry verify` and the full eval suite (`athanor evals run`). It also checks that core ATHANOR still works without the `[evals]` extra. On 3.11 and 3.12 it builds the search index and re-verifies every case citation (`athanor evals evidence --check`); on 3.10 the search tests are skipped.
 
 ## Theory & Manuscripts
 
@@ -369,6 +393,7 @@ H7 coherence geometry law (`h7_coherence_geometry_law_v2_1.tex`), the Codex–DG
 - [x] Validity pre-gate, 4-arm comparison, adaptive schedule tuned on separate seeds (2.5)
 - [x] Transfer test on a second, larger self-modifier (TSP solver); admission/lockout condition derived (2.6)
 - [x] Bug2Eval regression suite, versioned config registry, eval-gated Athanor-governed promotion, METHOD.md (2.7)
+- [x] AgentSearch evidence layer: cited results, stale-evidence checks before promotion and tuning, `athanor search` (2.8)
 - [ ] Probe sets that cover deployment input sizes (every governed TSP break was outside the probe range)
 - [ ] Robust (worst-case over seed subsets) tuning objective, since the tuned optimum overfit its safety
 - [ ] Pluggable telemetry backends for real model or agent traces (beyond the built-in linear dynamics)

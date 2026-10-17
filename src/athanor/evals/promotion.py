@@ -90,7 +90,7 @@ def _brief(s: Dict[str, Any]) -> Dict[str, Any]:
 def promote(registry: Registry, ref: str, *, cases_root: str, out_dir: Optional[str] = None,
             seeds: Sequence[int] = GATE_SEEDS, steps: int = 1000, allow_refine: bool = False,
             dry_run: bool = False, workers: Optional[int] = None, src_root: Optional[str] = None,
-            bootstrap: bool = False) -> Dict[str, Any]:
+            bootstrap: bool = False, require_fresh_evidence: bool = False) -> Dict[str, Any]:
     from .suite import run_suite
     entry = registry.get(ref)
     status = registry.status(ref)
@@ -105,8 +105,12 @@ def promote(registry: Registry, ref: str, *, cases_root: str, out_dir: Optional[
     suite = run_suite(cases_root=cases_root, out_dir=out_dir, candidate=cand, src_root=src_root)
     report: Dict[str, Any] = {"ref": ref, "incumbent": incumbent_ref, "suite": {
         k: suite[k] for k in ("ok", "failing", "counts", "suite_digest", "ledger")}}
+    report["evidence"] = evidence = check_promotion_evidence(registry, entry, cases_root, suite)
     if not suite["ok"]:
         decision, why = "reject", "eval suite failed: " + ", ".join(suite["failing"])
+    elif require_fresh_evidence and evidence.get("hard"):
+        decision, why = "refine", ("stale evidence: " + ", ".join(sorted({h["path"] for h in evidence["hard"]}))
+                                   + " changed since it was cited; re-verify before promoting")
         report["verdict"] = None
     elif incumbent_ref is None:
         decision, why = "promote", "bootstrap: first incumbent of the family (suite passed)"
@@ -129,7 +133,53 @@ def promote(registry: Registry, ref: str, *, cases_root: str, out_dir: Optional[
             v = report["verdict"]
             fields.update({"verdict": v["verdict"], "h7": v["h7"], "gate_seeds": [v["seeds"][0], v["seeds"][-1]],
                            "dphi_mean": round(v["dphi_mean"], 6), "dphi_max": round(v["dphi_max"], 6)})
+        if evidence.get("checked") is not None:
+            fields["evidence_checked"] = evidence["checked"]
+            fields["stale_evidence"] = sorted({x["path"] for x in evidence.get("stale", [])})
         if decision == "promote" and incumbent_ref:
             fields["replaces"] = incumbent_ref
         report["event"] = registry.record(decision, ref, **fields)
     return report
+
+
+def check_promotion_evidence(registry: Registry, entry: Dict[str, Any], cases_root: str,
+                             suite: Dict[str, Any]) -> Dict[str, Any]:
+    """Re-verify every past result the promotion relies on (needs ``athanor[search]``).
+
+    Sources: the candidate's own registry evidence that carries a SHA-256, and the
+    AgentSearch citations of the tuning cases of its family.
+    """
+    import os
+    from ..config_registry import check_row_evidence
+    from ..search import search_available
+    repo = os.path.dirname(os.path.dirname(os.path.abspath(cases_root)))
+    rows = check_row_evidence(entry.get("evidence", []), repo)
+    if not search_available():
+        if not rows:
+            return {"checked": None, "note": "AgentSearch not installed; evidence not verified"}
+        return _evidence_report(rows, {"registry_rows": len(rows)},
+                                note="AgentSearch not installed; only pinned log rows verified")
+    from ..search import EvidenceIndex, read_evidence
+    from .cases import load_cases
+    cites = [e for e in entry.get("evidence", []) if isinstance(e, dict) and e.get("sha256") and e.get("path")]
+    sources = {"registry": len(cites), "registry_rows": len(rows)}
+    for ac in load_cases(cases_root, kinds=["tuning"]):
+        if ac.family == entry["family"]:
+            c = read_evidence(ac.path)
+            sources[ac.case_id] = len(c)
+            cites.extend(c)
+    results = list(rows)
+    if cites:
+        with EvidenceIndex(repo) as idx:
+            results += idx.check(cites)["results"]
+    return _evidence_report(results, sources)
+
+
+def _evidence_report(results, sources, note=None) -> Dict[str, Any]:
+    from ..search import HARD
+    stale = [{k: x.get(k) for k in ("path", "status", "detail")} for x in results if x["status"] != "fresh"]
+    out = {"checked": len(results), "fresh": len(results) - len(stale), "sources": sources,
+           "stale": stale, "hard": [x for x in stale if x["status"] in HARD]}
+    if note:
+        out["note"] = note
+    return out
