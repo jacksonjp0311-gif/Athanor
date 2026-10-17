@@ -6,6 +6,7 @@ import numpy as np
 
 from ..core.types import Candidate
 from ..agents import TelemetryAgent, ProposerAgent, VerifierAgent, SelectorAgent, ArchivistAgent
+from ..ledger import LedgerWriter, canonical_json
 from ..utils.visualization import plot_h7, plot_fitness, render_dashboard
 
 log = logging.getLogger(__name__)
@@ -16,6 +17,29 @@ def now_tag():
 def sha256_json(obj: Any) -> str:
     s = json.dumps(obj, sort_keys=True, separators=(',',':')).encode('utf-8')
     return hashlib.sha256(s).hexdigest()
+
+def derive_seed(*parts: int) -> int:
+    """Derive a collision-free 32-bit seed from integer parts (deterministic)."""
+    ss = np.random.SeedSequence([int(p) for p in parts])
+    return int(ss.generate_state(1, dtype=np.uint32)[0])
+
+def _make_run_path(out_dir: str, tag: str | None) -> str:
+    os.makedirs(out_dir, exist_ok=True)
+    if tag:
+        path = os.path.join(out_dir, tag)
+        if os.path.exists(os.path.join(path, 'ledger.jsonl')):
+            raise FileExistsError(f'run folder already contains a ledger: {path}')
+        os.makedirs(path, exist_ok=True)
+        return path
+    base = os.path.join(out_dir, f'run_{now_tag()}')
+    path, n = base, 1
+    while True:
+        try:
+            os.makedirs(path)
+            return path
+        except FileExistsError:
+            path = f'{base}_{n:02d}'
+            n += 1
 
 def run(config: Dict[str, Any]) -> Dict[str, Any]:
     seed = int(config.get('seed', 1337))
@@ -31,10 +55,13 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
 
     bins = tuple(config.get('archive', {}).get('bins', [16,16]))
     out_dir = str(config.get('run', {}).get('out_dir', 'data/archives'))
+    run_tag = config.get('run', {}).get('tag')
+    refine_floor = float(config.get('refine_floor', 0.50))
 
-    telemetry = TelemetryAgent(steps=steps, noise=0.02, seed=seed)
-    proposer  = ProposerAgent(sigma=0.12, step_cap=0.50)
-    verifier  = VerifierAgent(threshold_h7=threshold, dphi_mode=dphi_mode, refine_floor=0.50)
+    telemetry = TelemetryAgent(steps=steps, noise=float(config.get('telemetry_noise', 0.02)), seed=seed)
+    proposer  = ProposerAgent(sigma=float(config.get('proposer_sigma', 0.12)),
+                              step_cap=float(config.get('proposer_step_cap', 0.50)))
+    verifier  = VerifierAgent(threshold_h7=threshold, dphi_mode=dphi_mode, refine_floor=refine_floor)
     selector  = SelectorAgent(alpha=alpha)
     archivist = ArchivistAgent(bins=bins)
 
@@ -45,15 +72,15 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
     h7_trace = []
     f_trace  = []
 
-    run_tag  = f'run_{now_tag()}'
-    run_path = os.path.join(out_dir, run_tag)
-    os.makedirs(run_path, exist_ok=True)
+    run_path = _make_run_path(out_dir, run_tag)
+
+    # Persist the fully-resolved config so the run can be replayed exactly.
+    with open(os.path.join(run_path, 'config.json'), 'w', encoding='utf-8') as f:
+        f.write(canonical_json(config) + '\n')
 
     ledger_path = os.path.join(run_path, 'ledger.jsonl')
-
-    def ledger(row: Dict[str, Any]):
-        with open(ledger_path, 'a', encoding='utf-8') as f:
-            f.write(json.dumps(row) + '\n')
+    writer = LedgerWriter(ledger_path)
+    ledger = writer.append
 
     for g in range(gens):
         best = None
@@ -62,7 +89,7 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
             cid = f'g{g:03d}_c{i:03d}'
             child = proposer.step(parent, rng=rng, child_id=cid)
 
-            telemetry.seed = seed + (g * 10000) + i
+            telemetry.seed = derive_seed(seed, g, i, 0)
             child = telemetry.step(child)
             child = verifier.step(child)
 
@@ -73,7 +100,7 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
                     attempts += 1
                     proposer.sigma = sigma0 * (0.75 ** attempts)
                     child2 = proposer.step(parent, rng=rng, child_id=f'{cid}_r{attempts}')
-                    telemetry.seed = seed + (g * 10000) + i + attempts
+                    telemetry.seed = derive_seed(seed, g, i, attempts)
                     child2 = telemetry.step(child2)
                     child2 = verifier.step(child2)
                     child = child2
@@ -135,6 +162,8 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
         'seed': seed,
         'config_hash': cfg_hash,
         'git_commit': git_hash,
+        'ledger_rows': writer.count,
+        'run_digest': writer.head,
     }
     with open(os.path.join(run_path, 'metadata.yaml'), 'w', encoding='utf-8') as f:
         for k,v in meta.items():
@@ -147,4 +176,10 @@ def run(config: Dict[str, Any]) -> Dict[str, Any]:
     except Exception as exc:
         log.warning("artifact generation failed: %s", exc)
 
-    return { 'run_path': run_path, 'stats': stats, 'config_hash': cfg_hash }
+    return {
+        'run_path': run_path,
+        'stats': stats,
+        'config_hash': cfg_hash,
+        'run_digest': writer.head,
+        'ledger_rows': writer.count,
+    }

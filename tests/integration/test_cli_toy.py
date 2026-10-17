@@ -1,28 +1,46 @@
 import json, subprocess, sys
 from pathlib import Path
 
+ROOT = Path(__file__).resolve().parents[2]
+CFG = ROOT / 'configs' / 'toy_experiment.yaml'
 
-def test_cli_runs_toy(tmp_path):
-    root = Path(__file__).resolve().parents[2]
-    cfg = root / 'configs' / 'toy_experiment.yaml'
-    p = subprocess.run([sys.executable, '-m', 'athanor', '--config', str(cfg)],
-                       cwd=str(root),
-                       stdout=subprocess.PIPE,
-                       stderr=subprocess.PIPE,
-                       text=True)
+
+def _athanor(*args):
+    p = subprocess.run([sys.executable, '-m', 'athanor', *args], cwd=str(ROOT),
+                       stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    out = json.loads(p.stdout.strip().splitlines()[-1]) if p.stdout.strip() else None
+    return p, out
+
+
+def test_cli_runs_toy_legacy_form(tmp_path):
+    p, out = _athanor('--config', str(CFG), '--out-dir', str(tmp_path))
     assert p.returncode == 0, p.stderr
-    out = json.loads(p.stdout.strip().splitlines()[-1])
-    assert 'run_path' in out
+    run_path = Path(out['run_path'])
+    for name in ('ledger.jsonl', 'archive_stats.json', 'metadata.yaml', 'config.json'):
+        assert (run_path / name).exists(), name
+    first = (run_path / 'ledger.jsonl').read_text(encoding='utf-8').splitlines()[0]
+    assert json.loads(first)['seq'] == 0
 
-    run_path = root / out['run_path']
-    ledger = run_path / 'ledger.jsonl'
-    stats = run_path / 'archive_stats.json'
-    metadata = run_path / 'metadata.yaml'
-    assert ledger.exists()
-    assert stats.exists()
-    assert metadata.exists()
 
-    with ledger.open('r', encoding='utf-8') as f:
-        first = f.readline().strip()
-    assert first
-    json.loads(first)
+def test_cli_run_verify_replay_and_tamper(tmp_path):
+    p, out = _athanor('run', '--config', str(CFG), '--out-dir', str(tmp_path), '--tag', 't1')
+    assert p.returncode == 0, p.stderr
+    run_path = out['run_path']
+
+    p, v = _athanor('verify', run_path)
+    assert p.returncode == 0 and v['ok'] and v['head'] == out['run_digest']
+
+    p, r = _athanor('replay', run_path)
+    assert p.returncode == 0, p.stderr
+    assert r['ok'] and r['replay_digest'] == out['run_digest']
+
+    ledger = Path(run_path) / 'ledger.jsonl'
+    lines = ledger.read_text(encoding='utf-8').splitlines()
+    row = json.loads(lines[3]); row['verdict'] = 'APPROVE' if row['verdict'] != 'APPROVE' else 'REJECT'
+    lines[3] = json.dumps(row)
+    ledger.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+
+    p, v = _athanor('verify', run_path)
+    assert p.returncode == 1 and not v['ok'] and v['first_bad_seq'] == 3
+    p, r = _athanor('replay', run_path)
+    assert p.returncode == 1 and not r['ok']

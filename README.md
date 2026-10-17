@@ -20,6 +20,7 @@ ATHANOR is a research-grade Python framework for running multi-agent evolutionar
 - [Documentation & Charters](#documentation--charters)
 - [Testing](#testing)
 - [Scope & Intended Use](#scope--intended-use)
+- [Changelog](CHANGELOG.md)
 - [License](#license)
 
 ---
@@ -87,6 +88,7 @@ A successful run emits JSON to stdout with:
 - `run_path`
 - `stats`
 - `config_hash`
+- `run_digest`, `ledger_rows`
 
 ---
 
@@ -105,14 +107,19 @@ Key fields include:
 - `refine_attempts`
 - `dphi_mode`
 - `genome_dim`
+- `refine_floor` (must be `<= threshold_h7`; the REFINE band is `[refine_floor, threshold_h7)`)
+- `telemetry_noise`, `proposer_sigma`, `proposer_step_cap`
 - `archive.bins`
-- `run.out_dir`
+- `run.out_dir`, `run.tag` (optional fixed run folder name)
+
+`inherits:` performs a **deep merge** (nested sections such as `archive:` are merged key-by-key, not replaced), and inheritance cycles are rejected.
 
 ---
 
 ## Run Artifacts
 Each run writes to `data/archives/run_<timestamp>/` and includes:
-- `ledger.jsonl`
+- `ledger.jsonl` — hash-chained verdict ledger (see below)
+- `config.json` — the fully resolved config, used by `athanor replay`
 - `archive.pkl`
 - `archive_stats.json`
 - `metadata.yaml`
@@ -121,6 +128,17 @@ Each run writes to `data/archives/run_<timestamp>/` and includes:
 - `dashboard.html`
 
 These artifacts provide reproducible traces for analysis, comparison, and reporting.
+
+### Tamper-evident ledger & deterministic replay
+Every ledger row carries `seq`, `prev_hash` (the previous row's hash, or 64 zeros for the first row) and `row_hash` (SHA-256 of the row's canonical JSON without `row_hash`). The final `row_hash` is the **run digest**, recorded in `metadata.yaml` and returned by `athanor run`. Because all randomness is derived from `seed` (per-candidate telemetry seeds come from `numpy.random.SeedSequence([seed, gen, idx, attempt])`), the same config produces the same digest.
+
+```bash
+athanor run --config configs/toy_experiment.yaml --tag demo
+athanor verify data/archives/demo   # exit 1 if any row was edited, removed, inserted or reordered
+athanor replay data/archives/demo   # re-runs from config.json; exit 0 only if digests match
+```
+
+The chain makes edits *detectable*; it does not prevent someone from rewriting the whole file and re-hashing it. Store the run digest separately if you need that guarantee.
 
 ---
 
