@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "athanor"
-version = "2.5.0"
+version = "2.7.0"
 description = "ATHANOR: a deterministic coherence governor for recursive AI systems (ΔΦ → C → H7 → verdict)"
 readme = "README.md"
 license = "MIT"
@@ -32,6 +32,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=7.4", "build>=1.0", "twine>=5.0"]
+# Bug2Eval regression suite + eval-gated config promotion (athanor evals / athanor registry)
+evals = ["bug2eval @ git+https://github.com/jacksonjp0311-gif/bug2eval.git@v0.1.3"]
 
 [project.urls]
 Homepage = "https://github.com/jacksonjp0311-gif/Athanor"
@@ -44,6 +46,9 @@ athanor = "athanor.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+"athanor.evals" = ["templates/*.py"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

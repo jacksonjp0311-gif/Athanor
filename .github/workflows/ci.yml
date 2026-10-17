@@ -9,6 +9,8 @@ jobs:
         python-version: ['3.10', '3.11', '3.12']
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # eval tests snapshot historical commits
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
@@ -16,7 +18,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install -e .
+          pip install -e ".[evals]"
       - name: Tests
         run: pytest -q
       - name: Determinism smoke (run -> verify -> replay)
@@ -26,6 +28,17 @@ jobs:
           athanor replay "$RUNNER_TEMP/runs/ci"
           athanor replay "$RUNNER_TEMP/runs/ci" --out-dir "$RUNNER_TEMP/replay"
           athanor diff "$RUNNER_TEMP/runs/ci" "$(ls -d "$RUNNER_TEMP"/replay/run_*)"
+      - name: Eval suite (Bug2Eval regression cases + registry integrity)
+        run: |
+          athanor registry verify
+          athanor evals run --out "$RUNNER_TEMP/evals"
+      - name: Core works without the evals extra
+        if: matrix.python-version == '3.12'
+        run: |
+          python -m venv /tmp/core && /tmp/core/bin/pip install -q -r requirements.txt -e .
+          /tmp/core/bin/athanor --version
+          /tmp/core/bin/athanor registry verify
+          /tmp/core/bin/athanor evals run --out /tmp/ev | grep -q "bug2eval is not installed"
   package:
     runs-on: ubuntu-latest
     steps:

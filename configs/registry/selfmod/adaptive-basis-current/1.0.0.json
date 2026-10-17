@@ -1,0 +1,35 @@
+{
+  "evidence": [
+    {
+      "section": "Sensitivity (round 8)",
+      "seeds": "100-115",
+      "severe_regressions": 30,
+      "source": "docs/TUNING_LOG.md"
+    }
+  ],
+  "family": "selfmod",
+  "name": "adaptive-basis-current",
+  "parent": "selfmod/adaptive@1.0.0",
+  "reason": "Round 8 sensitivity: tolerance driven by the current (not best-so-far) error.",
+  "ref": "selfmod/adaptive-basis-current@1.0.0",
+  "registered_with_athanor": "2.7.0",
+  "schema": "athanor.config/1",
+  "spec": {
+    "arm": {
+      "athanor": true,
+      "gamma": 6.0,
+      "validity": true
+    },
+    "cfg": {
+      "adaptive_basis": "current",
+      "adaptive_cap": 6.0,
+      "adaptive_floor": 0.7,
+      "adaptive_halflife": 50,
+      "adaptive_power": 3.0,
+      "refine_floor": 0.5,
+      "threshold_h7": 0.7
+    }
+  },
+  "spec_hash": "89caaa3dc36c3f0fbd7bb2a918abf2d13d2c6a94ef87b9592e3a6b2d8a61699d",
+  "version": "1.0.0"
+}

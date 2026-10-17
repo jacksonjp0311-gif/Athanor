@@ -53,7 +53,12 @@ def main(argv=None):
     ap.add_argument("--gammas", default="none")
     ap.add_argument("--grid", default="threshold_h7=0.7")
     ap.add_argument("--note", default="")
+    ap.add_argument("--register-best", default=None, metavar="REF",
+                    help="register this round's best feasible setting as a registry candidate, "
+                         "e.g. selfmod/adaptive@1.2.0 (then: athanor registry promote REF)")
+    ap.add_argument("--parent", default=None, help="registry parent of --register-best")
     a = ap.parse_args(argv)
+    start = len(json.load(open(LOG))) if os.path.exists(LOG) else 0
     log = json.load(open(LOG)) if os.path.exists(LOG) else []
     grid = parse_grid(a.grid)
     keys = list(grid)
@@ -75,6 +80,27 @@ def main(argv=None):
                               "m100": round(s["median_mse_100"], 3), "fin": round(s["median_mse_final"], 3),
                               "steps": s["median_steps_to_1p5"]}), flush=True)
             json.dump(log, open(LOG, "w"), indent=1)
+    if a.register_best:
+        register_best(log[start:], a.register_best, a.parent, a.round)
+
+
+def register_best(entries, ref, parent, rnd):
+    """Hand the round's winner to the versioned registry. Promotion is a separate, eval-gated step."""
+    from athanor.config_registry import Registry
+    ok = [e for e in entries if e["feasible"]]
+    if not ok:
+        print(json.dumps({"registered": None, "reason": "no feasible setting this round"}))
+        return None
+    best = min(ok, key=lambda e: objective(e["summary"]))
+    s = best["summary"]
+    entry = Registry().register(ref, {"arm": best["arm"], "cfg": best["cfg"]}, parent=parent,
+                                reason=f"tune.py round {rnd}: best feasible on seeds 100-115",
+                                evidence=[{"source": LOG, "round": rnd, "seeds": "100-115",
+                                           "broken_commits": s["broken_commits"],
+                                           "severe_regressions": s["severe_regressions"],
+                                           "median_mse_100": s["median_mse_100"]}])
+    print(json.dumps({"registered": ref, "spec_hash": entry["spec_hash"], "next": f"athanor registry promote {ref}"}))
+    return entry
 
 
 if __name__ == "__main__":

@@ -1,0 +1,35 @@
+{
+  "athanor_version": "2.7.0",
+  "bug2eval_version": "0.1.3",
+  "case_id": "ATH-B002",
+  "case_sha": "ef739252d1e0a210d639af05be5b61574299637e51b02b3d0335f6b4ba71bcf8",
+  "family": null,
+  "inject": "source",
+  "kind": "bug",
+  "provenance": {
+    "after_commit": "31c1c4a90b7c0a387b469ed855aeeccb5d1e5550",
+    "after_ref": "31c1c4a",
+    "before_commit": "ad237568c4f02867f5cee295a7c651cd44e2be3e",
+    "before_ref": "ad23756",
+    "changed_files": [
+      "src/athanor/__init__.py",
+      "src/athanor/evolution/dgm_loop.py",
+      "src/athanor/experiments/registry.py",
+      "src/athanor/ledger/__init__.py",
+      "src/athanor/scripts/cli.py",
+      "src/athanor/utils/logging.py"
+    ],
+    "fix_subject": "Evolve to 2.1.0: hash-chained verdict ledger, deterministic replay, CLI subcommands, config fixes",
+    "snapshot_paths": [
+      "src"
+    ],
+    "verifier": "ATH-B002_config_inherit_nested.py"
+  },
+  "recorded": {
+    "after_exit": 0,
+    "after_output": "PASS: nested keys deep-merged",
+    "before_exit": 1,
+    "before_output": "FAIL: archive.bins=[16, 16], expected [8, 8] from base; run.out_dir='data/archives', expected 'custom_out' from base"
+  },
+  "schema": "athanor.eval/1"
+}

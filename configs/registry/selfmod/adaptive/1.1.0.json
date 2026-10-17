@@ -1,0 +1,37 @@
+{
+  "evidence": [
+    {
+      "broken_commits": 0,
+      "median_mse_100": 1.247,
+      "section": "Held-out evaluation",
+      "seeds": "0-15",
+      "severe_regressions": 2,
+      "source": "docs/TUNING_LOG.md"
+    }
+  ],
+  "family": "selfmod",
+  "name": "adaptive",
+  "parent": "selfmod/adaptive@1.0.0",
+  "reason": "Conservative tau 0.75 neighbour, fixed before held-out evaluation.",
+  "ref": "selfmod/adaptive@1.1.0",
+  "registered_with_athanor": "2.7.0",
+  "schema": "athanor.config/1",
+  "spec": {
+    "arm": {
+      "athanor": true,
+      "gamma": 6.0,
+      "validity": true
+    },
+    "cfg": {
+      "adaptive_basis": "best",
+      "adaptive_cap": 6.0,
+      "adaptive_floor": 0.7,
+      "adaptive_halflife": 50,
+      "adaptive_power": 3.0,
+      "refine_floor": 0.5,
+      "threshold_h7": 0.75
+    }
+  },
+  "spec_hash": "b6b33be53e4a01f0d48d725df20fa854fe0ec63300a89c8e41c4d3022ca7ad7f",
+  "version": "1.1.0"
+}

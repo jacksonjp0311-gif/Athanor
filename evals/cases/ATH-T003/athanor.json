@@ -1,0 +1,98 @@
+{
+  "athanor_version": "2.7.0",
+  "bug2eval_version": "0.1.3",
+  "case_id": "ATH-T003",
+  "case_sha": "d129b69f5088219c652b712d7946f435114e2c0149bf9f6e3db492eacb4fc67c",
+  "contract": {
+    "bad": "selfmod/validity-athanor@1.1.0",
+    "family": "selfmod",
+    "fingerprint_metrics": [
+      "broken_commits",
+      "severe_regressions",
+      "commits",
+      "never_reached_1p5",
+      "median_steps_to_1p5",
+      "median_mse_100",
+      "median_mse_final"
+    ],
+    "good": "selfmod/validity-athanor@1.0.0",
+    "limits": [
+      {
+        "metric": "broken_commits",
+        "op": "<=",
+        "value": 2.0
+      },
+      {
+        "metric": "severe_regressions",
+        "op": "<=",
+        "value": 10.0
+      },
+      {
+        "metric": "median_steps_to_1p5",
+        "op": "<=",
+        "value": 1000.0
+      }
+    ],
+    "seeds": [
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115
+    ],
+    "steps": 1000
+  },
+  "family": "selfmod",
+  "inject": "config",
+  "kind": "tuning",
+  "provenance": {
+    "bad": "selfmod/validity-athanor@1.1.0",
+    "bad_spec_hash": "6c2af21a0765a3d3972e5bc5cd5f3a5c02b850be31b7ad5e71afa4d5d295aefa",
+    "evidence": {
+      "finding": "tau 0.8: MSE@100 2.971, never < 1.5",
+      "section": "tau alone (round 1)",
+      "source": "docs/TUNING_LOG.md"
+    },
+    "good": "selfmod/validity-athanor@1.0.0",
+    "good_spec_hash": "fe75f62a42c12a4c198963f0c769f416d20f0f2a4fd8902b148f57aa69fbdd0d"
+  },
+  "recorded": {
+    "after_exit": 0,
+    "after_fingerprint": "11c20492bbd43516a76a6a4dbcb6b8e5113991823a5fb89cf17db5afb35bab62",
+    "after_metrics": {
+      "broken_commits": 2,
+      "commits": 1665,
+      "median_mse_100": 2.2467601604613967,
+      "median_mse_final": 1.0571406778352732,
+      "median_steps_to_1p5": 489.0,
+      "never_reached_1p5": 6,
+      "severe_regressions": 5
+    },
+    "before_exit": 1,
+    "before_fingerprint": "45633b30e4477bf3f103f19f721a26e852d9292fe956d03a2bdfba10a564d222",
+    "before_metrics": {
+      "broken_commits": 0,
+      "commits": 0,
+      "median_mse_100": 2.9705296092593505,
+      "median_mse_final": 2.9705296092593505,
+      "median_steps_to_1p5": "inf",
+      "never_reached_1p5": 16,
+      "severe_regressions": 0
+    },
+    "before_violations": [
+      "median_steps_to_1p5=inf violates <= 1000.0"
+    ]
+  },
+  "schema": "athanor.eval/1"
+}

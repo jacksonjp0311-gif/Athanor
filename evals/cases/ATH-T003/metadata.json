@@ -1,0 +1,50 @@
+{
+  "artifacts": {
+    "after": {
+      "bytes": 1668,
+      "path": "artifacts/workspace_after.tar.gz",
+      "sha256": "1acd2436100bb408b7fed6ffb21968d34f9834ae88b11f38e9e4653663df4611"
+    },
+    "before": {
+      "bytes": 1682,
+      "path": "artifacts/workspace_before.tar.gz",
+      "sha256": "9347bd9a65d22dc6a9d5df9b1ea61c4cc44169c8b99feb5f2344b990b7934375"
+    },
+    "prompt": {
+      "bytes": 303,
+      "path": "prompt.md",
+      "sha256": "e4a3ec254597781e61d5414e741e83d7e7a93c2f1456f50f7742b517d3c8c222"
+    }
+  },
+  "case_id": "ATH-T003",
+  "created_at": "2026-10-17T11:09:37Z",
+  "expected": {
+    "after": "pass",
+    "before": "fail",
+    "verify_exit_code": 0
+  },
+  "schema_version": "1.0",
+  "source": {
+    "after": "/tmp/athanor-capture-0h3nfrk2/after",
+    "before": "/tmp/athanor-capture-0h3nfrk2/before",
+    "changed_files": [],
+    "kind": "directory_pair"
+  },
+  "tags": [
+    "athanor",
+    "tuning",
+    "selfmod"
+  ],
+  "title": "tau 0.80 is past the threshold cliff and freezes self-improvement",
+  "verification": {
+    "argv": [
+      "python",
+      "verify_config.py"
+    ],
+    "protected_paths": [
+      "verify_config.py",
+      "case.json"
+    ],
+    "timeout_sec": 900
+  }
+}

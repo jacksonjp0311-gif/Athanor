@@ -6,6 +6,8 @@
     athanor diff RUN_A RUN_B           # compare two runs (digest, first divergence, stats)
     athanor bench [--config CFG] [--seeds 0-7] [--out DIR]   # governed vs ungoverned
     athanor selfmod [--seeds 0-15] [--steps 1000] [--out DIR]  # real self-modifying program
+    athanor evals {list,capture,run}      # Bug2Eval regression suite (pip install "athanor[evals]")
+    athanor registry {list,show,lineage,register,promote,verify}  # versioned configs, eval-gated promotion
 
 ``athanor --config CFG`` (the original form) is still accepted and equals ``run``.
 """
@@ -221,6 +223,9 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument('run_a')
     p.add_argument('run_b')
     p.set_defaults(fn=_cmd_diff)
+
+    from .evals_cli import add_parsers as _add_eval_parsers
+    _add_eval_parsers(sub)
     return ap
 
 

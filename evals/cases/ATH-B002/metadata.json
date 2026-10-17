@@ -1,0 +1,48 @@
+{
+  "artifacts": {
+    "after": {
+      "bytes": 15777,
+      "path": "artifacts/workspace_after.tar.gz",
+      "sha256": "943132b3ce9ee9ab007bdd876ab5eb3858b3e75ed2bea4229e24efb87b2b9a9f"
+    },
+    "before": {
+      "bytes": 12926,
+      "path": "artifacts/workspace_before.tar.gz",
+      "sha256": "5734f181b6358e533dc40cb155b820f8e555cfcbceea57f7cf1c0acfd6e99b0a"
+    },
+    "prompt": {
+      "bytes": 244,
+      "path": "prompt.md",
+      "sha256": "e3864054a861d908007a4e97956fa05fdc40a99719271dd370972ea0638e9f0f"
+    }
+  },
+  "case_id": "ATH-B002",
+  "created_at": "2026-10-17T11:09:16Z",
+  "expected": {
+    "after": "pass",
+    "before": "fail",
+    "verify_exit_code": 0
+  },
+  "schema_version": "1.0",
+  "source": {
+    "after": "/tmp/athanor-capture-osh5yn74/after",
+    "before": "/tmp/athanor-capture-osh5yn74/before",
+    "changed_files": [],
+    "kind": "directory_pair"
+  },
+  "tags": [
+    "athanor",
+    "bug"
+  ],
+  "title": "Config inheritance dropped nested keys (dict.update instead of deep merge)",
+  "verification": {
+    "argv": [
+      "python",
+      "ATH-B002_config_inherit_nested.py"
+    ],
+    "protected_paths": [
+      "ATH-B002_config_inherit_nested.py"
+    ],
+    "timeout_sec": 300
+  }
+}

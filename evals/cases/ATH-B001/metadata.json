@@ -1,0 +1,48 @@
+{
+  "artifacts": {
+    "after": {
+      "bytes": 15698,
+      "path": "artifacts/workspace_after.tar.gz",
+      "sha256": "000ad77fb425419dbe527942ddc73c04b52dd26f874f8d29610e0fcf5fe9db47"
+    },
+    "before": {
+      "bytes": 12849,
+      "path": "artifacts/workspace_before.tar.gz",
+      "sha256": "aa2291a97e9525f207fac0eefd697bdf2c1b543225394081b5c15b8c472fe0a5"
+    },
+    "prompt": {
+      "bytes": 224,
+      "path": "prompt.md",
+      "sha256": "5c54bf660400c526cf649c7870d9b766e6107f38492016ed1615dcdc5b08197f"
+    }
+  },
+  "case_id": "ATH-B001",
+  "created_at": "2026-10-17T11:09:15Z",
+  "expected": {
+    "after": "pass",
+    "before": "fail",
+    "verify_exit_code": 0
+  },
+  "schema_version": "1.0",
+  "source": {
+    "after": "/tmp/athanor-capture-gnbex4cu/after",
+    "before": "/tmp/athanor-capture-gnbex4cu/before",
+    "changed_files": [],
+    "kind": "directory_pair"
+  },
+  "tags": [
+    "athanor",
+    "bug"
+  ],
+  "title": "log_jsonl wrote a literal backslash-n instead of a newline",
+  "verification": {
+    "argv": [
+      "python",
+      "ATH-B001_log_jsonl_newline.py"
+    ],
+    "protected_paths": [
+      "ATH-B001_log_jsonl_newline.py"
+    ],
+    "timeout_sec": 300
+  }
+}
