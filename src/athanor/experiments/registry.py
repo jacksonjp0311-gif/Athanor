@@ -26,6 +26,23 @@ def validate_config(cfg: dict) -> dict:
     positive_int('refine_attempts', 2, min_value=0)
     positive_int('genome_dim', 64)
 
+    bounded01('refine_floor', 0.50)
+    if out['refine_floor'] > out['threshold_h7']:
+        raise ValueError(
+            f"refine_floor must be <= threshold_h7, got {out['refine_floor']} > {out['threshold_h7']}"
+        )
+
+    def non_negative(key: str, default: float):
+        v = float(out.get(key, default))
+        if not (v >= 0.0):
+            raise ValueError(f"{key} must be >= 0, got {v}")
+        out[key] = v
+
+    non_negative('telemetry_noise', 0.02)
+    non_negative('proposer_sigma', 0.12)
+    non_negative('proposer_step_cap', 0.50)
+    out['seed'] = int(out.get('seed', 1337))
+
     mode = str(out.get('dphi_mode', 'l2')).strip().lower()
     if mode not in {'l2', 'cosine'}:
         raise ValueError(f"dphi_mode must be 'l2' or 'cosine', got {mode}")
@@ -41,23 +58,63 @@ def validate_config(cfg: dict) -> dict:
     archive['bins'] = list(bins)
     out['archive'] = archive
 
+    gates = dict(out.get('gates', {}) or {})
+    h20 = dict(gates.get('h20', {}) or {})
+    h20['enabled'] = bool(h20.get('enabled', False))
+    h20['sigma'] = float(h20.get('sigma', 0.05))
+    h20['min_immunity'] = float(h20.get('min_immunity', 0.90))
+    if h20['sigma'] < 0 or not (0.0 <= h20['min_immunity'] <= 1.0):
+        raise ValueError("gates.h20 needs sigma >= 0 and min_immunity in [0,1]")
+    h44 = dict(gates.get('h44', {}) or {})
+    h44['enabled'] = bool(h44.get('enabled', False))
+    h44['min_excess'] = float(h44.get('min_excess', 0.0))
+    if not (0.0 <= h44['min_excess'] <= 1.0):
+        raise ValueError("gates.h44.min_excess must be in [0,1]")
+    gates['h20'], gates['h44'] = h20, h44
+    out['gates'] = gates
+
     run = dict(out.get('run', {}) or {})
     out_dir = str(run.get('out_dir', 'data/archives')).strip()
     if not out_dir:
         raise ValueError("run.out_dir must be a non-empty string")
     run['out_dir'] = out_dir
+
+    tag = run.get('tag')
+    if tag is not None:
+        tag = str(tag).strip()
+        if not tag or any(c in tag for c in '/\\') or tag in {'.', '..'}:
+            raise ValueError("run.tag must be a plain, non-empty folder name")
+        run['tag'] = tag
     out['run'] = run
 
     return out
 
 
-def load_config(path: str) -> dict:
+def deep_merge(base: dict, override: dict) -> dict:
+    """Recursively merge ``override`` into a copy of ``base`` (override wins)."""
+    out = dict(base)
+    for k, v in (override or {}).items():
+        if isinstance(v, dict) and isinstance(out.get(k), dict):
+            out[k] = deep_merge(out[k], v)
+        else:
+            out[k] = v
+    return out
+
+
+def _load_raw(path: str, _seen: tuple = ()) -> dict:
+    real = os.path.realpath(path)
+    if real in _seen:
+        raise ValueError(f"config inheritance cycle: {' -> '.join(_seen + (real,))}")
     with open(path, 'r', encoding='utf-8') as f:
         cfg = yaml.safe_load(f) or {}
-    inh = cfg.get('inherits')
+    if not isinstance(cfg, dict):
+        raise ValueError(f"config {path} must be a mapping")
+    inh = cfg.pop('inherits', None)
     if inh:
-        base_path = os.path.join(os.path.dirname(path), inh)
-        base = load_config(base_path)
-        base.update(cfg)
-        cfg = base
-    return validate_config(cfg)
+        base = _load_raw(os.path.join(os.path.dirname(path), inh), _seen + (real,))
+        cfg = deep_merge(base, cfg)
+    return cfg
+
+
+def load_config(path: str) -> dict:
+    return validate_config(_load_raw(path))

@@ -37,6 +37,19 @@ class MapElitesArchive:
             return True
         return False
 
+    def to_dict(self) -> Dict[str, Any]:
+        cells = [{"cell": [int(k[0]), int(k[1])], "best_id": c.best_id, "best_f": c.best_f, "meta": c.meta}
+                 for k, c in sorted(self.cells.items())]
+        return {"schema": "athanor.archive/1", "bins": list(self.bins), "cells": cells}
+
+    @classmethod
+    def from_dict(cls, d: Dict[str, Any]) -> "MapElitesArchive":
+        a = cls(bins=tuple(d.get("bins", (16, 16))))
+        for c in d.get("cells", []):
+            a.cells[tuple(c["cell"])] = ArchiveCell(best_id=c["best_id"], best_f=float(c["best_f"]),
+                                                    meta=dict(c.get("meta", {})))
+        return a
+
     def stats(self) -> Dict[str, Any]:
         if not self.cells:
             return {"filled": 0, "mean_best_f": 0.0, "max_best_f": 0.0}
