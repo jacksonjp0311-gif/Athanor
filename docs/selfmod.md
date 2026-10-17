@@ -59,7 +59,7 @@ athanor selfmod --seeds 0-15 --steps 1000 --out docs/selfmod --chart docs/assets
 | … after 200 steps | 2.146 | **1.137** |
 | … after 1000 steps | 1.110 | **0.862** |
 | Median best-ever held-out MSE per run | 0.899 | **0.206** |
-| Median steps to reach held-out MSE < 1.5 | ~300 (3 seeds never) | **~9** |
+| Median steps to reach held-out MSE < 1.5 ¹ | ~300 (3 seeds never) | **~9** |
 | Runs broken at the end | **0** | 1 |
 | Committed self-edits | 1642 | 2519 |
 | Commits that worsened held-out MSE | **639** | 1032 |
@@ -72,6 +72,8 @@ athanor selfmod --seeds 0-15 --steps 1000 --out docs/selfmod --chart docs/assets
 | Verdicts APPROVE / REFINE / REJECT | 6112 / 566 / 7370 | 6618 / 1458 / 5100 |
 | Verdict the gate gave the commits that **broke** the program (A / RF / RJ) | n/a | 20 / 2 / 1 |
 | Verdict the gate gave the **severe-regression** commits (A / RF / RJ) | 3 / 0 / 0 | 56 / 25 / 59 |
+
+¹ Computed from the per-step series (`--full-json`). Best-ever MSE is `best_test_mse` per run in `results.json`.
 
 Per seed, final held-out MSE is lower for the governed run on **7/16** seeds and for the ungoverned run on **9/16**. The full per-seed table is in [`selfmod/results.md`](selfmod/results.md), and machine-readable results are in [`selfmod/results.json`](selfmod/results.json).
 
