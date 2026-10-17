@@ -1,0 +1,37 @@
+{
+  "evidence": [
+    {
+      "broken_commits": 0,
+      "median_mse_100": 0.75,
+      "section": "Rounds 6-7",
+      "seeds": "100-115",
+      "severe_regressions": 8,
+      "source": "docs/TUNING_LOG.md"
+    }
+  ],
+  "family": "selfmod",
+  "name": "adaptive",
+  "parent": "selfmod/validity-athanor@1.0.0",
+  "reason": "Tuning rounds 6-7 selected setting: adaptive drift tolerance (gamma 6, p 3, basis best, cap 6, floor 0.7, half-life 50) at tau 0.70.",
+  "ref": "selfmod/adaptive@1.0.0",
+  "registered_with_athanor": "2.7.0",
+  "schema": "athanor.config/1",
+  "spec": {
+    "arm": {
+      "athanor": true,
+      "gamma": 6.0,
+      "validity": true
+    },
+    "cfg": {
+      "adaptive_basis": "best",
+      "adaptive_cap": 6.0,
+      "adaptive_floor": 0.7,
+      "adaptive_halflife": 50,
+      "adaptive_power": 3.0,
+      "refine_floor": 0.5,
+      "threshold_h7": 0.7
+    }
+  },
+  "spec_hash": "e780727fba2a251d0ab6ade509d8ac9e288c7548afc365948f0538dc9852582b",
+  "version": "1.0.0"
+}

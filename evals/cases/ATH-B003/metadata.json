@@ -1,0 +1,48 @@
+{
+  "artifacts": {
+    "after": {
+      "bytes": 15938,
+      "path": "artifacts/workspace_after.tar.gz",
+      "sha256": "8263243dfad8a4c508f5115cfcbbd81661eb0686bb8ad5d76f4f385435766c76"
+    },
+    "before": {
+      "bytes": 13091,
+      "path": "artifacts/workspace_before.tar.gz",
+      "sha256": "55edb110162b3477d4e5807aca6297afebc928cbf918b57615b632ea48950565"
+    },
+    "prompt": {
+      "bytes": 216,
+      "path": "prompt.md",
+      "sha256": "950231f984f55329723f7df9392a049b2cbd7adb73abdf80767e38ba7329aa32"
+    }
+  },
+  "case_id": "ATH-B003",
+  "created_at": "2026-10-17T11:09:17Z",
+  "expected": {
+    "after": "pass",
+    "before": "fail",
+    "verify_exit_code": 0
+  },
+  "schema_version": "1.0",
+  "source": {
+    "after": "/tmp/athanor-capture-wlu1rnwo/after",
+    "before": "/tmp/athanor-capture-wlu1rnwo/before",
+    "changed_files": [],
+    "kind": "directory_pair"
+  },
+  "tags": [
+    "athanor",
+    "bug"
+  ],
+  "title": "REFINE retries reused other candidates' telemetry seeds",
+  "verification": {
+    "argv": [
+      "python",
+      "ATH-B003_seed_overlap.py"
+    ],
+    "protected_paths": [
+      "ATH-B003_seed_overlap.py"
+    ],
+    "timeout_sec": 300
+  }
+}

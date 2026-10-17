@@ -1,0 +1,35 @@
+{
+  "athanor_version": "2.7.0",
+  "bug2eval_version": "0.1.3",
+  "case_id": "ATH-B001",
+  "case_sha": "388415918a3632666d564997e45860800ab77ef059eb7c989e12e33c94262c7f",
+  "family": null,
+  "inject": "source",
+  "kind": "bug",
+  "provenance": {
+    "after_commit": "31c1c4a90b7c0a387b469ed855aeeccb5d1e5550",
+    "after_ref": "31c1c4a",
+    "before_commit": "ad237568c4f02867f5cee295a7c651cd44e2be3e",
+    "before_ref": "ad23756",
+    "changed_files": [
+      "src/athanor/__init__.py",
+      "src/athanor/evolution/dgm_loop.py",
+      "src/athanor/experiments/registry.py",
+      "src/athanor/ledger/__init__.py",
+      "src/athanor/scripts/cli.py",
+      "src/athanor/utils/logging.py"
+    ],
+    "fix_subject": "Evolve to 2.1.0: hash-chained verdict ledger, deterministic replay, CLI subcommands, config fixes",
+    "snapshot_paths": [
+      "src"
+    ],
+    "verifier": "ATH-B001_log_jsonl_newline.py"
+  },
+  "recorded": {
+    "after_exit": 0,
+    "after_output": "PASS: one JSON object per line",
+    "before_exit": 1,
+    "before_output": "FAIL: a line is not valid JSON: Extra data: line 1 column 33 (char 32); raw='{\"seq\": 0, \"verdict\": \"APPROVE\"}\\\\n{\"seq\": 1, \"verdict\": \"REJECT\"}\\\\n'"
+  },
+  "schema": "athanor.eval/1"
+}

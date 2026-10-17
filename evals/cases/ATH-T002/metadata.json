@@ -1,0 +1,50 @@
+{
+  "artifacts": {
+    "after": {
+      "bytes": 1739,
+      "path": "artifacts/workspace_after.tar.gz",
+      "sha256": "892ce904540815d539c5c76f83e855c189ab776e6796ebbc3abcbcbdf63d838e"
+    },
+    "before": {
+      "bytes": 1741,
+      "path": "artifacts/workspace_before.tar.gz",
+      "sha256": "f172f91e2e85eb32c1a021027ec850a6ff3f0ecb09aefea7d8bfead27cd25a24"
+    },
+    "prompt": {
+      "bytes": 265,
+      "path": "prompt.md",
+      "sha256": "b00ba2327536ed55c53c1d0876ae0361603e3e9bb8defd9d493bb62feeb486e7"
+    }
+  },
+  "case_id": "ATH-T002",
+  "created_at": "2026-10-17T11:09:29Z",
+  "expected": {
+    "after": "pass",
+    "before": "fail",
+    "verify_exit_code": 0
+  },
+  "schema_version": "1.0",
+  "source": {
+    "after": "/tmp/athanor-capture-1v0lbbfp/after",
+    "before": "/tmp/athanor-capture-1v0lbbfp/before",
+    "changed_files": [],
+    "kind": "directory_pair"
+  },
+  "tags": [
+    "athanor",
+    "tuning",
+    "selfmod"
+  ],
+  "title": "Tolerance on the current error is a positive feedback loop",
+  "verification": {
+    "argv": [
+      "python",
+      "verify_config.py"
+    ],
+    "protected_paths": [
+      "verify_config.py",
+      "case.json"
+    ],
+    "timeout_sec": 900
+  }
+}

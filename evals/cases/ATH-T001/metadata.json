@@ -1,0 +1,50 @@
+{
+  "artifacts": {
+    "after": {
+      "bytes": 1728,
+      "path": "artifacts/workspace_after.tar.gz",
+      "sha256": "2a493d800457553c5350a0df96079eba75dfc46f5a71fd5020bc028ed0f86a8a"
+    },
+    "before": {
+      "bytes": 1727,
+      "path": "artifacts/workspace_before.tar.gz",
+      "sha256": "e703d0116780d4910cce50149661ff4976b6d9b1384503e4879f4c6aaaae1997"
+    },
+    "prompt": {
+      "bytes": 266,
+      "path": "prompt.md",
+      "sha256": "d548c1cfced353a631c47562a335814a2f725feca63579aea9f5e26a151a5944"
+    }
+  },
+  "case_id": "ATH-T001",
+  "created_at": "2026-10-17T11:09:21Z",
+  "expected": {
+    "after": "pass",
+    "before": "fail",
+    "verify_exit_code": 0
+  },
+  "schema_version": "1.0",
+  "source": {
+    "after": "/tmp/athanor-capture-l88xqaf6/after",
+    "before": "/tmp/athanor-capture-l88xqaf6/before",
+    "changed_files": [],
+    "kind": "directory_pair"
+  },
+  "tags": [
+    "athanor",
+    "tuning",
+    "selfmod"
+  ],
+  "title": "Selected adaptive setting overfit its safety on held-out seeds",
+  "verification": {
+    "argv": [
+      "python",
+      "verify_config.py"
+    ],
+    "protected_paths": [
+      "verify_config.py",
+      "case.json"
+    ],
+    "timeout_sec": 900
+  }
+}

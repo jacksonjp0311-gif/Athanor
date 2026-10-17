@@ -1,0 +1,48 @@
+{
+  "artifacts": {
+    "after": {
+      "bytes": 15903,
+      "path": "artifacts/workspace_after.tar.gz",
+      "sha256": "ec657b0e89218042cc531f6ee180a7a82798fe2aaffde8b4524be76273acaa82"
+    },
+    "before": {
+      "bytes": 13058,
+      "path": "artifacts/workspace_before.tar.gz",
+      "sha256": "d926a9e2886ba7f7cee30038e086153f52ec2f9c1b8bc952ebeeccc5e594ea2c"
+    },
+    "prompt": {
+      "bytes": 237,
+      "path": "prompt.md",
+      "sha256": "08b2690601465c74ef1611b9f30f2dd3b4cf2028f0e8e0b8bd49cf95ec15c932"
+    }
+  },
+  "case_id": "ATH-B004",
+  "created_at": "2026-10-17T11:09:19Z",
+  "expected": {
+    "after": "pass",
+    "before": "fail",
+    "verify_exit_code": 0
+  },
+  "schema_version": "1.0",
+  "source": {
+    "after": "/tmp/athanor-capture-i_m65f07/after",
+    "before": "/tmp/athanor-capture-i_m65f07/before",
+    "changed_files": [],
+    "kind": "directory_pair"
+  },
+  "tags": [
+    "athanor",
+    "bug"
+  ],
+  "title": "Two runs started in the same second shared one run folder and ledger",
+  "verification": {
+    "argv": [
+      "python",
+      "ATH-B004_run_folder_collision.py"
+    ],
+    "protected_paths": [
+      "ATH-B004_run_folder_collision.py"
+    ],
+    "timeout_sec": 300
+  }
+}

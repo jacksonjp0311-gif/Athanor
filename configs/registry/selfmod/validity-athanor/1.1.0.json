@@ -1,0 +1,31 @@
+{
+  "evidence": [
+    {
+      "median_mse_100": 2.971,
+      "median_steps_to_1p5": "never",
+      "section": "tau alone (no adaptive, round 1)",
+      "seeds": "100-115",
+      "severe_regressions": 0,
+      "source": "docs/TUNING_LOG.md"
+    }
+  ],
+  "family": "selfmod",
+  "name": "validity-athanor",
+  "parent": "selfmod/validity-athanor@1.0.0",
+  "reason": "Tuning round 1: tighten tau to 0.80.",
+  "ref": "selfmod/validity-athanor@1.1.0",
+  "registered_with_athanor": "2.7.0",
+  "schema": "athanor.config/1",
+  "spec": {
+    "arm": {
+      "athanor": true,
+      "gamma": null,
+      "validity": true
+    },
+    "cfg": {
+      "threshold_h7": 0.8
+    }
+  },
+  "spec_hash": "6c2af21a0765a3d3972e5bc5cd5f3a5c02b850be31b7ad5e71afa4d5d295aefa",
+  "version": "1.1.0"
+}

@@ -5,7 +5,7 @@
 <p align="center">
   <a href="https://github.com/jacksonjp0311-gif/Athanor/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/jacksonjp0311-gif/Athanor/actions/workflows/ci.yml/badge.svg?branch=main"/></a>
   <img alt="Python 3.10 | 3.11 | 3.12" src="https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-3776AB?logo=python&logoColor=white"/>
-  <a href="https://github.com/jacksonjp0311-gif/Athanor/releases/latest"><img alt="Version 2.6.0" src="https://img.shields.io/badge/version-2.6.0-ffb347"/></a>
+  <a href="https://github.com/jacksonjp0311-gif/Athanor/releases/latest"><img alt="Version 2.7.0" src="https://img.shields.io/badge/version-2.7.0-ffb347"/></a>
   <a href="../LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-3ddc97"/></a>
 </p>
 
@@ -26,7 +26,7 @@ A system that rewrites itself needs a referee that is *outside* the thing being 
 - **Every run can be audited.** Edited, deleted, inserted, or reordered ledger rows are detected, and a run can be replayed and compared bit-for-bit through its digest.
 
 ## Contents
-[Governance loop](#governance-loop) · [Quickstart](#quickstart) · [Benchmark](#benchmark-governed-vs-ungoverned) · [Real self-modifying program](#real-world-test-a-self-modifying-program) · [Transfer test](#26-transfer-test-a-self-modifying-tsp-solver) · [Algorithm card](../docs/ALGORITHM_CARD.md) · [CLI](#cli-reference) · [Configuration](#configuration-reference) · [Guarantees](#guarantees) · [Run artifacts](#run-artifacts) · [Architecture](#architecture) · [Testing](#testing) · [Theory](#theory--manuscripts) · [Roadmap](#roadmap) · [Changelog](../CHANGELOG.md)
+[Governance loop](#governance-loop) · [Quickstart](#quickstart) · [Benchmark](#benchmark-governed-vs-ungoverned) · [Real self-modifying program](#real-world-test-a-self-modifying-program) · [Transfer test](#26-transfer-test-a-self-modifying-tsp-solver) · [Evals & versioned configs](#evals-and-versioned-configs-27) · [Algorithm card](../docs/ALGORITHM_CARD.md) · [Method](../docs/METHOD.md) · [CLI](#cli-reference) · [Configuration](#configuration-reference) · [Guarantees](#guarantees) · [Run artifacts](#run-artifacts) · [Architecture](#architecture) · [Testing](#testing) · [Theory](#theory--manuscripts) · [Roadmap](#roadmap) · [Changelog](../CHANGELOG.md)
 
 ## Governance loop
 
@@ -60,10 +60,16 @@ Install straight from GitHub (Python 3.10+):
 
 ```bash
 pip install git+https://github.com/jacksonjp0311-gif/Athanor.git            # latest main
-pip install git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.6.0     # pinned release
+pip install git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.7.0     # pinned release
 ```
 
-Each [GitHub release](https://github.com/jacksonjp0311-gif/Athanor/releases) also has the built wheel and sdist attached (for example `pip install athanor-2.6.0-py3-none-any.whl`). ATHANOR is **not published on PyPI**. The name `athanor` on PyPI belongs to an unrelated project, so `pip install athanor` will **not** install this package.
+Each [GitHub release](https://github.com/jacksonjp0311-gif/Athanor/releases) also has the built wheel and sdist attached (for example `pip install athanor-2.7.0-py3-none-any.whl`). ATHANOR is **not published on PyPI**. The name `athanor` on PyPI belongs to an unrelated project, so `pip install athanor` will **not** install this package.
+
+Optional extra for the regression suite and eval-gated config promotion ([docs/EVALS.md](../docs/EVALS.md)):
+
+```bash
+pip install "athanor[evals] @ git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.7.0"   # adds Bug2Eval
+```
 
 For development:
 
@@ -207,6 +213,30 @@ Details: [tsp_selfmod.md](../docs/tsp_selfmod.md) · [TUNING_LOG.md](../docs/TUN
 python experiments/tsp_selfmod/run.py --with-tuned
 ```
 
+## Evals and versioned configs (2.7)
+
+Every bug fixed in ATHANOR and every tuning failure is now a permanent, deterministic **[Bug2Eval](https://github.com/jacksonjp0311-gif/bug2eval) case** in [`evals/cases/`](../evals/cases/). Each case proves its own contract: the captured *before* fails and the captured *after* passes. Every tuned config is an immutable, content-hashed, semver'd entry in [`configs/registry/`](../configs/registry/). A config becomes the incumbent only through **eval-gated, Athanor-governed promotion**:
+
+```text
+capture (bug commit pair | failed config + seeds + limits) → evals/cases/<ID>  (before FAILS, after PASSES)
+athanor registry promote REF:
+   1. eval suite with REF injected   → a new config can't re-break a captured case
+   2. Athanor verdict REF vs incumbent on fresh gate seeds 200–215 (ΔΦ of log-MSE signatures → C → H7)
+   → APPROVE promote · REFINE hold · REJECT / suite failure reject   (hash-chained registry ledger)
+```
+
+The suite is seeded from real history: the 4 bugs fixed in 2.1.0 (snapshots of the real `src/` at `ad23756` and `31c1c4a`) and 4 tuning failures re-measured exactly. Those four are the overfit setting (severe **34 → 2** on held-out seeds), the `basis = current` feedback trap (**30 → 8**), the τ 0.80 threshold cliff (never reaches MSE < 1.5 → 489 steps), and no governor (broken/severe **23/140 → 0/3**). Injecting the pre-2.1 source makes all 4 bug cases fail with `REGRESSION`, and injecting the overfit config makes ATH-T001 `BLOCKED` (both tested).
+
+The conservative τ 0.75 setting (`selfmod/adaptive@1.1.0`) was promoted through the gate: the suite passed 8/8, and Athanor gave **APPROVE with H7 = 0.8125** (13 of 16 fresh seeds coherent, mean ΔΦ 0.296) over `selfmod/validity-athanor@1.0.0`. On those fresh seeds it had 1 broken commit and 5 severe regressions, against 0 and 13 for the incumbent. It reached MSE < 1.5 in a median 32.5 steps against 398.
+
+```bash
+athanor evals run                                   # PASS / DRIFT / STALE / BLOCKED / REGRESSION / ERROR, hash-chained ledger
+athanor registry list                               # configs, statuses, incumbents
+athanor registry promote selfmod/adaptive@1.2.0     # suite + Athanor verdict; decision recorded
+```
+
+Full design, statuses and caveats: [docs/EVALS.md](../docs/EVALS.md). The reusable procedure behind all of this, including how it was run as a human + AI collaboration: [docs/METHOD.md](../docs/METHOD.md).
+
 ## CLI reference
 
 | Command | What it does | Exit code |
@@ -218,6 +248,12 @@ python experiments/tsp_selfmod/run.py --with-tuned
 | `athanor bench [--config CFG] [--seeds 0-7] [--out DIR] [--chart PNG]` | Governed vs ungoverned comparison across seeds. Writes `results.json`, `results.md` and a chart. Without `--config` it uses a built-in copy of `configs/bench.yaml`. | `0` |
 | `athanor selfmod [--seeds 0-15] [--steps 1000] [--out DIR] [--chart PNG] [--ledgers]` | Governed vs ungoverned **real self-modifying program** (see [`docs/selfmod.md`](../docs/selfmod.md)). `--ledgers` keeps a hash-chained ledger and `final_self.py` per run. | `0` |
 | `athanor selfmod-arms [--seeds 0-15] [--steps 1000] [--out DIR] [--chart PNG]` | Held-out comparison of 7 arms: ungoverned, validity, athanor, validity+athanor, and the tuned adaptive variants. | `0` |
+| `athanor evals list` · `evals run [--kind bug\|tuning] [--case ID] [--candidate REF] [--strict] [--out DIR]` | Lists and replays the Bug2Eval regression cases and writes a hash-chained `ledger.jsonl` + `summary.json` (needs `athanor[evals]`). | `0` ok · `1` REGRESSION/BLOCKED/ERROR · `2` unavailable |
+| `athanor evals capture bug --id ID --title T --before-ref A --after-ref B --verifier V.py` | Captures a fixed bug. The case is refused unless *before* fails and *after* passes. | `0` · `2` refused |
+| `athanor evals capture tuning --id ID --title T --bad REF --good REF --seeds S --limit M<=X` | Captures a tuning failure: the bad config must violate a limit and the good one must satisfy every limit. | `0` · `2` refused |
+| `athanor registry list · show REF · lineage REF · verify` | The versioned config registry. `verify` recomputes every content hash and the ledger chain. | `0` · `1` corrupt |
+| `athanor registry register REF [--parent P] [--set cfg.k=v] --reason R` | Adds an immutable config. Semver is enforced: an arm change is major, a cfg change is minor. | `0` · `2` |
+| `athanor registry promote REF [--gate-seeds 200-215] [--allow-refine] [--bootstrap] [--dry-run]` | Eval suite with REF injected, then an Athanor verdict vs the incumbent. The decision is recorded. | `0` promoted · `1` not |
 | `athanor --version` | Prints the version. | `0` |
 
 `athanor --config CFG` (the 2.0 form) still works and is the same as `athanor run`. You can also use `python -m athanor ...`.
@@ -282,13 +318,18 @@ src/athanor/
 ├── experiments/   Config loading, deep-merge inheritance, validation
 ├── bench.py       Governed-vs-ungoverned comparison (athanor bench)
 ├── selfmod/       Real self-modifying program, arms, adaptive schedule (athanor selfmod, selfmod-arms)
-├── scripts/       CLI: run · verify · replay · diff · bench · selfmod
+├── evals/         Bug2Eval integration: capture, suite runner, eval-gated promotion (athanor evals)
+├── config_registry.py  Versioned, content-hashed config registry (athanor registry)
+├── scripts/       CLI: run · verify · replay · diff · bench · selfmod · evals · registry
 └── utils/         Seeding, JSONL logging, plots and dashboard
 configs/           base.yaml, toy_experiment.yaml, bench.yaml
 docs/benchmark/    Committed benchmark results (results.md, results.json)
 docs/selfmod/      Committed self-modification results; write-up in docs/selfmod.md
 experiments/       Runnable experiment entry points (self_modify/: run, tune, analyze_tuning)
 docs/ALGORITHM_CARD.md, docs/TUNING_LOG.md, docs/tuning/   Algorithm card, tuning log and raw tuning data
+docs/EVALS.md, docs/METHOD.md   Eval suite + registry design; the reusable tuning/governance method
+evals/cases/       Bug2Eval regression cases (bugs + tuning failures); evals/verifiers/ their verifier sources
+configs/registry/  Versioned config registry entries + hash-chained registry ledger
 docs/              Architecture notes, LaTeX manuscripts, assets
 tests/             Unit and integration tests (pytest)
 ```
@@ -312,7 +353,7 @@ pip install -e ".[dev]"
 pytest -q
 ```
 
-The suite covers the coherence math, config validation and inheritance, the ledger (edit, delete, and reorder detection), determinism and REFINE-stream independence, the H20 and H44 gates, the decision record, the archive JSON round-trip, `diff`, and the CLI end to end (run → verify → replay → tamper). CI runs it on Python 3.10, 3.11, and 3.12, and also runs a run → verify → replay smoke check.
+The suite covers the coherence math, config validation and inheritance, the ledger (edit, delete, and reorder detection), determinism and REFINE-stream independence, the H20 and H44 gates, the decision record, the archive JSON round-trip, `diff`, and the CLI end to end (run → verify → replay → tamper). CI runs it on Python 3.10, 3.11, and 3.12, and also runs a run → verify → replay smoke check, `athanor registry verify` and the full eval suite (`athanor evals run`). It also checks that core ATHANOR still works without the `[evals]` extra.
 
 ## Theory & Manuscripts
 
@@ -327,6 +368,7 @@ H7 coherence geometry law (`h7_coherence_geometry_law_v2_1.tex`), the Codex–DG
 - [x] Real self-modifying program test (`athanor selfmod`) (2.4)
 - [x] Validity pre-gate, 4-arm comparison, adaptive schedule tuned on separate seeds (2.5)
 - [x] Transfer test on a second, larger self-modifier (TSP solver); admission/lockout condition derived (2.6)
+- [x] Bug2Eval regression suite, versioned config registry, eval-gated Athanor-governed promotion, METHOD.md (2.7)
 - [ ] Probe sets that cover deployment input sizes (every governed TSP break was outside the probe range)
 - [ ] Robust (worst-case over seed subsets) tuning objective, since the tuned optimum overfit its safety
 - [ ] Pluggable telemetry backends for real model or agent traces (beyond the built-in linear dynamics)

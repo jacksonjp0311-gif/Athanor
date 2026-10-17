@@ -1,4 +1,4 @@
-# ATHANOR Algorithm Card (v2.6.0)
+# ATHANOR Algorithm Card (v2.7.0)
 
 ## Purpose
 
@@ -83,6 +83,25 @@ The built-in evolution loop (`evolution/dgm_loop.py`) is the same idea over a po
 
 Tuned on seeds 100–115 only. See [TUNING_LOG.md](TUNING_LOG.md).
 
+## Eval-gated config promotion (new in 2.7.0)
+
+Tuning outputs are **candidates**, never defaults. A config moves to the incumbent of its family only through `athanor registry promote` (`evals/promotion.py`; full design in [EVALS.md](EVALS.md), and the general procedure in [METHOD.md](METHOD.md)):
+
+```
+suite ← run every Bug2Eval case (evals/cases) with the candidate injected into the tuning cases
+if any case is REGRESSION, BLOCKED or ERROR            → REJECT   (cannot re-break a captured case)
+for each fresh gate seed s ∈ 200–215 (disjoint from tuning 100–115 and held-out 0–15):
+    σ_s(x) = clip(log10 MSE_x(t), −3, 6), t ∈ {10, 30, 100, 300, 1000}   (broken self ⇒ 6)
+    d_s    = (σ_s(candidate) − σ_s(incumbent)) / √5
+X ← [0; cumsum(d)]   ⇒ ΔΦ_s = ‖d_s‖,  C_s = 1/(1+ΔΦ_s),  H7 = mean_s[C_s ≥ τ]   (τ 0.70, refine floor 0.50)
+VerifierAgent verdict: APPROVE → promote · REFINE → hold (--allow-refine to accept) · REJECT → reject
+append {event, ref, spec_hash, suite_digest, verdict, H7, ΔΦ stats} to configs/registry/ledger.jsonl (hash-chained)
+```
+
+This is the same verdict rule as for a self-edit, with a config change as the edit and per-seed behaviour as the probes. A seed counts as coherent when `ΔΦ_s ≤ 1/τ − 1 = 0.4286`, i.e. when the RMS log10-MSE shift across checkpoints is under about 0.43 decades. **Measured** (`selfmod/adaptive@1.1.0` over `selfmod/validity-athanor@1.0.0`): suite 8/8 PASS, H7 = 0.8125, mean ΔΦ 0.296, max ΔΦ 0.654 → APPROVE.
+
+**Registry invariants (tested):** entries are immutable and content-hashed (`spec_hash = SHA-256(canonical {arm, cfg})`), and status comes only from the hash-chained ledger. Semver is enforced against a same-name parent (an arm change is major, a cfg change is minor, an identical spec is a patch). `athanor registry verify` detects any edit after registration.
+
 ## Complexity
 
 | Operation | Cost |
@@ -93,6 +112,8 @@ Tuned on seeds 100–115 only. See [TUNING_LOG.md](TUNING_LOG.md).
 | Self-mod edit check | O(P + |V| + minibatch) program evaluations, each O(expression size ≤ 40 nodes) |
 | Ledger append / verify | O(row size) SHA-256 per row; verify is O(N rows) |
 | Built-in loop | O(G · N · (1 + refine) · T · D²) (telemetry is a D×D linear map per step) |
+| Eval suite | per case: 2 reference verifications + 1 current check; a tuning case is 3 × (16 seeds × 1000 steps) self-mod runs (about 3–4 s per tuning case on 8 cores) |
+| Promotion | suite + 2 × 16 gate-seed runs |
 
 ## Guarantees (tested)
 
@@ -119,9 +140,12 @@ Tuned on seeds 100–115 only. See [TUNING_LOG.md](TUNING_LOG.md).
 | Narrow tuned optimum overfits | Selected setting: 8 severe on tuning seeds → 34 on held-out seeds |
 | Breakage between validation inputs | Validity-only: 10 broken commits on held-out seeds |
 | Slower improvement | Non-adaptive governed: median steps to MSE < 1.5 is 404.5 vs 8.5 ungoverned |
+
 | Probes smaller than deployment inputs (TSP, 2.6) | Every committed break in the governed TSP arms was an APPROVEd timeout or crash that only occurs on held-out instances larger than any probe |
 | Step-based decay is task-specific (TSP, 2.6) | Carried-over t½ = 50 locks out the one large beneficial edit after about 60 steps; 9 of 16 held-out runs never reach good |
 | Fixed tolerance freezes on a big "unlock" edit (TSP, 2.6) | Non-adaptive Athanor: 0 commits on all 16 held-out seeds |
+
+Each failure mode above that came from a self-mod config is now a captured regression case (ATH-T001 overfit, ATH-T002 feedback, ATH-T003 cliff, ATH-T004 no governor). A future config that falls into one of them again is `BLOCKED` at promotion.
 
 ## Evaluation summary (held-out seeds 0–15, 1000 steps, self-modifying program)
 

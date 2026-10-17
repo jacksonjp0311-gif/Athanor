@@ -1,0 +1,27 @@
+{
+  "evidence": [
+    {
+      "broken_commits": 23,
+      "seeds": "0-15",
+      "severe_regressions": 140,
+      "source": "docs/selfmod/arms_results.md"
+    }
+  ],
+  "family": "selfmod",
+  "name": "ungoverned",
+  "parent": null,
+  "reason": "2.4.0 baseline: every improving self-edit is committed, no gate.",
+  "ref": "selfmod/ungoverned@1.0.0",
+  "registered_with_athanor": "2.7.0",
+  "schema": "athanor.config/1",
+  "spec": {
+    "arm": {
+      "athanor": false,
+      "gamma": null,
+      "validity": false
+    },
+    "cfg": {}
+  },
+  "spec_hash": "0188c385b13bb2e83132d804b01caca2459ad4c623156f22666c48fc80f33556",
+  "version": "1.0.0"
+}
