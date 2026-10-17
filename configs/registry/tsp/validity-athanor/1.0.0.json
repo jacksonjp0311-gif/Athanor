@@ -1,0 +1,28 @@
+{
+  "evidence": [
+    {
+      "frozen_runs": 16,
+      "path": "docs/tsp_selfmod/results.md",
+      "seeds": "0-15",
+      "sha256": "6adcf36da4139b254bb9d9a67bf0ae9bee89da00c20751ab9396e82362b187ac",
+      "source": "docs/tsp_selfmod/results.md"
+    }
+  ],
+  "family": "tsp",
+  "name": "validity-athanor",
+  "parent": "tsp/ungoverned@1.0.0",
+  "reason": "2.6.0 fixed-tolerance validity + Athanor (tau 0.70).",
+  "ref": "tsp/validity-athanor@1.0.0",
+  "registered_with_athanor": "3.0.0",
+  "schema": "athanor.config/1",
+  "spec": {
+    "arm": {
+      "athanor": true,
+      "gamma": null,
+      "validity": true
+    },
+    "cfg": {}
+  },
+  "spec_hash": "fe75f62a42c12a4c198963f0c769f416d20f0f2a4fd8902b148f57aa69fbdd0d",
+  "version": "1.0.0"
+}

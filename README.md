@@ -5,7 +5,7 @@
 <p align="center">
   <a href="https://github.com/jacksonjp0311-gif/Athanor/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/jacksonjp0311-gif/Athanor/actions/workflows/ci.yml/badge.svg?branch=main"/></a>
   <img alt="Python 3.10 | 3.11 | 3.12" src="https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-3776AB?logo=python&logoColor=white"/>
-  <a href="https://github.com/jacksonjp0311-gif/Athanor/releases/latest"><img alt="Version 2.8.0" src="https://img.shields.io/badge/version-2.8.0-ffb347"/></a>
+  <a href="https://github.com/jacksonjp0311-gif/Athanor/releases/latest"><img alt="Version 3.0.0" src="https://img.shields.io/badge/version-3.0.0-ffb347"/></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-3ddc97"/></a>
 </p>
 
@@ -26,7 +26,7 @@ A system that rewrites itself needs a referee that is *outside* the thing being 
 - **Every run can be audited.** Edited, deleted, inserted, or reordered ledger rows are detected, and a run can be replayed and compared bit-for-bit through its digest.
 
 ## Contents
-[Governance loop](#governance-loop) · [Quickstart](#quickstart) · [Benchmark](#benchmark-governed-vs-ungoverned) · [Real self-modifying program](#real-world-test-a-self-modifying-program) · [Transfer test](#26-transfer-test-a-self-modifying-tsp-solver) · [Evals & versioned configs](#evals-and-versioned-configs-27) · [Search & evidence](#search-and-evidence-28) · [Algorithm card](docs/ALGORITHM_CARD.md) · [Method](docs/METHOD.md) · [CLI](#cli-reference) · [Configuration](#configuration-reference) · [Guarantees](#guarantees) · [Run artifacts](#run-artifacts) · [Architecture](#architecture) · [Testing](#testing) · [Theory](#theory--manuscripts) · [Roadmap](#roadmap) · [Changelog](CHANGELOG.md)
+[Governance loop](#governance-loop) · [Quickstart](#quickstart) · [Plug in your program](#plug-in-your-own-self-modifying-program) · [Unified benchmark](#unified-benchmark-30) · [Benchmark (2.3)](#benchmark-governed-vs-ungoverned) · [Real self-modifying program](#real-world-test-a-self-modifying-program) · [Transfer test](#26-transfer-test-a-self-modifying-tsp-solver) · [Evals & versioned configs](#evals-and-versioned-configs-27) · [Search & evidence](#search-and-evidence-28) · [Algorithm card](docs/ALGORITHM_CARD.md) · [Method](docs/METHOD.md) · [CLI](#cli-reference) · [Configuration](#configuration-reference) · [Guarantees](#guarantees) · [Run artifacts](#run-artifacts) · [Architecture](#architecture) · [Testing](#testing) · [Theory](#theory--manuscripts) · [Roadmap](#roadmap) · [Changelog](CHANGELOG.md)
 
 ## Governance loop
 
@@ -60,16 +60,16 @@ Install straight from GitHub (Python 3.10+):
 
 ```bash
 pip install git+https://github.com/jacksonjp0311-gif/Athanor.git            # latest main
-pip install git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.8.0     # pinned release
+pip install git+https://github.com/jacksonjp0311-gif/Athanor.git@v3.0.0     # pinned release
 ```
 
-Each [GitHub release](https://github.com/jacksonjp0311-gif/Athanor/releases) also has the built wheel and sdist attached (for example `pip install athanor-2.8.0-py3-none-any.whl`). ATHANOR is **not published on PyPI**. The name `athanor` on PyPI belongs to an unrelated project, so `pip install athanor` will **not** install this package.
+Each [GitHub release](https://github.com/jacksonjp0311-gif/Athanor/releases) also has the built wheel and sdist attached (for example `pip install athanor-3.0.0-py3-none-any.whl`). ATHANOR is **not published on PyPI**. The name `athanor` on PyPI belongs to an unrelated project, so `pip install athanor` will **not** install this package.
 
 Optional extra for the regression suite and eval-gated config promotion ([docs/EVALS.md](docs/EVALS.md)):
 
 ```bash
-pip install "athanor[evals] @ git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.8.0"          # adds Bug2Eval
-pip install "athanor[evals,search] @ git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.8.0"   # + AgentSearch evidence layer (Python 3.11+)
+pip install "athanor[evals] @ git+https://github.com/jacksonjp0311-gif/Athanor.git@v3.0.0"          # adds Bug2Eval
+pip install "athanor[evals,search] @ git+https://github.com/jacksonjp0311-gif/Athanor.git@v3.0.0"   # + AgentSearch evidence layer (Python 3.11+)
 ```
 
 For development:
@@ -79,18 +79,79 @@ git clone https://github.com/jacksonjp0311-gif/Athanor.git && cd Athanor
 python -m pip install -e ".[dev]"
 ```
 
+Then, in three commands:
+
 ```bash
-# 1. run a governed evolution loop
-athanor run --config configs/toy_experiment.yaml --tag demo
-
-# 2. verify the hash chain of the verdict ledger
-athanor verify data/archives/demo
-
-# 3. replay from the saved config and confirm the digest matches
-athanor replay data/archives/demo
+athanor doctor          # 1. check the install: dependencies, extras, a governor self-test, a run + verify + determinism check
+athanor demo            # 2. end to end: run → verify the hash-chained ledger → replay from config.json (same digest) → eval suite
+athanor bench --all     # 3. the unified benchmark on held-out seeds 3000–3015 (about 2 minutes on 8 cores)
 ```
 
-Each command prints one JSON object to stdout and exits non-zero on failure, so it fits in CI and scripts.
+`athanor demo` prints one line per step (`✔ run`, `✔ verify`, `✔ replay`, `✔ evals`) and exits non-zero if any step fails. The eval step needs the `[evals]` extra and a checkout; otherwise it is skipped with a note. The individual steps are also commands:
+
+```bash
+athanor run --config configs/toy_experiment.yaml --tag demo   # a governed evolution loop
+athanor verify data/archives/demo                             # check the verdict ledger's hash chain
+athanor replay data/archives/demo                             # re-run from the saved config, compare digests
+```
+
+Each of these prints one JSON object and exits non-zero on failure, so it fits in CI and scripts. Errors are one line plus a hint (`ATHANOR_DEBUG=1` shows the traceback).
+
+## Plug in your own self-modifying program
+
+`athanor.govern` wraps any program that edits itself. You give it three functions about your program; ATHANOR decides which edits get committed and can write every decision to a hash-chained ledger:
+
+```python
+import athanor
+
+result = athanor.govern(
+    initial_program,
+    propose=lambda program, rng, scale: edited_copy,    # your self-edit (scale 1.0, then 0.5, 0.25 on REFINE)
+    evaluate=lambda program: loss,                      # your objective, lower is better
+    probe=lambda program: [outputs on fixed inputs],    # behaviour on fixed probe inputs
+    scale=0.7,              # the behaviour change you would call "one unit" (e.g. the output's std)
+    check=None,             # optional validity pre-gate: program -> bool (False or raise = reject)
+    steps=400, seed=0, ledger="runs/my_program.jsonl")
+result.program, result.score, result.counts            # the final program, its score, verdict counts
+
+gate = athanor.Governor(probe, scale=0.7)               # or gate one edit yourself
+gate.judge(current, candidate).verdict                  # "APPROVE" | "REFINE" | "REJECT"
+```
+
+An edit is committed only if it improves `evaluate`, passes `check`, and ATHANOR APPROVEs the probe drift. With τ = 0.70, each probe may move by at most 0.43 × `scale`. [`examples/govern_quickstart.py`](examples/govern_quickstart.py) is a complete example (about 60 lines): a program that rewrites its own source to fit sin(x). It also runs the same loop with `governed=False` for comparison, and there the ungoverned loop reaches a lower training error. Bad inputs raise `athanor.GovernorError` with a hint.
+
+## Unified benchmark (3.0)
+
+`athanor bench --all` runs all three systems on **brand-new held-out seeds 3000–3015**: the synthetic evolution loop, the self-modifying curve-fitting program and the self-modifying TSP solver. These seeds were never used for tuning, gating or any earlier report. Arm configs are the registry entries. Measured with 3.0.0:
+
+| system | arm | unsafe commits¹ | severe regressions | final quality² | never reached target |
+|---|---|---:|---:|---:|---:|
+| synthetic loop | ungoverned | 163 | – | H7 0.781 | – |
+| synthetic loop | **governed** | **0** | – | **H7 0.914** | – |
+| curve-fit selfmod | ungoverned | 31 | 116 | MSE **0.433** | 0 |
+| curve-fit selfmod | validity only | 8 | 84 | MSE 0.874 | 0 |
+| curve-fit selfmod | validity + Athanor | 0 | 4 | MSE 1.044 | 3 |
+| curve-fit selfmod | **Athanor adaptive** (incumbent) | **0** | 10 | MSE 0.930 | 3 |
+| TSP selfmod | ungoverned | 16 | 16 | broken | 9 |
+| TSP selfmod | validity only | 4 | 15 | ratio 1.045 | 1 |
+| TSP selfmod | validity + scaled checks | 0 | 11 | ratio **1.044** | 0 |
+| TSP selfmod | validity + Athanor (fixed tolerance) | 0 | 0 | 1.177 (frozen) | 16 |
+| TSP selfmod | Athanor adaptive 2.6 | 2 | 2 | ratio 1.068 | 7 |
+| TSP selfmod | **Athanor adaptive + scaled checks** (incumbent) | **0** | **0** | ratio 1.049 | 7 |
+
+¹ Committed self-edits that broke the program on held-out inputs; for the synthetic loop, promotions of a non-APPROVED parent. Summed over 16 seeds. ² Median over seeds. Curve fit: held-out MSE (lower is better). TSP: tour length ÷ harness reference (lower is better; the starting program is 1.177). Synthetic: population H7 over the last 10 generations (higher is better).
+
+<p align="center"><img src="docs/assets/benchmark_v3.png" alt="Unified benchmark on held-out seeds 3000–3015" width="100%"/></p>
+
+What it shows, including what it doesn't:
+- **Safety.** On both self-modifying systems the governed incumbents committed **0 breaking edits**, against 31 and 16 for ungoverned and 8 and 4 for validity only. The TSP incumbent also had 0 severe regressions.
+- **The price is speed and best-case quality.** On the curve fit, ungoverned reached a much lower final MSE (0.433 vs 0.930) and reached MSE < 1.5 in 5.5 steps against 27.5. On TSP, every governed arm was still at the starting program at step 50, and 7 of 16 runs never reached ratio ≤ 1.05.
+- **The curve-fit incumbent had 10 severe regressions**, exactly at the tuning cases' limit of 10. Fixed-tolerance validity + Athanor had 4 but was slower.
+- **The size-scaled checks are new in 3.0.** Adding validity inputs at 50/75/100 % of the deployment instance size removed the TSP timeouts: validity only went from 4 broken commits to 0, and the adaptive arm from 2 broken / 2 severe to 0 / 0. Final ratio was 1.049 against 1.068, at the same speed. The setting was chosen on tuning seeds before this run.
+- **On the synthetic loop**, governed H7 was higher on 10 of 16 seeds, lower on 4 and tied on 2.
+
+Reproduce: `athanor bench --all` (full tables in [docs/benchmark_v3/results.md](docs/benchmark_v3/results.md), raw numbers in `results.json`).
+
 
 ## Benchmark: governed vs ungoverned
 
@@ -273,9 +334,12 @@ Details: [docs/SEARCH.md](docs/SEARCH.md). Core ATHANOR and the eval suite work 
 | `athanor evals capture tuning --id ID --title T --bad REF --good REF --seeds S --limit M<=X` | Captures a tuning failure: the bad config must violate a limit and the good one must satisfy every limit. | `0` · `2` refused |
 | `athanor registry list · show REF · lineage REF · verify` | The versioned config registry. `verify` recomputes every content hash and the ledger chain. | `0` · `1` corrupt |
 | `athanor registry register REF [--parent P] [--set cfg.k=v] --reason R` | Adds an immutable config. Semver is enforced: an arm change is major, a cfg change is minor. | `0` · `2` |
-| `athanor registry promote REF [--gate-seeds 200-215] [--allow-refine] [--bootstrap] [--dry-run] [--require-fresh-evidence]` | Eval suite with REF injected, then an Athanor verdict vs the incumbent. The decision is recorded. Stale evidence holds it with `--require-fresh-evidence`. | `0` promoted · `1` not |
+| `athanor registry promote REF [--gate-seeds S] [--allow-seed-reuse] [--allow-refine] [--bootstrap] [--dry-run] [--require-fresh-evidence]` | Eval suite with REF injected, then an Athanor verdict vs the incumbent (selfmod or tsp family) on the next **never-used** gate seed block. The decision is recorded. Stale evidence holds it with `--require-fresh-evidence`. | `0` promoted · `1` not |
 | `athanor search index · status · find Q · grep TEXT [--scope runs\|configs\|registry\|tuning\|evals\|docs\|src] · read PATH · cite PATH --pattern P · verify PATH SHA` | Local, read-only AgentSearch index over the repo, plus citations with file and line SHA-256 (needs `athanor[search]`, Python 3.11+). | `0` · `2` unavailable |
 | `athanor evals evidence [--case ID] [--cite PATH[:text]] [--check]` | Attaches citations to cases, or re-verifies them with `--check`. | `0` · `1` stale/missing · `2` unavailable |
+| `athanor doctor [--json]` | Install check and self-test: Python, dependencies, extras, a governor self-test, a short run + ledger verify + determinism check, and the registry and eval cases when run inside a checkout. | `0` ok · `1` a check failed |
+| `athanor demo [--out DIR] [--skip-evals] [--full-evals]` | One command end to end: run → verify → replay (identical digest) → eval suite (bug cases by default). | `0` · `1` a step failed |
+| `athanor bench --all [--seeds 3000-3015] [--systems synthetic,selfmod,tsp] [--steps 1000] [--out DIR]` | The unified benchmark across all three systems: ungoverned vs validity vs governed. Writes `results.json`, `results.md` and a 3-panel chart. | `0` |
 | `athanor --version` | Prints the version. | `0` |
 
 `athanor --config CFG` (the 2.0 form) still works and is the same as `athanor run`. You can also use `python -m athanor ...`.
@@ -343,7 +407,10 @@ src/athanor/
 ├── evals/         Bug2Eval integration: capture, suite runner, eval-gated promotion (athanor evals)
 ├── config_registry.py  Versioned, content-hashed config registry (athanor registry)
 ├── search.py      AgentSearch evidence layer: index, citations, stale-evidence checks (athanor search)
-├── scripts/       CLI: run · verify · replay · diff · bench · selfmod · evals · registry · search
+├── governor.py    Public adapter API: Governor, govern() for any self-modifying program
+├── seedsets.py    Seed-set policy: tuning / held-out / gate / benchmark seeds, never-reused gate blocks
+├── bench_all.py   Unified benchmark across the three systems (athanor bench --all)
+├── scripts/       CLI: run · verify · replay · diff · bench · selfmod · evals · registry · search · doctor · demo
 └── utils/         Seeding, JSONL logging, plots and dashboard
 configs/           base.yaml, toy_experiment.yaml, bench.yaml
 docs/benchmark/    Committed benchmark results (results.md, results.json)
@@ -352,6 +419,8 @@ experiments/       Runnable experiment entry points (self_modify/: run, tune, an
 docs/ALGORITHM_CARD.md, docs/TUNING_LOG.md, docs/tuning/   Algorithm card, tuning log and raw tuning data
 docs/EVALS.md, docs/METHOD.md   Eval suite + registry design; the reusable tuning/governance method
 docs/SEARCH.md     Evidence layer: citations, statuses, stale-evidence checks
+docs/benchmark_v3/ Unified 3.0 benchmark results (results.md, results.json)
+examples/          govern_quickstart.py: plug a self-modifying program into athanor.govern
 evals/cases/       Bug2Eval regression cases (bugs + tuning failures); evals/verifiers/ their verifier sources
 configs/registry/  Versioned config registry entries + hash-chained registry ledger
 docs/              Architecture notes, LaTeX manuscripts, assets
@@ -377,7 +446,7 @@ pip install -e ".[dev]"
 pytest -q
 ```
 
-The suite covers the coherence math, config validation and inheritance, the ledger (edit, delete, and reorder detection), determinism and REFINE-stream independence, the H20 and H44 gates, the decision record, the archive JSON round-trip, `diff`, and the CLI end to end (run → verify → replay → tamper). CI runs it on Python 3.10, 3.11, and 3.12, and also runs a run → verify → replay smoke check, `athanor registry verify` and the full eval suite (`athanor evals run`). It also checks that core ATHANOR still works without the `[evals]` extra. On 3.11 and 3.12 it builds the search index and re-verifies every case citation (`athanor evals evidence --check`); on 3.10 the search tests are skipped.
+The suite covers the coherence math, config validation and inheritance, the ledger (edit, delete, and reorder detection), determinism and REFINE-stream independence, the H20 and H44 gates, the decision record, the archive JSON round-trip, `diff`, and the CLI end to end (run → verify → replay → tamper). CI runs it on Python 3.10, 3.11, and 3.12, and also runs a run → verify → replay smoke check, `athanor registry verify` and the full eval suite (`athanor evals run`). It also checks that core ATHANOR still works without the `[evals]` extra, runs `athanor doctor`, `athanor demo`, the adapter example and a small `athanor bench --all` smoke run. The 3.0 tests cover the adapter API (verdicts, validity, determinism, the ungoverned baseline, error messages), the seed-set policy, the size-scaled TSP inputs, the TSP promotion signature and the operational commands. On 3.11 and 3.12 it builds the search index and re-verifies every case citation (`athanor evals evidence --check`); on 3.10 the search tests are skipped.
 
 ## Theory & Manuscripts
 
@@ -394,7 +463,8 @@ H7 coherence geometry law (`h7_coherence_geometry_law_v2_1.tex`), the Codex–DG
 - [x] Transfer test on a second, larger self-modifier (TSP solver); admission/lockout condition derived (2.6)
 - [x] Bug2Eval regression suite, versioned config registry, eval-gated Athanor-governed promotion, METHOD.md (2.7)
 - [x] AgentSearch evidence layer: cited results, stale-evidence checks before promotion and tuning, `athanor search` (2.8)
-- [ ] Probe sets that cover deployment input sizes (every governed TSP break was outside the probe range)
+- [x] Public adapter API (`athanor.govern`, `Governor`), `athanor doctor`, `athanor demo`, unified `athanor bench --all`, size-scaled validity inputs, never-reused gate seeds (3.0)
+- [ ] Size-scaled inputs for the curve-fitting testbed, and automatic deployment-size discovery for user programs
 - [ ] Robust (worst-case over seed subsets) tuning objective, since the tuned optimum overfit its safety
 - [ ] Pluggable telemetry backends for real model or agent traces (beyond the built-in linear dynamics)
 - [ ] Signed run digests (for example Sigstore or GPG) to make whole-file rewrites detectable

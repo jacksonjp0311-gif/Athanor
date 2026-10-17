@@ -1,0 +1,38 @@
+{
+  "evidence": [
+    {
+      "broken_commits": 4,
+      "never_good": 9,
+      "path": "docs/tsp_selfmod/results.md",
+      "seeds": "0-15",
+      "severe_regressions": 5,
+      "sha256": "6adcf36da4139b254bb9d9a67bf0ae9bee89da00c20751ab9396e82362b187ac",
+      "source": "docs/tsp_selfmod/results.md"
+    }
+  ],
+  "family": "tsp",
+  "name": "adaptive",
+  "parent": "tsp/validity-athanor@1.0.0",
+  "reason": "The 2.5 conservative self-mod setting carried over to TSP unchanged.",
+  "ref": "tsp/adaptive@1.0.0",
+  "registered_with_athanor": "3.0.0",
+  "schema": "athanor.config/1",
+  "spec": {
+    "arm": {
+      "athanor": true,
+      "gamma": 6.0,
+      "validity": true
+    },
+    "cfg": {
+      "adaptive_basis": "best",
+      "adaptive_cap": 6.0,
+      "adaptive_floor": 0.7,
+      "adaptive_halflife": 50,
+      "adaptive_power": 3.0,
+      "refine_floor": 0.5,
+      "threshold_h7": 0.75
+    }
+  },
+  "spec_hash": "b6b33be53e4a01f0d48d725df20fa854fe0ec63300a89c8e41c4d3022ca7ad7f",
+  "version": "1.0.0"
+}

@@ -1,0 +1,38 @@
+{
+  "evidence": [
+    {
+      "broken_commits": 0,
+      "path": "docs/tsp_selfmod/probe_scaling_tuning.json",
+      "seeds": "100-115",
+      "severe_regressions": 2,
+      "sha256": "218d03406ab7640418980a01a04669db231a4fb002973e035d4943920f4a8012",
+      "source": "docs/tsp_selfmod/probe_scaling_tuning.json"
+    }
+  ],
+  "family": "tsp",
+  "name": "adaptive",
+  "parent": "tsp/adaptive@1.1.0",
+  "reason": "3.0.0: validity checks include inputs at 50/75/100 % of the deployment size (selected on tuning seeds 100-115: broken 2 -> 0, severe 4 -> 2, same median ratio).",
+  "ref": "tsp/adaptive@1.2.0",
+  "registered_with_athanor": "3.0.0",
+  "schema": "athanor.config/1",
+  "spec": {
+    "arm": {
+      "athanor": true,
+      "gamma": 6.0,
+      "validity": true
+    },
+    "cfg": {
+      "adaptive_basis": "best",
+      "adaptive_cap": 6.0,
+      "adaptive_floor": 0.7,
+      "adaptive_halflife": null,
+      "adaptive_power": 3.0,
+      "probe_scaling": "checks",
+      "refine_floor": 0.5,
+      "threshold_h7": 0.78
+    }
+  },
+  "spec_hash": "8fdb5a6131de2fe61f1cdea88cae7bd33dacfa7d284b68578739d8b5a1866bc2",
+  "version": "1.2.0"
+}

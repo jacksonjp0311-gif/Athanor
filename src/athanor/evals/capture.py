@@ -128,12 +128,15 @@ def parse_limit(text: str) -> Dict[str, Any]:
 
 DEFAULT_FINGERPRINT = ["broken_commits", "severe_regressions", "commits", "never_reached_1p5",
                        "median_steps_to_1p5", "median_mse_100", "median_mse_final"]
+TSP_FINGERPRINT = ["broken_commits", "severe_regressions", "commits", "never_good", "frozen_runs",
+                   "median_steps_to_good", "median_held_50", "median_held_1000"]
+FINGERPRINTS = {"selfmod": DEFAULT_FINGERPRINT, "tsp": TSP_FINGERPRINT}
 
 
 def capture_tuning(*, case_id: str, title: str, bad_ref: str, good_ref: str, seeds: Sequence[int], steps: int,
                    limits: Sequence[Dict[str, Any]], registry: Registry, out_root: str = DEFAULT_CASES,
                    evidence: Optional[Dict[str, Any]] = None, prompt: Optional[str] = None,
-                   fingerprint_metrics: Sequence[str] = DEFAULT_FINGERPRINT, timeout: int = 900,
+                   fingerprint_metrics: Optional[Sequence[str]] = None, timeout: int = 900,
                    tags: Optional[List[str]] = None, force: bool = False, cites: Sequence = (),
                    attach_evidence: Optional[bool] = None, repo: str = ".") -> Dict[str, Any]:
     """Capture a tuning failure: ``bad_ref`` violates ``limits`` on ``seeds``; ``good_ref`` satisfies them."""
@@ -145,6 +148,9 @@ def capture_tuning(*, case_id: str, title: str, bad_ref: str, good_ref: str, see
         raise ValueError("bad and good configs must be in the same family")
     if not limits:
         raise ValueError("at least one --limit is required")
+    if bad["family"] not in FINGERPRINTS:
+        raise ValueError(f"family {bad['family']!r} has no experiment runner (supported: {', '.join(FINGERPRINTS)})")
+    fingerprint_metrics = list(fingerprint_metrics or FINGERPRINTS[bad["family"]])
     case = {"family": bad["family"], "seeds": [int(s) for s in seeds], "steps": int(steps),
             "limits": list(limits), "fingerprint_metrics": list(fingerprint_metrics),
             "bad": bad_ref, "good": good_ref}

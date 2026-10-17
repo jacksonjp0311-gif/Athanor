@@ -1,0 +1,50 @@
+{
+  "artifacts": {
+    "after": {
+      "bytes": 1863,
+      "path": "artifacts/workspace_after.tar.gz",
+      "sha256": "e5d3248b401ab088e56794edb7f1973e9166b169aba65cfb97b63e8fdd5bcb7d"
+    },
+    "before": {
+      "bytes": 1788,
+      "path": "artifacts/workspace_before.tar.gz",
+      "sha256": "8a35d2f9fd9e12cbba62853220f0048949594e693078e27975aa75ee167f38e8"
+    },
+    "prompt": {
+      "bytes": 311,
+      "path": "prompt.md",
+      "sha256": "bb5e60e3f651ef5f38447416a2b0828cc84bb0b4e9eb6f0e5b503a4958c12a33"
+    }
+  },
+  "case_id": "ATH-T006",
+  "created_at": "2026-10-17T12:20:43Z",
+  "expected": {
+    "after": "pass",
+    "before": "fail",
+    "verify_exit_code": 0
+  },
+  "schema_version": "1.0",
+  "source": {
+    "after": "/tmp/athanor-capture-3w56kxrr/after",
+    "before": "/tmp/athanor-capture-3w56kxrr/before",
+    "changed_files": [],
+    "kind": "directory_pair"
+  },
+  "tags": [
+    "athanor",
+    "tuning",
+    "tsp"
+  ],
+  "title": "Fixed drift tolerance freezes the TSP solver (no edit is ever committed)",
+  "verification": {
+    "argv": [
+      "python",
+      "verify_config.py"
+    ],
+    "protected_paths": [
+      "verify_config.py",
+      "case.json"
+    ],
+    "timeout_sec": 900
+  }
+}

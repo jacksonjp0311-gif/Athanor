@@ -1,4 +1,4 @@
-"""Rebuild the seeded registry and eval cases from Athanor's real history (v2.7.0).
+"""Rebuild the seeded registry and eval cases from Athanor's real history (v2.7.0; TSP family added in 3.0.0).
 
     python evals/seed_history.py            # from the repo root, with athanor[evals] installed
 
@@ -87,6 +87,60 @@ TUNING = [
 ]
 
 
+# ---------------------------------------------------------------- TSP family (3.0.0)
+TSP_RES = "docs/tsp_selfmod/results.md"
+_TSP_TUNED = json.load(open("experiments/tsp_selfmod/tuned.json"))["arm"]
+TSP_ADAPTIVE_ARM = {k: _TSP_TUNED[k] for k in ("validity", "athanor", "gamma")}
+
+
+def configs_tsp():
+    def reg(ref, spec, parent, reason, evidence):
+        if not os.path.exists(REG.entry_path(ref)):
+            REG.register(ref, spec, parent=parent, reason=reason, evidence=evidence)
+
+    reg("tsp/ungoverned@1.0.0", {"arm": {"validity": False, "athanor": False, "gamma": None}, "cfg": {}}, None,
+        "2.6.0 TSP baseline: every improving self-edit is committed.",
+        [{"source": TSP_RES, "seeds": "0-15", "broken_commits": 16, "severe_regressions": 17}])
+    reg("tsp/validity-athanor@1.0.0", {"arm": {"validity": True, "athanor": True, "gamma": None}, "cfg": {}},
+        "tsp/ungoverned@1.0.0", "2.6.0 fixed-tolerance validity + Athanor (tau 0.70).",
+        [{"source": TSP_RES, "seeds": "0-15", "frozen_runs": 16}])
+    reg("tsp/adaptive@1.0.0", {"arm": {"validity": True, "athanor": True,
+                                       "gamma": float(TUNED_ADAPTIVE_CONSERVATIVE["gamma"])},
+                               "cfg": dict(TUNED_ADAPTIVE_CONSERVATIVE["cfg"])},
+        "tsp/validity-athanor@1.0.0", "The 2.5 conservative self-mod setting carried over to TSP unchanged.",
+        [{"source": TSP_RES, "seeds": "0-15", "broken_commits": 4, "severe_regressions": 5, "never_good": 9}])
+    reg("tsp/adaptive@1.1.0", {"arm": TSP_ADAPTIVE_ARM, "cfg": dict(_TSP_TUNED["cfg"])},
+        "tsp/adaptive@1.0.0", "2.6.0 retune on seeds 100-115 (tau 0.78, no half-life).",
+        [{"source": TSP_RES, "seeds": "0-15", "broken_commits": 2, "severe_regressions": 2}])
+    reg("tsp/adaptive@1.2.0", {"arm": TSP_ADAPTIVE_ARM, "cfg": {**_TSP_TUNED["cfg"], "probe_scaling": "checks"}},
+        "tsp/adaptive@1.1.0", "3.0.0: validity checks include inputs at 50/75/100 % of the deployment size "
+        "(selected on tuning seeds 100-115: broken 2 -> 0, severe 4 -> 2, same median ratio).",
+        [{"source": "docs/tsp_selfmod/probe_scaling_tuning.json", "seeds": "100-115", "broken_commits": 0,
+          "severe_regressions": 2}])
+    hist = {e["ref"] for e in REG.events() if e.get("event") == "reject"}
+    for ref, why in [
+        ("tsp/ungoverned@1.0.0", "historical: broke on all 16 held-out seeds (15 silent wrong answers)"),
+        ("tsp/validity-athanor@1.0.0", "historical: fixed tolerance froze on all 16 held-out seeds"),
+        ("tsp/adaptive@1.0.0", "historical: partial transfer; 4 broken, 5 severe, 9/16 never good"),
+    ]:
+        if ref not in hist:
+            REG.record("reject", ref, reason=why, historical=True)
+
+
+TSP_TUNING = [
+    ("ATH-T005", "The 2.5 conservative setting does not transfer to the TSP solver",
+     "tsp/adaptive@1.0.0", "tsp/adaptive@1.1.0", range(0, 16), LIMITS,
+     {"source": TSP_RES, "finding": "carried-over: broken 4 / severe 5; retuned: 2 / 2"}),
+    ("ATH-T006", "Fixed drift tolerance freezes the TSP solver (no edit is ever committed)",
+     "tsp/validity-athanor@1.0.0", "tsp/adaptive@1.1.0", range(0, 16),
+     LIMITS + [{"metric": "frozen_runs", "op": "<=", "value": 0.0}, {"metric": "never_good", "op": "<=", "value": 8.0}],
+     {"source": TSP_RES, "finding": "frozen 16/16, never good 16 vs 0 frozen, 3 never good"}),
+    ("ATH-T007", "Ungoverned TSP self-modification ships silent wrong answers",
+     "tsp/ungoverned@1.0.0", "tsp/adaptive@1.1.0", range(0, 16), LIMITS,
+     {"source": TSP_RES, "finding": "broken 16 (15 silent invalid) vs 2"}),
+]
+
+
 def cases():
     for cid, title, ver in BUGS:
         if os.path.isdir(os.path.join("evals/cases", cid)):
@@ -100,8 +154,15 @@ def cases():
         r = capture_tuning(case_id=cid, title=title, bad_ref=bad, good_ref=good, seeds=list(seeds), steps=1000,
                            limits=limits, registry=REG, evidence=ev)
         print(cid, r["validation"], r["sidecar"]["recorded"]["before_violations"], flush=True)
+    for cid, title, bad, good, seeds, limits, ev in TSP_TUNING:
+        if os.path.isdir(os.path.join("evals/cases", cid)):
+            continue
+        r = capture_tuning(case_id=cid, title=title, bad_ref=bad, good_ref=good, seeds=list(seeds), steps=1000,
+                           limits=limits, registry=REG, evidence=ev, attach_evidence=False)
+        print(cid, r["validation"], r["sidecar"]["recorded"]["before_violations"], flush=True)
 
 
 if __name__ == "__main__":
     configs()
+    configs_tsp()
     cases()

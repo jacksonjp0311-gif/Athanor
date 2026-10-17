@@ -1,0 +1,106 @@
+{
+  "athanor_version": "3.0.0",
+  "bug2eval_version": "0.1.3",
+  "case_id": "ATH-T006",
+  "case_sha": "187a9dfe8e9253ab551f2fc0ba485c0a2316ebe3154c582705931c872eb14fe5",
+  "contract": {
+    "bad": "tsp/validity-athanor@1.0.0",
+    "family": "tsp",
+    "fingerprint_metrics": [
+      "broken_commits",
+      "severe_regressions",
+      "commits",
+      "never_good",
+      "frozen_runs",
+      "median_steps_to_good",
+      "median_held_50",
+      "median_held_1000"
+    ],
+    "good": "tsp/adaptive@1.1.0",
+    "limits": [
+      {
+        "metric": "broken_commits",
+        "op": "<=",
+        "value": 2.0
+      },
+      {
+        "metric": "severe_regressions",
+        "op": "<=",
+        "value": 10.0
+      },
+      {
+        "metric": "frozen_runs",
+        "op": "<=",
+        "value": 0.0
+      },
+      {
+        "metric": "never_good",
+        "op": "<=",
+        "value": 8.0
+      }
+    ],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "steps": 1000
+  },
+  "family": "tsp",
+  "inject": "config",
+  "kind": "tuning",
+  "provenance": {
+    "bad": "tsp/validity-athanor@1.0.0",
+    "bad_spec_hash": "fe75f62a42c12a4c198963f0c769f416d20f0f2a4fd8902b148f57aa69fbdd0d",
+    "evidence": {
+      "finding": "frozen 16/16, never good 16 vs 0 frozen, 3 never good",
+      "source": "docs/tsp_selfmod/results.md"
+    },
+    "good": "tsp/adaptive@1.1.0",
+    "good_spec_hash": "5f8fad362f6e59141a9416dbdab7ee316767de877015f52e4b93c7d94e57b19f"
+  },
+  "recorded": {
+    "after_exit": 0,
+    "after_fingerprint": "a812d62e44d4645e92adae4abd8d016ef81eab2449c4fca1d757a55af10aa9eb",
+    "after_metrics": {
+      "broken_commits": 2,
+      "commits": 282,
+      "frozen_runs": 0,
+      "median_held_1000": 1.0464725636510561,
+      "median_held_50": 1.0962102792910227,
+      "median_steps_to_good": 76.0,
+      "never_good": 3,
+      "severe_regressions": 2
+    },
+    "before_exit": 1,
+    "before_fingerprint": "19e0cee5462bb43e3443467a086b11390d5590c425c4c39b534b16035dee070a",
+    "before_metrics": {
+      "broken_commits": 0,
+      "commits": 0,
+      "frozen_runs": 16,
+      "median_held_1000": 1.1771816438120328,
+      "median_held_50": 1.1771816438120328,
+      "median_steps_to_good": "inf",
+      "never_good": 16,
+      "severe_regressions": 0
+    },
+    "before_violations": [
+      "frozen_runs=16 violates <= 0.0",
+      "never_good=16 violates <= 8.0"
+    ]
+  },
+  "schema": "athanor.eval/1"
+}

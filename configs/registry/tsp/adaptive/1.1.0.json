@@ -1,0 +1,37 @@
+{
+  "evidence": [
+    {
+      "broken_commits": 2,
+      "path": "docs/tsp_selfmod/results.md",
+      "seeds": "0-15",
+      "severe_regressions": 2,
+      "sha256": "6adcf36da4139b254bb9d9a67bf0ae9bee89da00c20751ab9396e82362b187ac",
+      "source": "docs/tsp_selfmod/results.md"
+    }
+  ],
+  "family": "tsp",
+  "name": "adaptive",
+  "parent": "tsp/adaptive@1.0.0",
+  "reason": "2.6.0 retune on seeds 100-115 (tau 0.78, no half-life).",
+  "ref": "tsp/adaptive@1.1.0",
+  "registered_with_athanor": "3.0.0",
+  "schema": "athanor.config/1",
+  "spec": {
+    "arm": {
+      "athanor": true,
+      "gamma": 6.0,
+      "validity": true
+    },
+    "cfg": {
+      "adaptive_basis": "best",
+      "adaptive_cap": 6.0,
+      "adaptive_floor": 0.7,
+      "adaptive_halflife": null,
+      "adaptive_power": 3.0,
+      "refine_floor": 0.5,
+      "threshold_h7": 0.78
+    }
+  },
+  "spec_hash": "5f8fad362f6e59141a9416dbdab7ee316767de877015f52e4b93c7d94e57b19f",
+  "version": "1.1.0"
+}

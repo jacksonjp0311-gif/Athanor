@@ -26,6 +26,10 @@ CITES = {
     "ATH-T003": [("docs/TUNING_LOG.md", "At τ = 0.8 the threshold sits right at"), ("docs/tuning/log.json", None)],
     "ATH-T004": [("docs/selfmod/arms_results.md", "Commits that broke the program"),
                  ("docs/selfmod/arms_results.json", None)],
+    "ATH-T005": [("docs/tsp_selfmod/results.md", "| validity+athanor-conservative |"),
+                 ("docs/tsp_selfmod/results.md", "| validity+athanor-tuned |"), ("docs/tsp_selfmod/results.json", None)],
+    "ATH-T006": [("docs/tsp_selfmod/results.md", "| validity+athanor |"), ("docs/tsp_selfmod/results.json", None)],
+    "ATH-T007": [("docs/tsp_selfmod/results.md", "| ungoverned |"), ("docs/tsp_selfmod/results.json", None)],
 }
 
 if __name__ == "__main__":
