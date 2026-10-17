@@ -71,11 +71,12 @@ def _evals_evidence(a) -> int:
         if a.check:
             chk = check_case(ac)
             out.append({"case_id": ac.case_id, "checked": chk and chk["checked"],
-                        "stale": chk and [{k: x.get(k) for k in ("path", "status", "detail")} for x in chk["stale"]]})
+                        "stale": chk and [{k: x.get(k) for k in ("path", "status", "detail")} for x in chk["stale"]],
+                        "hard": len(chk["hard"]) if chk else 0})
         else:
             out.append(attach(ac, _cites(a), refresh=not a.no_refresh))
     _print(out)
-    if a.check and any(r["stale"] for r in out):
+    if a.check and any(r["hard"] for r in out):  # stale/missing; soft changes are reported only
         return 1
     return 0
 
@@ -212,7 +213,7 @@ def add_parsers(sub) -> None:
     p = es.add_parser("evidence", help="attach (default) or --check AgentSearch citations of cases (athanor[search])")
     p.add_argument("--case", action="append", help="case id; repeatable (default: all)")
     p.add_argument("--cite", action="append", help="extra citation PATH or PATH:literal text")
-    p.add_argument("--check", action="store_true", help="re-verify citations; exit 1 if any are stale")
+    p.add_argument("--check", action="store_true", help="re-verify citations; exit 1 if a cited line changed or a file is missing")
     p.add_argument("--no-refresh", action="store_true", help="do not rescan the index first")
     p.add_argument("--cases", **common_cases)
     p.set_defaults(fn=_g_evals_evidence)
