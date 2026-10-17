@@ -33,7 +33,7 @@ import sys
 from typing import Any, Dict, List, Optional
 
 SEARCH_HINT = ('AgentSearch is not installed (needs Python 3.11+). Install the extra: '
-               'pip install "athanor[search] @ git+https://github.com/jacksonjp0311-gif/Athanor.git"')
+               'pip install "athanor[search] @ git+https://github.com/jacksonjp0311-gif/Athanor.git@v2.8.0"')
 EXCLUDES = (".git", ".venv", "venv", "__pycache__", ".athanor", ".pytest_cache", "node_modules",
             "dist", "build", ".mypy_cache", ".ruff_cache")
 SCOPES = {

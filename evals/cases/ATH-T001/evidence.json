@@ -1,0 +1,48 @@
+{
+  "agentsearch_version": "1.0.0rc5",
+  "athanor_version": "2.8.0",
+  "citations": [
+    {
+      "note": null,
+      "path": "configs/registry/selfmod/adaptive/1.0.0.json",
+      "sha256": "f3015e8dd13e4f335503b19c5d3db150cca6ffde438d2c77a2b297c12e52db75",
+      "total_lines": 37,
+      "whole_file": true
+    },
+    {
+      "note": null,
+      "path": "configs/registry/selfmod/adaptive/1.1.0.json",
+      "sha256": "89715c059e60f29768824908c35746fcf438885eaa271b6be5c6b0e10dded31b",
+      "total_lines": 37,
+      "whole_file": true
+    },
+    {
+      "end_line": 120,
+      "excerpt": "| **conservative** (τ 0.75, adaptive): broken / severe / MSE@100 / MSE@1000 | 0 / 1 / 1.027 / 0.802 | 0 / **2** / 1.247 / 0.903 |\n\n- **The selected setting overfit its safety.** Severe regressions went from 8 to 34 on held-out seeds. Its speed held up: MSE@100 was 0.86× ungoverned on both seed sets, and MSE@1000 was 0.697 vs 0.862 ungoverned.\n- **The conservative setting generalised.** It had 0 broken, 2 severe (vs 3 for non-adaptive validity + Athanor and 140 for ungoverned), and its worst committed MSE was 3.8. Its MSE@100 is within 6 % of ungoverned (1.247 vs 1.173) and MSE@1000 within 5 % (0.903 vs 0.862). **It does not match ungoverned speed on every measure:** median steps to < 1.5 is 34.5 vs 8.5, and median best-ever MSE is 0.819 vs 0.206.\n",
+      "lines_sha256": "ef2bf9b81ad5cd5c743782b14890966e4e1187b00a9813ddc050670041bd4704",
+      "note": null,
+      "path": "docs/TUNING_LOG.md",
+      "pattern": "The selected setting overfit its safety",
+      "sha256": "2136c8a513e98cd21fbed9f85327818fb811aff00a92aff7c43ca60afc172d13",
+      "start_line": 116
+    },
+    {
+      "end_line": 8,
+      "excerpt": "|---|---:|---:|---:|---:|---:|---:|---:|\n| Commits that broke the program | 23 | 10 | 0 | 0 | 21 | 0 | 0 |\n| Severe regressions (>2× worse or broken) | 140 | 118 | 3 | 3 | 53 | 34 | 2 |\n| Worst held-out MSE ever committed | 2.2e+143 | 3.3e+247 | 527.980 | 527.980 | 2.1e+21 | 2.1e+21 | 3.767 |\n| Median held-out MSE @100 | 1.173 | 1.276 | 2.250 | 2.250 | 1.037 | 1.011 | 1.247 |",
+      "lines_sha256": "1408f6229d42390fa8baca25a9472a355b84c78a911f044bc8429c62bbdae1d7",
+      "note": null,
+      "path": "docs/selfmod/arms_results.md",
+      "pattern": "Severe regressions (>2× worse or broken)",
+      "sha256": "bb53458aab5010644eaf52ded612cdef23766783fa3d81ca63d6004de7df32d2",
+      "start_line": 4
+    },
+    {
+      "note": null,
+      "path": "docs/selfmod/arms_results.json",
+      "sha256": "4e2e00736fce39af159393e215ef9ee85bd414fc8987536e5a3f9f589806d26f",
+      "total_lines": 7004,
+      "whole_file": true
+    }
+  ],
+  "schema": "athanor.evidence/1"
+}

@@ -1,0 +1,34 @@
+{
+  "agentsearch_version": "1.0.0rc5",
+  "athanor_version": "2.8.0",
+  "citations": [
+    {
+      "note": null,
+      "path": "evals/verifiers/ATH-B004_run_folder_collision.py",
+      "sha256": "302d4c0cbf2c7eea319e481a2d528aaaca40c821b1974b3d3e5f25489d70006d",
+      "total_lines": 32,
+      "whole_file": true
+    },
+    {
+      "end_line": 28,
+      "excerpt": "    return int(ss.generate_state(1, dtype=np.uint32)[0])\n\ndef _make_run_path(out_dir: str, tag: str | None) -> str:\n    os.makedirs(out_dir, exist_ok=True)\n    if tag:",
+      "lines_sha256": "f777b15548e94bb276eaad6dc5e1d932b207cfbf80ce53131911c1a861d3dcc0",
+      "note": null,
+      "path": "src/athanor/evolution/dgm_loop.py",
+      "pattern": "def _make_run_path",
+      "sha256": "b9ba4cc86edb580ef654ff96fcf23bfc37641e8f46c944315ad82f6d6523697b",
+      "start_line": 24
+    },
+    {
+      "end_line": 153,
+      "excerpt": "- `inherits:` did a shallow `dict.update`, silently dropping nested keys (e.g. `archive.novelty_eps`); now a deep merge with cycle detection.\n- Telemetry seeds `seed + g*10000 + i + attempt` collided (refine attempt 1 of candidate *i* reused candidate *i+1*'s seed); now derived via `SeedSequence`.\n- Two runs started in the same second shared one folder and appended to the same ledger; untagged runs now get a unique folder, tagged runs refuse to overwrite an existing ledger.\n- Validation now rejects `refine_floor > threshold_h7`.\n",
+      "lines_sha256": "42aabb1d8bb44e0407a3b8c13d2809259f8ee6291bd06c5a75489f0626e20d41",
+      "note": null,
+      "path": "CHANGELOG.md",
+      "pattern": "Two runs started in the same second shared one folder",
+      "sha256": "ab41d21f466fd176ff4240f458ceba23dc23ea68e5156801a99f4bcb77f5647b",
+      "start_line": 149
+    }
+  ],
+  "schema": "athanor.evidence/1"
+}

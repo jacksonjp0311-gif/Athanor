@@ -1,0 +1,38 @@
+{
+  "agentsearch_version": "1.0.0rc5",
+  "athanor_version": "2.8.0",
+  "citations": [
+    {
+      "note": null,
+      "path": "configs/registry/selfmod/validity-athanor/1.1.0.json",
+      "sha256": "2dc788de8d5231365c327b1e76eba8d53f6b40cb20ca19cbaa8e1cd29d07570f",
+      "total_lines": 31,
+      "whole_file": true
+    },
+    {
+      "note": null,
+      "path": "configs/registry/selfmod/validity-athanor/1.0.0.json",
+      "sha256": "2b6548f715ce55bcdf54c0cea28e4817ca3799d58efe2f411fef37d1cc1fb63c",
+      "total_lines": 27,
+      "whole_file": true
+    },
+    {
+      "end_line": 92,
+      "excerpt": "  | 0.8 | 2.971 | 0 | never |\n\n  At τ = 0.8 the threshold sits right at the structural cost of the smallest structural edit (`x → x + c` costs `w_s · 0.5 = 0.25`, and C ≥ 0.8 needs ΔΦ ≤ 0.25), so nothing structural passes. τ, w_s and the probe set interact through `ΔΦ_max = 1/τ − 1`.\n- **Feedback instability.** With `basis = current`, the tolerance is a positive feedback on regressions (worse error → looser gate → worse edits). Measured: severe 30 vs 8 for the otherwise-selected setting.\n",
+      "lines_sha256": "4dd7dd13c5be7cd3dcb6b274da0c0a600e98f55f4be9df5a4ab63f5e903dfa2f",
+      "note": null,
+      "path": "docs/TUNING_LOG.md",
+      "pattern": "At τ = 0.8 the threshold sits right at",
+      "sha256": "2136c8a513e98cd21fbed9f85327818fb811aff00a92aff7c43ca60afc172d13",
+      "start_line": 88
+    },
+    {
+      "note": null,
+      "path": "docs/tuning/log.json",
+      "sha256": "84a3cad179a7a8177598a646276ed33f4c26fad3c00b14d2329ec570c1a585ab",
+      "total_lines": 6958,
+      "whole_file": true
+    }
+  ],
+  "schema": "athanor.evidence/1"
+}

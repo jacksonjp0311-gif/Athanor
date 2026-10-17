@@ -144,6 +144,10 @@ actually fail (for tuning, it must *violate a limit*, exit 1, and not merely cra
 
 The candidate traded one broken commit for far fewer severe regressions and much faster progress. The incumbent's 13 severe regressions on these seeds are above the limit of 10 used by the tuning cases. The decision is the `promote` event in `configs/registry/ledger.jsonl` (`athanor registry show selfmod/adaptive@1.1.0`).
 
+## Evidence: citations and stale-evidence checks (2.8)
+
+With `athanor[search]` (Python 3.11+), each case can carry `evidence.json`: the lines it rests on, cited through AgentSearch with the SHA-256 of the file and of the cited lines. Every `athanor evals run` re-verifies them (row field `evidence: {checked, stale, hard}`, summary fields `evidence_checked` and `stale_evidence`). Stale evidence is reported but does not change a case's status. `athanor registry promote --require-fresh-evidence` records `refine` instead of promoting when a cited result has changed or is gone. Registry entries registered by `tune.py --register-best` pin their rows of `docs/tuning/log.json` by hash. Full design: [SEARCH.md](SEARCH.md).
+
 ## Caveats
 
 - **The suite is a floor, not an objective.** Tuning cases ATH-T001 and ATH-T004 run on the held-out seeds 0–15. Once a gate checks those seeds over and over, they stop being truly held out for later configs, so confirm any new config once on fresh seeds before quoting held-out numbers. The promotion verdict already uses separate seeds (200–215).

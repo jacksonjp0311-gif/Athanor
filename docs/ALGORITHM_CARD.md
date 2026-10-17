@@ -1,4 +1,4 @@
-# ATHANOR Algorithm Card (v2.7.0)
+# ATHANOR Algorithm Card (v2.8.0)
 
 ## Purpose
 
@@ -101,6 +101,8 @@ append {event, ref, spec_hash, suite_digest, verdict, H7, ΔΦ stats} to configs
 This is the same verdict rule as for a self-edit, with a config change as the edit and per-seed behaviour as the probes. A seed counts as coherent when `ΔΦ_s ≤ 1/τ − 1 = 0.4286`, i.e. when the RMS log10-MSE shift across checkpoints is under about 0.43 decades. **Measured** (`selfmod/adaptive@1.1.0` over `selfmod/validity-athanor@1.0.0`): suite 8/8 PASS, H7 = 0.8125, mean ΔΦ 0.296, max ΔΦ 0.654 → APPROVE.
 
 **Registry invariants (tested):** entries are immutable and content-hashed (`spec_hash = SHA-256(canonical {arm, cfg})`), and status comes only from the hash-chained ledger. Semver is enforced against a same-name parent (an arm change is major, a cfg change is minor, an identical spec is a patch). `athanor registry verify` detects any edit after registration.
+
+**Evidence freshness (2.8.0, optional `athanor[search]`).** Before promotion or a tuning round relies on a past result, each citation `{path, sha256, lines, lines_sha256}` is re-verified: `fresh` (same file bytes) · `changed-lines-intact` · `moved` · `stale` (cited lines changed) · `missing`. Only `stale`/`missing` are hard: with `--require-fresh-evidence` the promotion decision becomes `refine` and the tuner stops. Registry evidence from the tuner is a hashed row slice of the append-only tuning log. See [SEARCH.md](SEARCH.md).
 
 ## Complexity
 

@@ -63,6 +63,8 @@ def _cites(a):
 
 
 def _evals_evidence(a) -> int:
+    from ..search import require_agentsearch
+    require_agentsearch()  # clear "needs athanor[search] / Python 3.11+" error instead of empty results
     from ..evals.cases import load_cases
     from ..evals.evidence import attach, check_case
     cases = load_cases(a.cases, ids=a.case or None)

@@ -1,0 +1,38 @@
+{
+  "agentsearch_version": "1.0.0rc5",
+  "athanor_version": "2.8.0",
+  "citations": [
+    {
+      "note": null,
+      "path": "configs/registry/selfmod/ungoverned/1.0.0.json",
+      "sha256": "70f5f694d9b96ba06786f20cc854696734dd68590d67dc2bf12747741bf7ed23",
+      "total_lines": 27,
+      "whole_file": true
+    },
+    {
+      "note": null,
+      "path": "configs/registry/selfmod/validity-athanor/1.0.0.json",
+      "sha256": "2b6548f715ce55bcdf54c0cea28e4817ca3799d58efe2f411fef37d1cc1fb63c",
+      "total_lines": 27,
+      "whole_file": true
+    },
+    {
+      "end_line": 7,
+      "excerpt": "| Metric | ungoverned | validity | athanor | validity+athanor | athanor-adaptive | validity+athanor-adaptive | validity+athanor-adaptive-τ0.75 |\n|---|---:|---:|---:|---:|---:|---:|---:|\n| Commits that broke the program | 23 | 10 | 0 | 0 | 21 | 0 | 0 |\n| Severe regressions (>2× worse or broken) | 140 | 118 | 3 | 3 | 53 | 34 | 2 |\n| Worst held-out MSE ever committed | 2.2e+143 | 3.3e+247 | 527.980 | 527.980 | 2.1e+21 | 2.1e+21 | 3.767 |",
+      "lines_sha256": "aec903b925694aef0c2a9c0e6a7bbb95f9e5eff1895addef7c9ba50e4f9fc2c7",
+      "note": null,
+      "path": "docs/selfmod/arms_results.md",
+      "pattern": "Commits that broke the program",
+      "sha256": "bb53458aab5010644eaf52ded612cdef23766783fa3d81ca63d6004de7df32d2",
+      "start_line": 3
+    },
+    {
+      "note": null,
+      "path": "docs/selfmod/arms_results.json",
+      "sha256": "4e2e00736fce39af159393e215ef9ee85bd414fc8987536e5a3f9f589806d26f",
+      "total_lines": 7004,
+      "whole_file": true
+    }
+  ],
+  "schema": "athanor.evidence/1"
+}

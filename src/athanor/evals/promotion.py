@@ -112,7 +112,6 @@ def promote(registry: Registry, ref: str, *, cases_root: str, out_dir: Optional[
         decision, why = "refine", ("stale evidence: " + ", ".join(sorted({h["path"] for h in evidence["hard"]}))
                                    + " changed since it was cited; re-verify before promoting")
         report["verdict"] = None
-        report["verdict"] = None
     elif incumbent_ref is None:
         decision, why = "promote", "bootstrap: first incumbent of the family (suite passed)"
         report["verdict"] = None
@@ -151,23 +150,36 @@ def check_promotion_evidence(registry: Registry, entry: Dict[str, Any], cases_ro
     AgentSearch citations of the tuning cases of its family.
     """
     import os
+    from ..config_registry import check_row_evidence
     from ..search import search_available
+    repo = os.path.dirname(os.path.dirname(os.path.abspath(cases_root)))
+    rows = check_row_evidence(entry.get("evidence", []), repo)
     if not search_available():
-        return {"checked": None, "note": "AgentSearch not installed; evidence not verified"}
+        if not rows:
+            return {"checked": None, "note": "AgentSearch not installed; evidence not verified"}
+        return _evidence_report(rows, {"registry_rows": len(rows)},
+                                note="AgentSearch not installed; only pinned log rows verified")
     from ..search import EvidenceIndex, read_evidence
     from .cases import load_cases
-    repo = os.path.dirname(os.path.dirname(os.path.abspath(cases_root)))
     cites = [e for e in entry.get("evidence", []) if isinstance(e, dict) and e.get("sha256") and e.get("path")]
-    sources = {"registry": len(cites)}
+    sources = {"registry": len(cites), "registry_rows": len(rows)}
     for ac in load_cases(cases_root, kinds=["tuning"]):
         if ac.family == entry["family"]:
             c = read_evidence(ac.path)
             sources[ac.case_id] = len(c)
             cites.extend(c)
-    if not cites:
-        return {"checked": 0, "stale": [], "hard": [], "sources": sources}
-    with EvidenceIndex(repo) as idx:
-        res = idx.check(cites)
-    return {"checked": res["checked"], "fresh": res["fresh"], "sources": sources,
-            "stale": [{k: x.get(k) for k in ("path", "status", "detail")} for x in res["stale"]],
-            "hard": [{k: x.get(k) for k in ("path", "status", "detail")} for x in res["hard"]]}
+    results = list(rows)
+    if cites:
+        with EvidenceIndex(repo) as idx:
+            results += idx.check(cites)["results"]
+    return _evidence_report(results, sources)
+
+
+def _evidence_report(results, sources, note=None) -> Dict[str, Any]:
+    from ..search import HARD
+    stale = [{k: x.get(k) for k in ("path", "status", "detail")} for x in results if x["status"] != "fresh"]
+    out = {"checked": len(results), "fresh": len(results) - len(stale), "sources": sources,
+           "stale": stale, "hard": [x for x in stale if x["status"] in HARD]}
+    if note:
+        out["note"] = note
+    return out

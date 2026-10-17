@@ -247,9 +247,41 @@ def _hash_evidence(evidence: List[Dict[str, Any]], repo: str) -> List[Dict[str, 
         item = dict(item) if isinstance(item, dict) else {"note": item}
         src = item.get("source")
         full = os.path.join(repo, src) if isinstance(src, str) else None
-        if full and os.path.isfile(full) and "sha256" not in item:
+        if full and os.path.isfile(full) and "rows" in item and "rows_sha256" not in item:
+            # a slice of a JSON log that keeps growing: pin the rows, not the whole file
+            item["rows_sha256"] = rows_digest(full, *item["rows"])
+            item["path"] = src.replace(os.sep, "/")
+        elif full and os.path.isfile(full) and "sha256" not in item and "rows" not in item:
             with open(full, "rb") as f:
                 item["sha256"] = hashlib.sha256(f.read()).hexdigest()
             item["path"] = src.replace(os.sep, "/")
         out.append(item)
+    return out
+
+
+def rows_digest(path: str, start: int, end: int) -> str:
+    """SHA-256 of rows ``[start, end)`` of a JSON-list log, in canonical JSON."""
+    with open(path, encoding="utf-8") as f:
+        rows = json.load(f)
+    if not isinstance(rows, list) or end > len(rows) or start < 0 or start >= end:
+        raise ValueError(f"{path}: rows [{start}, {end}) out of range")
+    return hashlib.sha256(json.dumps(rows[start:end], sort_keys=True, separators=(",", ":"),
+                                     ensure_ascii=False).encode("utf-8")).hexdigest()
+
+
+def check_row_evidence(evidence: List[Dict[str, Any]], repo: str) -> List[Dict[str, Any]]:
+    """Re-verify pinned JSON-log row slices (no AgentSearch needed). Statuses: fresh, stale, missing."""
+    out = []
+    for item in evidence:
+        if not (isinstance(item, dict) and item.get("rows_sha256") and item.get("path")):
+            continue
+        full = os.path.join(repo, item["path"])
+        res = {"path": item["path"], "rows": item.get("rows")}
+        try:
+            cur = rows_digest(full, *item["rows"])
+        except (OSError, ValueError) as e:
+            out.append({**res, "status": "missing", "detail": str(e)})
+            continue
+        out.append({**res, "status": "fresh" if cur == item["rows_sha256"] else "stale",
+                    "detail": None if cur == item["rows_sha256"] else "cited log rows changed"})
     return out

@@ -84,6 +84,7 @@ From 2.7.0 on (details in [EVALS.md](EVALS.md)):
 - **Every failure becomes a [Bug2Eval](https://github.com/jacksonjp0311-gif/bug2eval) case** that must discriminate: before fails, after passes. The seeded suite has 4 real bugs fixed in 2.1.0 and 4 real tuning failures: the overfit (34 → 2), the feedback trap (30 → 8), the threshold cliff (never → 489 steps), and no governor (23/140 → 0/3).
 - **Every config is an immutable, content-hashed registry entry** with semver (arm change = major, cfg change = minor), a parent and a reason. Status lives in a hash-chained ledger.
 - **Promotion = eval floor + step-size rule.** The suite must pass with the candidate injected, so it cannot re-break a captured case. Athanor's own ΔΦ → C → H7 verdict compares the candidate's behaviour with the incumbent's on fresh seeds. The tuner can only *register* candidates.
+- **Cite the results you rely on, and re-check them before you use them** (2.8, [SEARCH.md](SEARCH.md)). Each case records the exact lines and run records it rests on with their SHA-256, and a tuner candidate pins its rows of the tuning log. Promotion and the next tuning round re-verify them first, and a changed or missing result holds the decision.
 
 ## How to apply this to your system: checklist
 
@@ -96,7 +97,8 @@ From 2.7.0 on (details in [EVALS.md](EVALS.md)):
 7. ☐ If the optimum is narrow, fix a **conservative neighbour** before the held-out run. Then run held-out **once** and report both settings.
 8. ☐ Turn every bug and every failed config into a **discriminating eval case**, and put every config in a **versioned registry**.
 9. ☐ Promote only through the gate: **suite passes** with the candidate **and** a governor verdict vs the incumbent on fresh seeds. Record the decision in a hash-chained ledger.
-10. ☐ Report what got **worse** as plainly as what got better (speed, best-ever error, seeds where nothing changed).
+10. ☐ **Cite** every past result a decision depends on (file + line hashes), and **re-verify** the citations before tuning or promoting on them.
+11. ☐ Report what got **worse** as plainly as what got better (speed, best-ever error, seeds where nothing changed).
 
 ## How this method was actually run: a human + AI collaboration
 

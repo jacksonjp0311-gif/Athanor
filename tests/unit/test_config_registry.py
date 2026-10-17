@@ -60,3 +60,24 @@ def test_repo_registry_is_consistent():
     assert reg.status("selfmod/adaptive@1.0.0") == "rejected"
     assert reg.incumbent("selfmod") is not None
     assert spec_hash(reg.get("selfmod/adaptive@1.1.0")["spec"]) == reg.get("selfmod/adaptive@1.1.0")["spec_hash"]
+
+
+def test_pinned_log_rows_survive_appends_but_not_edits(tmp_path):
+    from athanor.config_registry import check_row_evidence
+    log = tmp_path / "docs" / "tuning" / "log.json"
+    log.parent.mkdir(parents=True)
+    rows = [{"round": 1, "severe": 8}, {"round": 1, "severe": 3}]
+    log.write_text(json.dumps(rows, indent=1))
+    reg = Registry(str(tmp_path / "configs" / "registry"))
+    e = reg.register("f/a@1.0.0", SPEC, parent=None, reason="tuned",
+                     evidence=[{"source": "docs/tuning/log.json", "rows": [0, 2]}])
+    ev = e["evidence"][0]
+    assert ev["rows_sha256"] and "sha256" not in ev
+    assert [r["status"] for r in check_row_evidence(e["evidence"], str(tmp_path))] == ["fresh"]
+    log.write_text(json.dumps(rows + [{"round": 2, "severe": 1}], indent=1))  # a later round appends
+    assert [r["status"] for r in check_row_evidence(e["evidence"], str(tmp_path))] == ["fresh"]
+    rows[0]["severe"] = 0                                                       # a past result is edited
+    log.write_text(json.dumps(rows, indent=1))
+    assert [r["status"] for r in check_row_evidence(e["evidence"], str(tmp_path))] == ["stale"]
+    log.unlink()
+    assert [r["status"] for r in check_row_evidence(e["evidence"], str(tmp_path))] == ["missing"]

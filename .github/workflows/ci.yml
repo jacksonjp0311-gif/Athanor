@@ -38,6 +38,11 @@ jobs:
           athanor search index
           athanor search grep "severe 30 vs 8" --scope docs
           athanor evals evidence --check
+      - name: Search extra degrades gracefully on Python 3.10
+        if: matrix.python-version == '3.10'
+        run: |
+          athanor search status | grep -q "needs Python 3.11"
+          athanor evals evidence --check | grep -q "needs Python 3.11"
       - name: Core works without the evals extra
         if: matrix.python-version == '3.12'
         run: |
@@ -45,6 +50,7 @@ jobs:
           /tmp/core/bin/athanor --version
           /tmp/core/bin/athanor registry verify
           /tmp/core/bin/athanor evals run --out /tmp/ev | grep -q "bug2eval is not installed"
+          /tmp/core/bin/athanor search status | grep -q "AgentSearch is not installed"
   package:
     runs-on: ubuntu-latest
     steps:

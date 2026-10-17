@@ -57,7 +57,14 @@ def main(argv=None):
                     help="register this round's best feasible setting as a registry candidate, "
                          "e.g. selfmod/adaptive@1.2.0 (then: athanor registry promote REF)")
     ap.add_argument("--parent", default=None, help="registry parent of --register-best")
+    ap.add_argument("--require-fresh-evidence", action="store_true",
+                    help="stop if a past result this round builds on has gone stale (needs athanor[search] "
+                         "for the eval-case citations; pinned registry log rows are checked without it)")
     a = ap.parse_args(argv)
+    pre = preflight_evidence(a.parent)
+    print(json.dumps({"evidence_preflight": pre}), flush=True)
+    if a.require_fresh_evidence and pre.get("hard"):
+        raise SystemExit(1)
     start = len(json.load(open(LOG))) if os.path.exists(LOG) else 0
     log = json.load(open(LOG)) if os.path.exists(LOG) else []
     grid = parse_grid(a.grid)
@@ -81,11 +88,47 @@ def main(argv=None):
                               "steps": s["median_steps_to_1p5"]}), flush=True)
             json.dump(log, open(LOG, "w"), indent=1)
     if a.register_best:
-        register_best(log[start:], a.register_best, a.parent, a.round)
+        register_best(log[start:], a.register_best, a.parent, a.round, offset=start)
 
 
-def register_best(entries, ref, parent, rnd):
-    """Hand the round's winner to the versioned registry. Promotion is a separate, eval-gated step."""
+def preflight_evidence(parent=None):
+    """Before a round builds on past results, re-verify them (v2.8.0).
+
+    Checks the AgentSearch citations of the self-mod tuning eval cases (TUNING_LOG lines,
+    raw logs, arms results) and the pinned evidence of the ``--parent`` registry entry.
+    Returns ``{checked, stale, hard}``; ``hard`` means a cited result changed or is gone.
+    """
+    from athanor.config_registry import Registry, check_row_evidence
+    from athanor.search import EvidenceIndex, read_evidence, search_available, HARD
+    results = []
+    if parent:
+        results += check_row_evidence(Registry().get(parent).get("evidence", []), ".")
+    if search_available():
+        from athanor.evals.cases import load_cases
+        cites = []
+        if os.path.isdir("evals/cases"):
+            for ac in load_cases("evals/cases", kinds=["tuning"]):
+                cites += read_evidence(ac.path)
+        if parent:
+            cites += [e for e in Registry().get(parent).get("evidence", [])
+                      if isinstance(e, dict) and e.get("sha256") and e.get("path")]
+        if cites:
+            with EvidenceIndex(".") as idx:
+                idx.ensure()
+                results += idx.check(cites)["results"]
+    stale = [{k: r.get(k) for k in ("path", "status", "detail")} for r in results if r["status"] != "fresh"]
+    out = {"checked": len(results), "stale": stale, "hard": [r for r in stale if r["status"] in HARD]}
+    if not search_available():
+        out["note"] = "athanor[search] not installed: eval-case citations not checked"
+    return out
+
+
+def register_best(entries, ref, parent, rnd, offset=0):
+    """Hand the round's winner to the versioned registry. Promotion is a separate, eval-gated step.
+
+    ``offset`` is the index of ``entries[0]`` in the log; the round's rows are pinned by hash
+    (``rows`` + ``rows_sha256``), so later rounds appending to the log do not make them stale.
+    """
     from athanor.config_registry import Registry
     ok = [e for e in entries if e["feasible"]]
     if not ok:
@@ -93,9 +136,10 @@ def register_best(entries, ref, parent, rnd):
         return None
     best = min(ok, key=lambda e: objective(e["summary"]))
     s = best["summary"]
+    lo, hi = offset, offset + len(entries)
     entry = Registry().register(ref, {"arm": best["arm"], "cfg": best["cfg"]}, parent=parent,
                                 reason=f"tune.py round {rnd}: best feasible on seeds 100-115",
-                                evidence=[{"source": LOG, "round": rnd, "seeds": "100-115",
+                                evidence=[{"source": LOG, "rows": [lo, hi], "round": rnd, "seeds": "100-115",
                                            "broken_commits": s["broken_commits"],
                                            "severe_regressions": s["severe_regressions"],
                                            "median_mse_100": s["median_mse_100"]}])
