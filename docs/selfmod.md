@@ -1,6 +1,6 @@
 # Does ATHANOR help a real self-modifying program?
 
-*v2.4.0 · 16 seeds × 1000 self-edit steps · fully offline and deterministic*
+*v2.4.0 (two-arm study), extended in v2.5.0 (validity gate, adaptive schedule, 7 arms) · 16 seeds × 1000 self-edit steps · fully offline and deterministic*
 
 **Short answer:** in this experiment the governed agent avoided almost every catastrophic self-edit. It committed **0** program-breaking edits versus **23**, and **3** severe regressions versus **140**. But it improved **much more slowly**, and after 1000 steps its typical held-out error is **worse** (median 1.110 vs 0.862). There is also an important nuance: the gate itself would have **APPROVED 20 of the 23** breaking edits the ungoverned agent made. The governed agent stays clear of breakage mostly because it takes a different, more conservative path through program space, not because H7 detects breakage. It is a stability-for-speed trade, not a free win.
 
@@ -89,10 +89,37 @@ Per seed, final held-out MSE is lower for the governed run on **7/16** seeds and
 - **Worse typical outcome at 1000 steps.** Median final MSE is 1.110 vs 0.862, and median best-ever is 0.899 vs 0.206. On 9/16 seeds the ungoverned run ends better.
 - **It doesn't stop ordinary regressions.** 639 governed commits still worsened held-out error. Small, coherent edits that overfit the minibatch pass the gate by design, because ΔΦ measures *change*, not *correctness*.
 
+## 2.5.0: adding a validity pre-gate and an adaptive drift tolerance
+
+Following the findings above, 2.5.0 adds two things and re-runs everything on the **same held-out seeds 0–15**:
+
+1. **Validity pre-gate** (`athanor.core.validity.validity_check`): reject any edit that raises or returns a non-finite value on the 32 probes plus the 40 training inputs.
+2. **Adaptive drift tolerance** (off by default). The behaviour term of ΔΦ is divided by `tol = floor + (clip(γ·(rmse_best/σ_y)^p, floor, cap) − floor)·2^(−t/t½)`. It is loose while the agent is far from the target, then tightens as its *best-so-far* training error falls and as time passes. It was tuned on separate seeds 100–115 only. See [TUNING_LOG.md](TUNING_LOG.md) for all 195 settings, the plateau and the sensitivity analysis.
+
+Reproduce: `athanor selfmod-arms --seeds 0-15 --out docs/selfmod --chart docs/assets/selfmod_arms.png`
+
+![all arms](assets/selfmod_arms.png)
+
+| Arm (held-out seeds 0–15) | broken | severe | worst MSE | MSE@100 | MSE@1000 | best-ever | steps < 1.5 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| ungoverned | 23 | 140 | 2.2e143 | 1.173 | 0.862 | 0.206 | 8.5 |
+| validity only | 10 | 118 | 3.3e247 | 1.276 | 0.728 | 0.249 | 8.5 |
+| athanor only | 0 | 3 | 528 | 2.250 | 1.110 | 0.899 | 404.5 |
+| validity + athanor | 0 | 3 | 528 | 2.250 | 1.110 | 0.899 | 404.5 |
+| athanor-adaptive (tuned) | 21 | 53 | 2.1e21 | 1.037 | 0.807 | 0.550 | 14.5 |
+| validity + athanor-adaptive (tuned) | 0 | 34 | 2.1e21 | 1.011 | **0.697** | 0.527 | 14.5 |
+| **validity + athanor-adaptive, τ 0.75** (conservative) | **0** | **2** | **3.8** | 1.247 | 0.903 | 0.819 | 34.5 |
+
+**What this shows:**
+- **Validity alone is not enough.** It cut broken commits from 23 to 10. The remaining 10 broke at inputs it didn't check, and severe regressions barely moved (118).
+- **On these held-out seeds, validity added nothing to non-adaptive Athanor.** The two arms are identical, because Athanor's conservative trajectory never proposed an improving edit that failed validity here. On the tuning seeds it mattered: broken commits went from 5 to 2.
+- **The adaptive schedule buys speed.** The tuned arm has the best median error at step 1000 (0.697 vs 0.862 ungoverned) and reaches MSE < 1.5 in 14.5 steps instead of 404.5. **But its safety did not generalise:** 8 severe regressions on tuning seeds became 34 on held-out seeds. Without validity, the adaptive schedule also lets breakages through (21).
+- **The conservative τ 0.75 setting** was fixed before held-out evaluation because round 8 showed the tuned optimum was fragile. It keeps 0 broken and 2 severe (worst MSE 3.8), and gets within 6 % of ungoverned at step 100 and within 5 % at step 1000. **It does not match ungoverned speed on every measure:** time to MSE < 1.5 is 34.5 vs 8.5 steps, and best-ever MSE is 0.819 vs 0.206.
+
 ## Caveats (read before citing)
 
 - This is one small toy system: symbolic regression with ≤ 40-node expressions and a deliberately naive, noisy acceptance rule. It is not an LLM or a general agent. Treat the numbers as evidence about this setup only.
 - ΔΦ is probe-based, and H7 is a *fraction* of probes. An edit that breaks on a few inputs (or between probes) can still be APPROVED, and on the ungoverned trajectory 20 of 23 breaking edits were. If you need crash-freedom, add an explicit hard check. H7 is a drift limit, not a correctness test.
-- The ungoverned baseline has no safety checks of its own. A simple "reject any edit that crashes on a probe set" rule would also remove most breakages. ATHANOR's added value over such a rule here is mainly the graded drift limit (fewer severe regressions) and the audit trail. That rule wasn't benchmarked separately.
+- 2.4.0 did not test a plain crash check. 2.5.0 does (the "validity only" arm): it removes about half the breakages and almost none of the severe regressions.
 - The settings (τ = 0.70, refine floor 0.50, structure weight 0.5, 32 probes, minibatch 8, 1000 steps, seeds 0–15) were fixed before the final run and **not tuned** to favour either mode. Different settings will move the trade-off. A lower τ, for example, should speed up the governed agent and admit more risky edits.
 - Results are deterministic for a given software stack. Float details may differ across Python/NumPy builds.
